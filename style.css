@@ -1,0 +1,107 @@
+*{
+    margin: 0;
+    padding: 0; 
+}
+
+html{
+
+    height: 100%;
+}
+
+body{
+    background-color: rgb(31, 48, 63);
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chess_board {
+    width: 80vh;
+    height: 80vh;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+.black{
+    background-color: rgb(161, 111, 100);
+    width: 9.7vh;
+    height: 9.7vh;
+    border : 0.1vh solid black;
+}
+
+.white{
+    background-color: rgb(235, 210, 183);
+    width: 9.7vh;
+    height: 9.7vh; 
+    border : 0.1vh solid black; 
+}
+.white  .black {
+    background-color: red;
+    border : 0.5vh solid black;
+}
+
+.piece{
+    width: 100%;
+}
+
+.yellow{
+    background-color: rgb(231, 231, 41);
+
+}
+
+.potential-enemy{
+    background-color: rgb(204, 8, 34);
+
+}
+
+.green{
+    background-color: rgb(2, 219, 2);
+
+}
+
+.piece-selected{
+    background-color: rgb(2, 219, 2);
+
+}
+
+.potential-square{
+    background-color: rgb(35, 186, 224);
+
+}
+
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    body{
+        background-color: white;
+    }
+    .chess_board {
+        width: 20vh;
+        justify-content: center;
+        align-items: center;
+        height: 20vh;
+        display: flex;
+       
+    }
+
+    .white{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgb(235, 210, 183);
+        width: 4vh;
+        height: 4vh;  
+    }
+
+    .black{
+        background-color: rgb(161, 111, 100);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 4vh;
+        height: 4vh;
+    }
+}
