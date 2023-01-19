@@ -3,6 +3,7 @@ import { pieceHandle } from '../pieceHandler.js';
 import { rookMovement } from '../pieceMovement/rook.js'
 import { pawnMovement } from '../pieceMovement/pawn.js'
 import { gameHandler } from '../gameHandler.js';
+import { bishopMovement } from './bishop.js';
 
 export const generalMovement = {
     
@@ -11,6 +12,8 @@ export const generalMovement = {
           rookMovement.setPotentialSquares(handleParams);
         }else if(handleParams.pieceType === 'pawn'){
           pawnMovement.setPotentialSquares(handleParams);
+        }else if(handleParams.pieceType === 'bishop'){
+            bishopMovement.setPotentialSquares(handleParams);
         }
     },
 
