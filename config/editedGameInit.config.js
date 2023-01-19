@@ -21,13 +21,13 @@ export const editedGame = {
     'g7': 'black_pawn',
     */
     'e8': 'black_pawn',
-    'a2': 'white_pawn',
-    'e1': 'black_pawn',
-    'd3': 'black_pawn',
-    'h3': 'white_pawn',
-    'b2': 'white_pawn',
-    'c2': 'white_pawn',
-    'd2': 'white_pawn',
+    'a2': 'white_bishop',
+    'e1': 'black_bishop',
+    'd3': 'black_bishop',
+    'h3': 'white_bishop',
+    'b2': 'white_bishop',
+    'c2': 'black_bishop',
+    'd2': 'white_bishop',
     
  /*   
     'a1': 'white_rook',

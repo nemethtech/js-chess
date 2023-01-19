@@ -27,7 +27,7 @@ export const generalMovement = {
     },
     
     setEventsOnPotentialSquares(handleParams){
-        console.log('handleParams:',handleParams);
+        //console.log('handleParams:',handleParams);
         $$('.potential-square , .potential-enemy').forEach(pieceBox => {
             pieceBox.addEventListener( 'click', this.movePiece)
         });
