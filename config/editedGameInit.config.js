@@ -20,14 +20,30 @@ export const editedGame = {
     'e6': 'black_pawn',
     'g7': 'black_pawn',
     */
-    'e8': 'black_pawn',
-    'a2': 'white_bishop',
-    'e1': 'black_bishop',
-    'd3': 'black_bishop',
-    'h3': 'white_bishop',
-    'b2': 'white_bishop',
-    'c2': 'black_bishop',
-    'd2': 'white_bishop',
+    'a8': 'white_knight',
+    'h8': 'white_knight',
+    'h1': 'white_knight',
+    'a1': 'white_knight',
+    'a8': 'white_knight',
+    'f3': 'black_knight',
+    'g6': 'white_knight',
+    'g3': 'black_knight',
+    'f6': 'white_knight',
+    'b3': 'black_knight',
+    'b6': 'white_knight',
+    'c3': 'black_knight',
+    'c6': 'white_knight',
+    'b2': 'white_knight',
+    'b7': 'white_knight',
+    'g7': 'white_knight',
+    'g2': 'white_knight',
+    'd5': 'white_knight',
+    'e5': 'white_knight',
+    'd4': 'white_knight',
+    'e4': 'white_knight',
+
+
+    
     
  /*   
     'a1': 'white_rook',
@@ -37,7 +53,7 @@ export const editedGame = {
     'e1': 'white_king',
     'f1': 'white_bishop',
     'g1': 'white_knight',
-*/    
+   
     'a8': 'white_bishop',
     'b8': 'white_bishop',
     'd1': 'white_bishop',
@@ -46,7 +62,7 @@ export const editedGame = {
     'c5': 'black_bishop',
     'f4': 'black_bishop',
     'h8': 'black_bishop',
-/*    'a2': 'white_pawn',
+   'a2': 'white_pawn',
     'b2': 'white_pawn',
     'c2': 'white_pawn',
     'd2': 'white_pawn',

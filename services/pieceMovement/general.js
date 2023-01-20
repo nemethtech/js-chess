@@ -4,6 +4,7 @@ import { rookMovement } from '../pieceMovement/rook.js'
 import { pawnMovement } from '../pieceMovement/pawn.js'
 import { gameHandler } from '../gameHandler.js';
 import { bishopMovement } from './bishop.js';
+import { knightMovement } from './knight.js';
 
 export const generalMovement = {
     
@@ -14,6 +15,8 @@ export const generalMovement = {
           pawnMovement.setPotentialSquares(handleParams);
         }else if(handleParams.pieceType === 'bishop'){
             bishopMovement.setPotentialSquares(handleParams);
+        }else if(handleParams.pieceType === 'knight'){
+            knightMovement.setPotentialSquares(handleParams);
         }
     },
 
@@ -78,6 +81,19 @@ export const generalMovement = {
                 $(`[id^="${freeSquareId}"]`).classList.add( 'potential-square');
             })                   
             if(val.possibleCollision)generalMovement.checkPossibleEnemy(val.possibleCollision);
+        });        
+    },
+
+    setSquaresForKnight(verifiedSquares){
+        console.log('verifiedSquares',verifiedSquares);
+        Object.values(verifiedSquares).forEach(val => {
+            val.collisionFreeSquares.forEach(freeSquareId => {
+                $(`[id^="${freeSquareId}"]`).classList.add( 'potential-square');
+            })   
+            val.possibleCollision.forEach(posColSq => {
+                generalMovement.checkPossibleEnemy(posColSq);
+            })                
+            
         });        
     },
 }

@@ -1,9 +1,6 @@
-import { $ } from '../../utils/utils.js'
 import { gameHandler } from '../gameHandler.js'
 import { chessConfig }  from '../../config/chessConfig.config.js'
-import { pieceHandle } from '../pieceHandler.js';
 import { generalMovement } from './general.js'
-
 
 
 export const bishopMovement = {
@@ -11,11 +8,8 @@ export const bishopMovement = {
     setPotentialSquares(bishopPiece){
         if(gameHandler.pieceTurn(bishopPiece.pieceColor)){
             generalMovement.setSquares(this.getAvaliableSquares(bishopPiece));
-          //  console.log('getAvaliableSquares:',this.getAvaliableSquares(bishopPiece));
         }
     },
-
-
 
    getAvaliableSquares(bishopPiece){
     const columArrayOne = chessConfig.columns.slice(chessConfig.columns.indexOf(bishopPiece.piecePosition[0])+1, 8 );
@@ -39,9 +33,7 @@ export const bishopMovement = {
             possibleCollision    : generalMovement.checkCollision(this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayTwo).possibleCollision
         },
     };
-
    },
-
 
    getSquaresOnLine(columnArray , rowPos){
     const rowPosWayOne = columnArray.map((_,idx) => Number(parseInt(rowPos) +1 ) + idx);
