@@ -1,14 +1,13 @@
 import { chessConfig } from '../../config/chessConfig.config.js';
 import { $ } from '../../utils/utils.js'
 import { gameHandler } from '../gameHandler.js'
-import { bishopMovement } from './bishop.js';
 import { generalMovement } from './general.js'
 
 export const knightMovement = {
     
     setPotentialSquares(knightPiece){
         if(gameHandler.pieceTurn(knightPiece.pieceColor)){
-           generalMovement.setSquaresForKnight(this.getAvaliableSquares(knightPiece));
+           generalMovement.setSquaresWithCollisionArray(this.getAvaliableSquares(knightPiece));
         }
     },
 
@@ -26,7 +25,7 @@ export const knightMovement = {
                 chessConfig.columns[colIdx+2]+(parseInt(rowPos)+1),
                 chessConfig.columns[colIdx+2]+(parseInt(rowPos)-1)];
 
-        const availableSquares = bishopMovement.filterNonExistentSquares(possibleSquares.filter(e => typeof(e) === 'string'));
+        const availableSquares = generalMovement.filterNonExistentSquares(possibleSquares.filter(e => typeof(e) === 'string'));
         const collisionArray = availableSquares.filter( e => $(`[id^="${e}"]`).hasChildNodes());
         const collisionFreeSquares = availableSquares.filter(x => !collisionArray.includes(x));
 

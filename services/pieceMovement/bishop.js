@@ -39,13 +39,9 @@ export const bishopMovement = {
     const rowPosWayOne = columnArray.map((_,idx) => Number(parseInt(rowPos) +1 ) + idx);
     const rowPosWayTwo = columnArray.map((_,idx) => Number(rowPos -1 ) - idx);
     return {
-        squaresOnWayOne : this.filterNonExistentSquares(this.zipArrayHelper(columnArray, rowPosWayOne)) , 
-        squaresOnWayTwo : this.filterNonExistentSquares(this.zipArrayHelper(columnArray, rowPosWayTwo)) ,
+        squaresOnWayOne : generalMovement.filterNonExistentSquares(this.zipArrayHelper(columnArray, rowPosWayOne)) , 
+        squaresOnWayTwo : generalMovement.filterNonExistentSquares(this.zipArrayHelper(columnArray, rowPosWayTwo)) ,
     }
-   },
-
-   filterNonExistentSquares(squareArray){
-    return squareArray.filter(e => e.length === 2).filter( e => chessConfig.rows.indexOf(parseInt(e[1])) !== -1);
    },
 
    zipArrayHelper(array1, array2){

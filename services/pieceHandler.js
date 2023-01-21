@@ -52,7 +52,6 @@ export const pieceHandle = {
     }, 
 
     setHoverOnEnter(piece){
-       
         return piece.parentElement.classList.add( 'yellow' );
     },
 

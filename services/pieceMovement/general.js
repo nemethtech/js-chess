@@ -1,10 +1,13 @@
 import { $, $$ } from '../../utils/utils.js'
+import { chessConfig } from '../../config/chessConfig.config.js';
 import { pieceHandle } from '../pieceHandler.js';
 import { rookMovement } from '../pieceMovement/rook.js'
 import { pawnMovement } from '../pieceMovement/pawn.js'
 import { gameHandler } from '../gameHandler.js';
 import { bishopMovement } from './bishop.js';
 import { knightMovement } from './knight.js';
+import { kingMovement } from './king.js';
+import { queenMovement } from './queen.js';
 
 export const generalMovement = {
     
@@ -17,6 +20,10 @@ export const generalMovement = {
             bishopMovement.setPotentialSquares(handleParams);
         }else if(handleParams.pieceType === 'knight'){
             knightMovement.setPotentialSquares(handleParams);
+        }else if(handleParams.pieceType === 'king'){
+            kingMovement.setPotentialSquares(handleParams);
+        }else if(handleParams.pieceType === 'queen'){
+            queenMovement.setPotentialSquares(handleParams);
         }
     },
 
@@ -26,11 +33,9 @@ export const generalMovement = {
             pieceBox.classList.remove( 'potential-square' );;
             pieceBox.removeEventListener( 'click', this.movePiece)
         });
-      
     },
     
     setEventsOnPotentialSquares(handleParams){
-        //console.log('handleParams:',handleParams);
         $$('.potential-square , .potential-enemy').forEach(pieceBox => {
             pieceBox.addEventListener( 'click', this.movePiece)
         });
@@ -84,7 +89,7 @@ export const generalMovement = {
         });        
     },
 
-    setSquaresForKnight(verifiedSquares){
+    setSquaresWithCollisionArray(verifiedSquares){
         console.log('verifiedSquares',verifiedSquares);
         Object.values(verifiedSquares).forEach(val => {
             val.collisionFreeSquares.forEach(freeSquareId => {
@@ -95,5 +100,9 @@ export const generalMovement = {
             })                
             
         });        
+    },
+
+    filterNonExistentSquares(squareArray){
+        return squareArray.filter(e => e.length === 2).filter( e => chessConfig.rows.indexOf(parseInt(e[1])) !== -1);
     },
 }

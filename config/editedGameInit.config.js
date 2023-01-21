@@ -20,10 +20,10 @@ export const editedGame = {
     'e6': 'black_pawn',
     'g7': 'black_pawn',
     */
-    'a8': 'white_knight',
-    'h8': 'white_knight',
-    'h1': 'white_knight',
-    'a1': 'white_knight',
+    'a8': 'white_queen',
+    'e5': 'white_queen',
+    'e4': 'black_queen',
+  /*  'a1': 'white_knight',
     'a8': 'white_knight',
     'f3': 'black_knight',
     'g6': 'white_knight',
@@ -40,7 +40,7 @@ export const editedGame = {
     'd5': 'white_knight',
     'e5': 'white_knight',
     'd4': 'white_knight',
-    'e4': 'white_knight',
+    'e4': 'white_knight',*/
 
 
     
