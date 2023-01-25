@@ -1,14 +1,32 @@
 import { $ } from '../utils/utils.js'
 import { generalMovement } from '../services/pieceMovement/general.js'
 import { gameHandler } from './gameHandler.js';
+import { checkHandler } from './checkHandler.js';
 
 export const pieceHandle = {
    
     handlePieceClick(pieceSettings){
-        
+        console.log("checkHandler" , checkHandler.checkHandle);
         if(!gameHandler.pieceTurn(pieceSettings.pieceColor)){
             console.log('1');
             return ;
+        }
+        else if(checkHandler.getCheckStatus(pieceSettings.pieceColor)){
+            console.log('0');
+         //   console.log('checkHandler.getCheckStatus(pieceSettings.pieceColor)',checkHandler.getCheckStatus(pieceSettings.pieceColor));
+            if(!this.isThereASelectedPiece()){
+                console.log('0.2');
+                this.setSelected(pieceSettings.piece);
+                generalMovement.markPotentialSquares(pieceSettings);
+                return this;
+            }
+            else if(this.ownPieceSelected(pieceSettings)){
+                console.log('0.33');
+                this.removeSelected(pieceSettings.piece);
+                generalMovement.clearPotentialSquares();
+                checkHandler.clearHandlerObj();
+                return this;
+            }
         }
      /*  van kiválasztva 
       else if(this.isThereASelectedPiece()){
@@ -19,13 +37,13 @@ export const pieceHandle = {
             console.log('2');
             this.setSelected(pieceSettings.piece);
             generalMovement.markPotentialSquares(pieceSettings);
-            generalMovement.setEventsOnPotentialSquares();
             return this;
         }
         else if(this.ownPieceSelected(pieceSettings)){
             console.log('3');
             this.removeSelected(pieceSettings.piece);
             generalMovement.clearPotentialSquares();
+            checkHandler.clearHandlerObj();
             return this;
         }
 

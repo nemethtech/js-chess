@@ -11,23 +11,6 @@ import { pawnMovement } from './pawn.js';
 
 
 export const generalMovement = {
-    
-    markPotentialSquares(piece){
-        if(piece.pieceType === 'rook'){
-            this.setSquares(rookMovement.returnAvailableSquares(piece));
-        }else if(piece.pieceType === 'pawn'){
-            this.setSquares(pawnMovement.returnAvailableSquares(piece));
-        }else if(piece.pieceType === 'bishop'){
-            this.setSquares(bishopMovement.returnAvailableSquares(piece));
-        }else if(piece.pieceType === 'knight'){
-            this.setSquares(knightMovement.returnAvailableSquares(piece));
-        }else if(piece.pieceType === 'king'){
-            this.setSquares(kingMovement.returnAvailableSquares(piece));
-        }else if(piece.pieceType === 'queen'){
-            this.setSquares(rookMovement.returnAvailableSquares(piece));
-            this.setSquares(bishopMovement.returnAvailableSquares(piece));
-        }
-    },
 
     getPotentialSquares(piece){
         if(piece.pieceType === 'rook'){
@@ -41,9 +24,14 @@ export const generalMovement = {
         }else if(piece.pieceType === 'king'){
             return kingMovement.returnAvailableSquares(piece);
         }else if(piece.pieceType === 'queen'){
-            return rookMovement.returnAvailableSquares(piece),
-                   bishopMovement.returnAvailableSquares(piece);
+            return { ...rookMovement.returnAvailableSquares(piece), 
+                     ...bishopMovement.returnAvailableSquares(piece)};
         }
+    },
+    
+    markPotentialSquares(piece){
+        this.setSquares(this.getPotentialSquares(piece));
+        this.setEventsOnPotentialSquares();
     },
 
     clearPotentialSquares(){
@@ -81,7 +69,6 @@ export const generalMovement = {
         let pieceSquare = $(`[id^="${square}"]`);
         let pieceColor = pieceSquare.firstChild.getAttribute('piece-type').includes('white') ? 'white' : 'black';
         if(!gameHandler.pieceTurn(pieceColor)){ 
-            console.log('pieceSquare.firstChild.',pieceSquare.firstChild);
             pieceSquare.classList.add('potential-enemy'); 
             return true;
         }
