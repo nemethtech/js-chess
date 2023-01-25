@@ -1,4 +1,3 @@
-import { $ } from '../../utils/utils.js'
 import { gameHandler } from '../gameHandler.js'
 import { chessConfig } from '../../config/chessConfig.config.js';
 import { generalMovement } from './general.js'
@@ -6,9 +5,9 @@ import { generalMovement } from './general.js'
 
 export const kingMovement = {
     
-    setPotentialSquares(kingPiece){
+    returnAvailableSquares(kingPiece){
         if(gameHandler.pieceTurn(kingPiece.pieceColor)){
-            generalMovement.setSquaresWithCollisionArray(this.getAvaliableSquares(kingPiece));
+            return this.getAvaliableSquares(kingPiece);
         }
     },
 
@@ -20,22 +19,21 @@ export const kingMovement = {
                [chessConfig.columns[colIdx-1]+(parseInt(rowPos)+1),
                 chessConfig.columns[colIdx-1]+(parseInt(rowPos)-1),
                 chessConfig.columns[colIdx-1]+(parseInt(rowPos)),
-                chessConfig.columns[colIdx]+(parseInt(rowPos)+1),
-                chessConfig.columns[colIdx]+(parseInt(rowPos)-1),
+                chessConfig.columns[ colIdx ]+(parseInt(rowPos)+1),
+                chessConfig.columns[ colIdx ]+(parseInt(rowPos)-1),
                 chessConfig.columns[colIdx+1]+(parseInt(rowPos)),
                 chessConfig.columns[colIdx+1]+(parseInt(rowPos)+1),
                 chessConfig.columns[colIdx+1]+(parseInt(rowPos)-1)];
 
         const availableSquares = generalMovement.filterNonExistentSquares(possibleSquares.filter(e => typeof(e) === 'string'));
-        const collisionArray = availableSquares.filter( e => $(`[id^="${e}"]`).hasChildNodes());
-        const collisionFreeSquares = availableSquares.filter(x => !collisionArray.includes(x));
-
-        return {
-            kingMove : {
-                collisionFreeSquares : collisionFreeSquares, 
-                possibleCollision    : collisionArray
+        const kingMove = {};
+        availableSquares.forEach((e,i) => {
+            kingMove[i] = {
+                collisionFreeSquares : generalMovement.checkCollision([e]).collisionFreeSquares,
+                possibleCollision : generalMovement.checkCollision([e]).possibleCollision
             }
-        }
+        })
+        return kingMove
     }
 
   

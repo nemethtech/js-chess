@@ -1,29 +1,48 @@
 import { $, $$ } from '../../utils/utils.js'
-import { chessConfig } from '../../config/chessConfig.config.js';
-import { pieceHandle } from '../pieceHandler.js';
-import { rookMovement } from '../pieceMovement/rook.js'
-import { pawnMovement } from '../pieceMovement/pawn.js'
+import { chessConfig } from '../../config/chessConfig.config.js'
 import { gameHandler } from '../gameHandler.js';
+import { pieceHandle } from './../pieceHandler.js'
 import { bishopMovement } from './bishop.js';
 import { knightMovement } from './knight.js';
 import { kingMovement } from './king.js';
-import { queenMovement } from './queen.js';
+import { rookMovement } from './rook.js';
+import { pawnMovement } from './pawn.js';
+
+
 
 export const generalMovement = {
     
-    markPotentialSquares(handleParams){
-        if(handleParams.pieceType === 'rook'){
-          rookMovement.setPotentialSquares(handleParams);
-        }else if(handleParams.pieceType === 'pawn'){
-          pawnMovement.setPotentialSquares(handleParams);
-        }else if(handleParams.pieceType === 'bishop'){
-            bishopMovement.setPotentialSquares(handleParams);
-        }else if(handleParams.pieceType === 'knight'){
-            knightMovement.setPotentialSquares(handleParams);
-        }else if(handleParams.pieceType === 'king'){
-            kingMovement.setPotentialSquares(handleParams);
-        }else if(handleParams.pieceType === 'queen'){
-            queenMovement.setPotentialSquares(handleParams);
+    markPotentialSquares(piece){
+        if(piece.pieceType === 'rook'){
+            this.setSquares(rookMovement.returnAvailableSquares(piece));
+        }else if(piece.pieceType === 'pawn'){
+            this.setSquares(pawnMovement.returnAvailableSquares(piece));
+        }else if(piece.pieceType === 'bishop'){
+            this.setSquares(bishopMovement.returnAvailableSquares(piece));
+        }else if(piece.pieceType === 'knight'){
+            this.setSquares(knightMovement.returnAvailableSquares(piece));
+        }else if(piece.pieceType === 'king'){
+            this.setSquares(kingMovement.returnAvailableSquares(piece));
+        }else if(piece.pieceType === 'queen'){
+            this.setSquares(rookMovement.returnAvailableSquares(piece));
+            this.setSquares(bishopMovement.returnAvailableSquares(piece));
+        }
+    },
+
+    getPotentialSquares(piece){
+        if(piece.pieceType === 'rook'){
+            return rookMovement.returnAvailableSquares(piece);
+        }else if(piece.pieceType === 'pawn'){
+            return pawnMovement.returnAvailableSquares(piece);
+        }else if(piece.pieceType === 'bishop'){
+            return bishopMovement.returnAvailableSquares(piece);
+        }else if(piece.pieceType === 'knight'){
+            return knightMovement.returnAvailableSquares(piece);
+        }else if(piece.pieceType === 'king'){
+            return kingMovement.returnAvailableSquares(piece);
+        }else if(piece.pieceType === 'queen'){
+            return rookMovement.returnAvailableSquares(piece),
+                   bishopMovement.returnAvailableSquares(piece);
         }
     },
 
@@ -35,7 +54,7 @@ export const generalMovement = {
         });
     },
     
-    setEventsOnPotentialSquares(handleParams){
+    setEventsOnPotentialSquares(){
         $$('.potential-square , .potential-enemy').forEach(pieceBox => {
             pieceBox.addEventListener( 'click', this.movePiece)
         });
@@ -59,10 +78,10 @@ export const generalMovement = {
     }, 
     
     checkPossibleEnemy(square){
-        console.log('square:',square);
         let pieceSquare = $(`[id^="${square}"]`);
         let pieceColor = pieceSquare.firstChild.getAttribute('piece-type').includes('white') ? 'white' : 'black';
         if(!gameHandler.pieceTurn(pieceColor)){ 
+            console.log('pieceSquare.firstChild.',pieceSquare.firstChild);
             pieceSquare.classList.add('potential-enemy'); 
             return true;
         }
@@ -80,25 +99,11 @@ export const generalMovement = {
     },
 
     setSquares(verifiedSquares){
-        console.log('verifiedSquares',verifiedSquares);
         Object.values(verifiedSquares).forEach(val => {
             val.collisionFreeSquares.forEach(freeSquareId => {
                 $(`[id^="${freeSquareId}"]`).classList.add( 'potential-square');
             })                   
             if(val.possibleCollision)generalMovement.checkPossibleEnemy(val.possibleCollision);
-        });        
-    },
-
-    setSquaresWithCollisionArray(verifiedSquares){
-        console.log('verifiedSquares',verifiedSquares);
-        Object.values(verifiedSquares).forEach(val => {
-            val.collisionFreeSquares.forEach(freeSquareId => {
-                $(`[id^="${freeSquareId}"]`).classList.add( 'potential-square');
-            })   
-            val.possibleCollision.forEach(posColSq => {
-                generalMovement.checkPossibleEnemy(posColSq);
-            })                
-            
         });        
     },
 

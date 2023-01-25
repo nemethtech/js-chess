@@ -5,9 +5,9 @@ import { generalMovement } from './general.js'
 
 export const bishopMovement = {
     
-    setPotentialSquares(bishopPiece){
+    returnAvailableSquares(bishopPiece){
         if(gameHandler.pieceTurn(bishopPiece.pieceColor)){
-            generalMovement.setSquares(this.getAvaliableSquares(bishopPiece));
+            return this.getAvaliableSquares(bishopPiece);
         }
     },
 

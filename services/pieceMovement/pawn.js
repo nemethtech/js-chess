@@ -7,13 +7,11 @@ import { generalMovement } from './general.js'
 
 export const pawnMovement = {
     
-    setPotentialSquares(pawnPiece){
+    returnAvailableSquares(pawnPiece){
+        //console.log('PAWN',pawnPiece);
         if(gameHandler.pieceTurn(pawnPiece.pieceColor)){
-         if(this.isTheFirstMove(pawnPiece)){
-            generalMovement.setSquares(this.getAvaliableSquares(pawnPiece, true));
-           }else{
-            generalMovement.setSquares(this.getAvaliableSquares(pawnPiece, false));
-           }
+            const firstMove = this.isTheFirstMove(pawnPiece) ? true : false ;
+            return this.getAvaliableSquares(pawnPiece, firstMove);
         }
     },
 

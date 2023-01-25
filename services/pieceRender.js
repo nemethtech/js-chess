@@ -26,11 +26,10 @@ export const piecesRender = {
 
         $$(chessConfig.chessPieceSelector).forEach(piece => {
 
-            const piecePosition = this.checkPiecePosition(piece);
+            const piecePosition = this.checkAndUpdatePiecePosition(piece);
             const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
             const pieceType = piece.getAttribute( 'piece-type' ).split('_')[1];
             
-
             const handleParams = {
                 piece,
                 pieceType, 
@@ -67,7 +66,7 @@ export const piecesRender = {
         })
     },
 
-    checkPiecePosition(piece){
+    checkAndUpdatePiecePosition(piece){
         
         let piecePosition ;
         if(!piece.getAttribute('new-piece-square')){
@@ -79,6 +78,18 @@ export const piecesRender = {
         }
         return piecePosition;
     },
+
+    checkPiecePosition(piece){
+        
+        let piecePosition ;
+        if(!piece.getAttribute('new-piece-square')){
+            piecePosition = piece.getAttribute( 'piece-square' );
+        }else{
+            piecePosition = piece.getAttribute('new-piece-square');
+        }
+        return piecePosition;
+    },
+
 
     startGame(){
         this.createPieces();

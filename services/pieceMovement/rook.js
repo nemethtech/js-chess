@@ -7,10 +7,10 @@ export const rookMovement = {
     
     potentialSquares : {},
   
-    setPotentialSquares(rookPiece){
+    returnAvailableSquares(rookPiece){
         this.potentialSquares = {};
         if(gameHandler.pieceTurn(rookPiece.pieceColor)){
-            generalMovement.setSquares(this.getAvaliableSquares(rookPiece));
+            return this.getAvaliableSquares(rookPiece);
         }
     },
 

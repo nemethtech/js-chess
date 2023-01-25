@@ -1,13 +1,12 @@
 import { chessConfig } from '../../config/chessConfig.config.js';
-import { $ } from '../../utils/utils.js'
 import { gameHandler } from '../gameHandler.js'
 import { generalMovement } from './general.js'
 
 export const knightMovement = {
     
-    setPotentialSquares(knightPiece){
+    returnAvailableSquares(knightPiece){
         if(gameHandler.pieceTurn(knightPiece.pieceColor)){
-           generalMovement.setSquaresWithCollisionArray(this.getAvaliableSquares(knightPiece));
+           return this.getAvaliableSquares(knightPiece);
         }
     },
 
@@ -26,15 +25,16 @@ export const knightMovement = {
                 chessConfig.columns[colIdx+2]+(parseInt(rowPos)-1)];
 
         const availableSquares = generalMovement.filterNonExistentSquares(possibleSquares.filter(e => typeof(e) === 'string'));
-        const collisionArray = availableSquares.filter( e => $(`[id^="${e}"]`).hasChildNodes());
-        const collisionFreeSquares = availableSquares.filter(x => !collisionArray.includes(x));
-
-        return {
-            horseJump : {
-                collisionFreeSquares : collisionFreeSquares, 
-                possibleCollision    : collisionArray
+        const horseJump = {};
+        availableSquares.forEach((e,i) => {
+            horseJump[i] = {
+                collisionFreeSquares : generalMovement.checkCollision([e]).collisionFreeSquares,
+                possibleCollision : generalMovement.checkCollision([e]).possibleCollision
             }
-        }
+        })
+
+        return horseJump;
     }
+    
 }
 

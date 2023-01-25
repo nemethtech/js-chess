@@ -19,7 +19,7 @@ export const pieceHandle = {
             console.log('2');
             this.setSelected(pieceSettings.piece);
             generalMovement.markPotentialSquares(pieceSettings);
-            generalMovement.setEventsOnPotentialSquares(pieceSettings);
+            generalMovement.setEventsOnPotentialSquares();
             return this;
         }
         else if(this.ownPieceSelected(pieceSettings)){
