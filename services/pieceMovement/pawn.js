@@ -8,11 +8,8 @@ import { generalMovement } from './general.js'
 export const pawnMovement = {
     
     returnAvailableSquares(pawnPiece){
-        //console.log('PAWN',pawnPiece);
-        if(gameHandler.pieceTurn(pawnPiece.pieceColor)){
-            const firstMove = this.isTheFirstMove(pawnPiece) ? true : false ;
-            return this.getAvaliableSquares(pawnPiece, firstMove);
-        }
+        const firstMove = this.isTheFirstMove(pawnPiece) ? true : false ;
+        return this.getAvaliableSquares(pawnPiece, firstMove);
     },
 
     isTheFirstMove(pawnPiece){

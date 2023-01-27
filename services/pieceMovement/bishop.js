@@ -6,9 +6,7 @@ import { generalMovement } from './general.js'
 export const bishopMovement = {
     
     returnAvailableSquares(bishopPiece){
-        if(gameHandler.pieceTurn(bishopPiece.pieceColor)){
-            return this.getAvaliableSquares(bishopPiece);
-        }
+        return this.getAvaliableSquares(bishopPiece);
     },
 
    getAvaliableSquares(bishopPiece){
@@ -31,6 +29,26 @@ export const bishopMovement = {
         lineTwoWayTwo : {
             collisionFreeSquares : generalMovement.checkCollision(this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayTwo).collisionFreeSquares, 
             possibleCollision    : generalMovement.checkCollision(this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayTwo).possibleCollision
+        },
+    };
+   },
+
+   checkSquaresWithKing(bishopPiece){
+    const columArrayOne = chessConfig.columns.slice(chessConfig.columns.indexOf(bishopPiece.piecePosition[0])+1, 8 );
+    const columArrayTwo = chessConfig.columns.slice(0, chessConfig.columns.indexOf(bishopPiece.piecePosition[0])).reverse();
+    const rowPos = bishopPiece.piecePosition[1];
+    return {
+        lineOneWayOne : {
+            collisionFreeSquares : generalMovement.checkCollisionWithKing(this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayOne).collisionFreeSquares, 
+        },
+        lineOneWayTwo : {
+            collisionFreeSquares : generalMovement.checkCollisionWithKing(this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayTwo).collisionFreeSquares, 
+        },
+        lineTwoWayOne  : {
+            collisionFreeSquares : generalMovement.checkCollisionWithKing(this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayOne).collisionFreeSquares, 
+        },
+        lineTwoWayTwo : {
+            collisionFreeSquares : generalMovement.checkCollisionWithKing(this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayTwo).collisionFreeSquares, 
         },
     };
    },

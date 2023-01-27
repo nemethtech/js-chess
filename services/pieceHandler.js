@@ -2,6 +2,7 @@ import { $ } from '../utils/utils.js'
 import { generalMovement } from '../services/pieceMovement/general.js'
 import { gameHandler } from './gameHandler.js';
 import { checkHandler } from './checkHandler.js';
+import { kingMovement } from './pieceMovement/king.js';
 
 export const pieceHandle = {
    
@@ -13,18 +14,39 @@ export const pieceHandle = {
         }
         else if(checkHandler.getCheckStatus(pieceSettings.pieceColor)){
             console.log('0');
-         //   console.log('checkHandler.getCheckStatus(pieceSettings.pieceColor)',checkHandler.getCheckStatus(pieceSettings.pieceColor));
-            if(!this.isThereASelectedPiece()){
-                console.log('0.2');
-                this.setSelected(pieceSettings.piece);
-                generalMovement.markPotentialSquares(pieceSettings);
-                return this;
+            if(pieceSettings.pieceType === 'king'){
+                if(kingMovement.canTheKingMove(pieceSettings)){
+                    if(!this.isThereASelectedPiece()){
+                        console.log('0.1');
+                        this.setSelected(pieceSettings.piece);
+                        generalMovement.markPotentialSquares(pieceSettings);
+                        return this;
+                    }
+                    else if(this.ownPieceSelected(pieceSettings)){
+                        console.log('0.2');
+                        this.removeSelected(pieceSettings.piece);
+                        generalMovement.clearPotentialSquares();
+                        //    checkHandler.clearHandlerObj();
+                        return this;
+                    }
+                }
             }
-            else if(this.ownPieceSelected(pieceSettings)){
-                console.log('0.33');
-                this.removeSelected(pieceSettings.piece);
-                generalMovement.clearPotentialSquares();
-                checkHandler.clearHandlerObj();
+            if(checkHandler.pieceCanBlockCheck(pieceSettings) ){
+
+                if(!this.isThereASelectedPiece()){
+                    console.log('1.2');
+                    this.setSelected(pieceSettings.piece);
+                    generalMovement.markPotentialSquares(pieceSettings);
+                    return this;
+                }
+                else if(this.ownPieceSelected(pieceSettings)){
+                    console.log('1.33');
+                    this.removeSelected(pieceSettings.piece);
+                    generalMovement.clearPotentialSquares();
+                    //    checkHandler.clearHandlerObj();
+                    return this;
+                }
+            }else{
                 return this;
             }
         }
@@ -34,16 +56,16 @@ export const pieceHandle = {
             return ;
         } */
         else if(!this.isThereASelectedPiece()){
-            console.log('2');
+            console.log('3');
             this.setSelected(pieceSettings.piece);
             generalMovement.markPotentialSquares(pieceSettings);
             return this;
         }
         else if(this.ownPieceSelected(pieceSettings)){
-            console.log('3');
+            console.log('4');
             this.removeSelected(pieceSettings.piece);
             generalMovement.clearPotentialSquares();
-            checkHandler.clearHandlerObj();
+           // checkHandler.clearHandlerObj();
             return this;
         }
 
@@ -92,5 +114,9 @@ export const pieceHandle = {
     getIdByIdVal(idVal){
         return $(`[id_val^="${idVal}"]`).getAttribute('id');
     },
+
+    getPieceSquareById(id){
+        return $(`[id^="${id}"]`);
+    }
 
 }

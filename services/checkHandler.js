@@ -3,6 +3,7 @@ import { chessConfig }  from '../config/chessConfig.config.js'
 import { piecesRender } from '../services/pieceRender.js'
 import { gameHandler } from '../services/gameHandler.js'
 import { generalMovement } from '../services/pieceMovement/general.js'
+import { pieceHandle } from './pieceHandler.js'
 
 export const checkHandler = {
 
@@ -10,13 +11,14 @@ export const checkHandler = {
         isCheck : false ,
         checkColor : undefined , 
         canTheKingMove : false ,
-        resolvableSquares : undefined,
-        kingMove : undefined
+        kingMove : undefined ,
+        attackerSquare : [] ,
+        resolvableSquares : [],
+        forbiddenSqures : []
     },
 
 
-    getAllPossibleSquares(){ 
-        const arr = [];
+    checkIfCheckIsOn(){ 
           $$(`[piece-type^="${chessConfig.currentTurn}"]`).forEach(piece => {
               const piecePosition = piecesRender.checkPiecePosition(piece);
               const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
@@ -28,8 +30,7 @@ export const checkHandler = {
                   piecePosition,
                   pieceColor,
               }
-              arr.push(handleParams,generalMovement.getPotentialSquares(handleParams));
-              this.setSquares(generalMovement.getPotentialSquares(handleParams));
+              this.checkCheckPossiblity(generalMovement.getPotentialSquares(handleParams),piecePosition);
           })
       },
   
@@ -41,17 +42,18 @@ export const checkHandler = {
               console.log('Chekk');
               this.checkHandle.checkColor = pieceColor;
               this.checkHandle.isCheck = true;
-              return this;
+              return true;
           }
-          return this;
+          return false;
           
       },
   
-      setSquares(verifiedSquares){
+        checkCheckPossiblity(verifiedSquares ,piecePosition){
           Object.values(verifiedSquares).forEach(val => {                
               if(val.possibleCollision){
-                  if(this.checkKing(val.possibleCollision)){
-                    this.checkHandle.resolvableSquares = val.collisionFreeSquares; 
+                  if(this.checkKing(val.possibleCollision)){   
+                    this.checkHandle.resolvableSquares.push(val.collisionFreeSquares); 
+                    this.checkHandle.attackerSquare.push(piecePosition);
                 }
             }
         });        
@@ -59,15 +61,52 @@ export const checkHandler = {
       },
 
       clearHandlerObj(){
-        this.checkHandle. isCheck = false ;
+        this.checkHandle.isCheck = false ;
         this.checkHandle.checkColor = undefined ;
         this.checkHandle.canTheKingMove = false ;
-        this.checkHandle.resolvableSquares = undefined;
         this.checkHandle.kingMove = undefined;
+        this.checkHandle.resolvableSquares = [];
+        this.checkHandle.attackerSquare = [];
+        this.checkHandle.forbiddenSqures = [];
         return this;
       },
 
       getCheckStatus(color){
         return this.checkHandle.checkColor === color;
-      }
+      },
+
+      pieceCanBlockCheck(pieceSettings){
+        if(pieceSettings.pieceType.includes('king')){
+            this.canKingeMoveUnderCheck(pieceSettings);
+        }
+        let pieceCanBlockCheck = false;
+        if(checkHandler.checkHandle.resolvableSquares.length !== 1){
+            return pieceCanBlockCheck;
+        }
+        const arrCollFreeSquares = generalMovement.getCollisionFreeSquares(generalMovement.getPotentialSquares(pieceSettings));
+        arrCollFreeSquares.forEach(collFreeSquare => {
+            if(checkHandler.checkHandle.resolvableSquares[0].includes(collFreeSquare)){
+                pieceCanBlockCheck = true;
+            }
+        });   
+        return pieceCanBlockCheck;
+    },
+
+    canKingeMoveUnderCheck(pieceSettings){
+       /* const arrCollFreeSquares = generalMovement.getCollisionFreeSquares(generalMovement.getPotentialSquares(pieceSettings));
+        
+        checkHandler.checkHandle.resolvableSquares.forEach(subArr => {
+            subArr.forEach(elem => {
+              // this.getAllForbiddenSquare.push(elem);
+            })
+        })
+        this.getAllForbiddenSquares();
+        let b = arrCollFreeSquares.filter(e => !checkHandler.checkHandle.resolvableSquares[0].includes(e));
+        console.log("king ",this.checkHandle);
+        console.log("king arrCollFreeSquares",arrCollFreeSquares);
+        console.log("king b",b);*/
+      //  console.log("getAllForbiddenSquare",getAllForbiddenSquare);
+        return true;
+    },
+
 }

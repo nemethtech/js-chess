@@ -1,5 +1,5 @@
 export const chessConfig = { 
-    useNormalGame : true , 
+    useNormalGame : false , 
     chessPieceSelector: '.piece' ,
     whiteTurn : true ,
     currentTurn : 'white', 

@@ -7,7 +7,7 @@ import { checkHandler } from './checkHandler.js'
 export const gameHandler = {
 
     endTurn(){
-        checkHandler.getAllPossibleSquares();
+        checkHandler.checkIfCheckIsOn();
       //  this.getAllPossibleSquares();
         this.changeTurnSettings();
         generalMovement.clearPotentialSquares();
@@ -25,6 +25,10 @@ export const gameHandler = {
     changeTurnSettings(){
         chessConfig.whiteTurn = chessConfig.whiteTurn === true ?  false : true;
         chessConfig.currentTurn = chessConfig.currentTurn  === 'white' ? 'black' : 'white';
+    },
+
+    notCurrentTurnFor(){
+        return  chessConfig.whiteTurn === true ?  'black' : 'white';
     }
 
    

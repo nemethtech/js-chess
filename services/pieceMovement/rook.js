@@ -1,5 +1,3 @@
-import { $ } from '../../utils/utils.js'
-import { gameHandler } from '../gameHandler.js'
 import { chessConfig }  from '../../config/chessConfig.config.js'
 import { generalMovement } from './general.js'
 
@@ -9,9 +7,7 @@ export const rookMovement = {
   
     returnAvailableSquares(rookPiece){
         this.potentialSquares = {};
-        if(gameHandler.pieceTurn(rookPiece.pieceColor)){
-            return this.getAvaliableSquares(rookPiece);
-        }
+        return this.getAvaliableSquares(rookPiece);
     },
 
     getAvaliableSquares(rookPiece){
@@ -32,6 +28,25 @@ export const rookMovement = {
             rightColumns : {
                 collisionFreeSquares : generalMovement.checkCollision(allPossibleSquares.rightColumns).collisionFreeSquares, 
                 possibleCollision    : generalMovement.checkCollision(allPossibleSquares.rightColumns).possibleCollision
+            },
+        };
+
+    },
+
+    checkSquaresWithKing(rookPiece){
+        let allPossibleSquares = this.checkAllPossibleSquares(rookPiece.piecePosition[0], rookPiece.piecePosition[1]);
+        return {
+            forwardRows : {
+                collisionFreeSquares : generalMovement.checkCollisionWithKing(allPossibleSquares.forwardRows).collisionFreeSquares, 
+            },
+            backwardRows : {
+                collisionFreeSquares : generalMovement.checkCollisionWithKing(allPossibleSquares.backwardRows).collisionFreeSquares, 
+            },
+            leftColumns  : {
+                collisionFreeSquares : generalMovement.checkCollisionWithKing(allPossibleSquares.leftColumns).collisionFreeSquares, 
+            },
+            rightColumns : {
+                collisionFreeSquares : generalMovement.checkCollisionWithKing(allPossibleSquares.rightColumns).collisionFreeSquares, 
             },
         };
 

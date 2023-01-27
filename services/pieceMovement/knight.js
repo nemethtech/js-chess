@@ -5,9 +5,7 @@ import { generalMovement } from './general.js'
 export const knightMovement = {
     
     returnAvailableSquares(knightPiece){
-        if(gameHandler.pieceTurn(knightPiece.pieceColor)){
-           return this.getAvaliableSquares(knightPiece);
-        }
+        return this.getAvaliableSquares(knightPiece);
     },
 
     getAvaliableSquares(knightPiece){
