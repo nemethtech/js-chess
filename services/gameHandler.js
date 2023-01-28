@@ -1,4 +1,3 @@
-import { $, $$ } from '../../utils/utils.js'
 import { chessConfig }  from '../config/chessConfig.config.js'
 import { piecesRender } from '../services/pieceRender.js'
 import { generalMovement } from '../services/pieceMovement/general.js'

@@ -90,7 +90,6 @@ export const piecesRender = {
         return piecePosition;
     },
 
-
     startGame(){
         this.createPieces();
         this.setEventListeners();

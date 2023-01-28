@@ -3,7 +3,6 @@ import { chessConfig }  from '../config/chessConfig.config.js'
 import { piecesRender } from '../services/pieceRender.js'
 import { gameHandler } from '../services/gameHandler.js'
 import { generalMovement } from '../services/pieceMovement/general.js'
-import { pieceHandle } from './pieceHandler.js'
 
 export const checkHandler = {
 

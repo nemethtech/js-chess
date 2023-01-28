@@ -13,7 +13,7 @@ import { checkHandler } from '../checkHandler.js';
 
 export const generalMovement = {
 
-    getPotentialSquares(piece){
+    /*getPotentialSquares(piece){
         if(piece.pieceType === 'rook'){
             return rookMovement.returnAvailableSquares(piece);
         }else if(piece.pieceType === 'pawn'){
@@ -28,16 +28,16 @@ export const generalMovement = {
             return { ...rookMovement.returnAvailableSquares(piece), 
                      ...bishopMovement.returnAvailableSquares(piece)};
         }
-    },
+    },*/
 
 
-    getPotentialSquaresWithKing(piece){
+    getPotentialSquares(piece){
         if(piece.pieceType === 'rook'){
-            return rookMovement.checkSquaresWithKing(piece);
+            return rookMovement.returnAvailableSquares(piece);
         }else if(piece.pieceType === 'pawn'){
             return pawnMovement.returnAvailableSquares(piece);
         }else if(piece.pieceType === 'bishop'){
-            return bishopMovement.checkSquaresWithKing(piece);
+            return bishopMovement.returnAvailableSquares(piece);
         }else if(piece.pieceType === 'knight'){
             return knightMovement.returnAvailableSquares(piece);
         }else if(piece.pieceType === 'king'){
@@ -45,8 +45,8 @@ export const generalMovement = {
         }else if(piece.pieceType === 'queen'){
          //   console.log('quuen' , { ...rookMovement.checkSquaresWithKing(piece), 
          //       ...bishopMovement.checkSquaresWithKing(piece)});
-            return { ...rookMovement.checkSquaresWithKing(piece), 
-                     ...bishopMovement.checkSquaresWithKing(piece)};
+            return { ...rookMovement.returnAvailableSquares(piece), 
+                     ...bishopMovement.returnAvailableSquares(piece)};
         }
     },
     
@@ -97,19 +97,19 @@ export const generalMovement = {
         return undefined;
     },
 
-    checkCollisionWithKing(arr){         
+    checkCollisionWithKing(arr, bool){         
         let collisionArray = arr.filter( e => $(`[id^="${e}"]`).hasChildNodes());
         let possibleCollision = collisionArray.length === 0 ? undefined  : collisionArray[0];
         if(pieceHandle.getPieceSquareById(possibleCollision)){
             let a = pieceHandle.getPieceSquareById(possibleCollision).firstChild;
-            console.log('A!!',a);
+       //     console.log('A!!',a);
             
             const pieceColor = a.getAttribute( 'piece-type' ).split('_')[0];
             const pieceType = a.getAttribute( 'piece-type' ).split('_')[1];
-            console.log('pieceColor!!',pieceColor);
-            console.log('pieceType!!',pieceType);
-            if(gameHandler.pieceTurn(pieceColor) && pieceType === 'king'){
-                console.log('king!!',a);
+     
+            console.log('king!!',a);
+            if(gameHandler.pieceTurn(pieceColor) === bool && pieceType === 'king'){
+                console.log('king2!!',a);
                 possibleCollision = undefined;
             }
 

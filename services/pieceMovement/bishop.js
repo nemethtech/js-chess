@@ -1,4 +1,3 @@
-import { gameHandler } from '../gameHandler.js'
 import { chessConfig }  from '../../config/chessConfig.config.js'
 import { generalMovement } from './general.js'
 
@@ -15,40 +14,20 @@ export const bishopMovement = {
     const rowPos = bishopPiece.piecePosition[1];
     return {
         lineOneWayOne : {
-            collisionFreeSquares : generalMovement.checkCollision(this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayOne).collisionFreeSquares, 
+            collisionFreeSquares : generalMovement.checkCollisionWithKing(this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayOne).collisionFreeSquares, 
             possibleCollision    : generalMovement.checkCollision(this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayOne).possibleCollision
         },
         lineOneWayTwo : {
-            collisionFreeSquares : generalMovement.checkCollision(this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayTwo).collisionFreeSquares, 
+            collisionFreeSquares : generalMovement.checkCollisionWithKing(this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayTwo).collisionFreeSquares, 
             possibleCollision    : generalMovement.checkCollision(this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayTwo).possibleCollision
         },
         lineTwoWayOne  : {
-            collisionFreeSquares : generalMovement.checkCollision(this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayOne).collisionFreeSquares, 
+            collisionFreeSquares : generalMovement.checkCollisionWithKing(this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayOne).collisionFreeSquares, 
             possibleCollision    : generalMovement.checkCollision(this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayOne).possibleCollision
         },
         lineTwoWayTwo : {
-            collisionFreeSquares : generalMovement.checkCollision(this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayTwo).collisionFreeSquares, 
-            possibleCollision    : generalMovement.checkCollision(this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayTwo).possibleCollision
-        },
-    };
-   },
-
-   checkSquaresWithKing(bishopPiece){
-    const columArrayOne = chessConfig.columns.slice(chessConfig.columns.indexOf(bishopPiece.piecePosition[0])+1, 8 );
-    const columArrayTwo = chessConfig.columns.slice(0, chessConfig.columns.indexOf(bishopPiece.piecePosition[0])).reverse();
-    const rowPos = bishopPiece.piecePosition[1];
-    return {
-        lineOneWayOne : {
-            collisionFreeSquares : generalMovement.checkCollisionWithKing(this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayOne).collisionFreeSquares, 
-        },
-        lineOneWayTwo : {
-            collisionFreeSquares : generalMovement.checkCollisionWithKing(this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayTwo).collisionFreeSquares, 
-        },
-        lineTwoWayOne  : {
-            collisionFreeSquares : generalMovement.checkCollisionWithKing(this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayOne).collisionFreeSquares, 
-        },
-        lineTwoWayTwo : {
             collisionFreeSquares : generalMovement.checkCollisionWithKing(this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayTwo).collisionFreeSquares, 
+            possibleCollision    : generalMovement.checkCollision(this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayTwo).possibleCollision
         },
     };
    },

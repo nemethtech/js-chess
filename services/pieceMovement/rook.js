@@ -14,39 +14,20 @@ export const rookMovement = {
         let allPossibleSquares = this.checkAllPossibleSquares(rookPiece.piecePosition[0], rookPiece.piecePosition[1]);
         return {
             forwardRows : {
-                collisionFreeSquares : generalMovement.checkCollision(allPossibleSquares.forwardRows).collisionFreeSquares, 
+                collisionFreeSquares : generalMovement.checkCollisionWithKing(allPossibleSquares.forwardRows).collisionFreeSquares, 
                 possibleCollision    : generalMovement.checkCollision(allPossibleSquares.forwardRows).possibleCollision
             },
             backwardRows : {
-                collisionFreeSquares : generalMovement.checkCollision(allPossibleSquares.backwardRows).collisionFreeSquares, 
+                collisionFreeSquares : generalMovement.checkCollisionWithKing(allPossibleSquares.backwardRows).collisionFreeSquares, 
                 possibleCollision    : generalMovement.checkCollision(allPossibleSquares.backwardRows).possibleCollision
             },
             leftColumns  : {
-                collisionFreeSquares : generalMovement.checkCollision(allPossibleSquares.leftColumns).collisionFreeSquares, 
+                collisionFreeSquares : generalMovement.checkCollisionWithKing(allPossibleSquares.leftColumns).collisionFreeSquares, 
                 possibleCollision    : generalMovement.checkCollision(allPossibleSquares.leftColumns).possibleCollision
             },
             rightColumns : {
-                collisionFreeSquares : generalMovement.checkCollision(allPossibleSquares.rightColumns).collisionFreeSquares, 
-                possibleCollision    : generalMovement.checkCollision(allPossibleSquares.rightColumns).possibleCollision
-            },
-        };
-
-    },
-
-    checkSquaresWithKing(rookPiece){
-        let allPossibleSquares = this.checkAllPossibleSquares(rookPiece.piecePosition[0], rookPiece.piecePosition[1]);
-        return {
-            forwardRows : {
-                collisionFreeSquares : generalMovement.checkCollisionWithKing(allPossibleSquares.forwardRows).collisionFreeSquares, 
-            },
-            backwardRows : {
-                collisionFreeSquares : generalMovement.checkCollisionWithKing(allPossibleSquares.backwardRows).collisionFreeSquares, 
-            },
-            leftColumns  : {
-                collisionFreeSquares : generalMovement.checkCollisionWithKing(allPossibleSquares.leftColumns).collisionFreeSquares, 
-            },
-            rightColumns : {
                 collisionFreeSquares : generalMovement.checkCollisionWithKing(allPossibleSquares.rightColumns).collisionFreeSquares, 
+                possibleCollision    : generalMovement.checkCollision(allPossibleSquares.rightColumns).possibleCollision
             },
         };
 

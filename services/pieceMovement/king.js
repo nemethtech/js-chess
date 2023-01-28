@@ -3,15 +3,14 @@ import { $$ }           from '../../utils/utils.js'
 import { chessConfig }  from '../../config/chessConfig.config.js';
 import { generalMovement } from './general.js'
 import { piecesRender } from '../pieceRender.js';
-import { pieceHandle } from '../pieceHandler.js';
 
 
 export const kingMovement = {
 
     returnAvailableSquares(kingPiece){
         
-        console.log('king');
-        console.log("canTheKingMove",this.canTheKingMove(kingPiece));
+     //   console.log('king');
+     //   console.log("canTheKingMove",this.canTheKingMove(kingPiece));
      //   this.getAvaliableSquares(kingPiece);
         return this.getAvailableSquares(kingPiece);
         // this.getAvaliableSquares(kingPiece);
@@ -52,7 +51,9 @@ export const kingMovement = {
                     console.log('generalMovement.getPotentialSquares(handleParams)',generalMovement.getPotentialSquares(handleParams));
                   this.getEnemyCollisionSquares(generalMovement.getPotentialSquares(handleParams)).forEach(e => console.log('e' , pieceHandle.getPieceSquareById(e)));
                 }*/
-              allForbiddenSquares.push(this.getEnemyCollisionSquares(generalMovement.getPotentialSquaresWithKing(handleParams)));
+                if(pieceType !== 'king'){
+                    allForbiddenSquares.push(this.getEnemyCollisionSquares(generalMovement.getPotentialSquares(handleParams)));
+                }
           })
         return allForbiddenSquares;
       } , 
@@ -76,6 +77,7 @@ export const kingMovement = {
       },
 
       getAvailableSquares(kingPiece){
+       // console.log('ITT');
         const enemySquares = this.getForbiddenSquares(this.getAllForbiddenSquares());
         let kingSquares = this.getAllAvaliableSquares(kingPiece);
         let avaliableSquares = kingSquares.filter( square => !enemySquares.includes(square));
