@@ -1,33 +1,33 @@
 import { chessConfig }  from '../../config/chessConfig.config.js'
-import { generalMovement } from './general.js'
+import { movePieceHandler } from './movePiece.js';
 
 export const rookMovement = {
     
     potentialSquares : {},
   
-    returnAvailableSquares(rookPiece){
+    returnAvailableSquares(rookPiece , bool){
         this.potentialSquares = {};
-        return this.getAvaliableSquares(rookPiece);
+        return this.getAvaliableSquares(rookPiece , bool);
     },
 
-    getAvaliableSquares(rookPiece){
+    getAvaliableSquares(rookPiece , bool){
         let allPossibleSquares = this.checkAllPossibleSquares(rookPiece.piecePosition[0], rookPiece.piecePosition[1]);
         return {
             forwardRows : {
-                collisionFreeSquares : generalMovement.checkCollisionWithKing(allPossibleSquares.forwardRows).collisionFreeSquares, 
-                possibleCollision    : generalMovement.checkCollision(allPossibleSquares.forwardRows).possibleCollision
+                collisionFreeSquares : movePieceHandler.checkCollisionWithKing(allPossibleSquares.forwardRows, bool).collisionFreeSquares, 
+                possibleCollision    : movePieceHandler.checkCollision(allPossibleSquares.forwardRows).possibleCollision
             },
             backwardRows : {
-                collisionFreeSquares : generalMovement.checkCollisionWithKing(allPossibleSquares.backwardRows).collisionFreeSquares, 
-                possibleCollision    : generalMovement.checkCollision(allPossibleSquares.backwardRows).possibleCollision
+                collisionFreeSquares : movePieceHandler.checkCollisionWithKing(allPossibleSquares.backwardRows, bool).collisionFreeSquares, 
+                possibleCollision    : movePieceHandler.checkCollision(allPossibleSquares.backwardRows).possibleCollision
             },
             leftColumns  : {
-                collisionFreeSquares : generalMovement.checkCollisionWithKing(allPossibleSquares.leftColumns).collisionFreeSquares, 
-                possibleCollision    : generalMovement.checkCollision(allPossibleSquares.leftColumns).possibleCollision
+                collisionFreeSquares : movePieceHandler.checkCollisionWithKing(allPossibleSquares.leftColumns, bool).collisionFreeSquares, 
+                possibleCollision    : movePieceHandler.checkCollision(allPossibleSquares.leftColumns).possibleCollision
             },
             rightColumns : {
-                collisionFreeSquares : generalMovement.checkCollisionWithKing(allPossibleSquares.rightColumns).collisionFreeSquares, 
-                possibleCollision    : generalMovement.checkCollision(allPossibleSquares.rightColumns).possibleCollision
+                collisionFreeSquares : movePieceHandler.checkCollisionWithKing(allPossibleSquares.rightColumns, bool).collisionFreeSquares, 
+                possibleCollision    : movePieceHandler.checkCollision(allPossibleSquares.rightColumns).possibleCollision
             },
         };
 

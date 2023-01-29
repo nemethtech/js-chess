@@ -3,6 +3,7 @@ import { $$ }           from '../../utils/utils.js'
 import { chessConfig }  from '../../config/chessConfig.config.js';
 import { generalMovement } from './general.js'
 import { piecesRender } from '../pieceRender.js';
+import { movePieceHandler } from './movePiece.js';
 
 
 export const kingMovement = {
@@ -30,7 +31,7 @@ export const kingMovement = {
                 chessConfig.columns[colIdx+1]+(parseInt(rowPos)+1),
                 chessConfig.columns[colIdx+1]+(parseInt(rowPos)-1)];
 
-        const availableSquares = generalMovement.filterNonExistentSquares(possibleSquares.filter(e => typeof(e) === 'string'));
+        const availableSquares = movePieceHandler.filterNonExistentSquares(possibleSquares.filter(e => typeof(e) === 'string'));
         return availableSquares;
     },
 
@@ -47,12 +48,9 @@ export const kingMovement = {
                   piecePosition,
                   pieceColor,
                 }
-         /*       if(pieceType === 'queen'){
-                    console.log('generalMovement.getPotentialSquares(handleParams)',generalMovement.getPotentialSquares(handleParams));
-                  this.getEnemyCollisionSquares(generalMovement.getPotentialSquares(handleParams)).forEach(e => console.log('e' , pieceHandle.getPieceSquareById(e)));
-                }*/
+            
                 if(pieceType !== 'king'){
-                    allForbiddenSquares.push(this.getEnemyCollisionSquares(generalMovement.getPotentialSquares(handleParams)));
+                    allForbiddenSquares.push(this.getEnemyCollisionSquares(generalMovement.getPotentialSquares(handleParams ,  true)));
                 }
           })
         return allForbiddenSquares;
@@ -77,7 +75,7 @@ export const kingMovement = {
       },
 
       getAvailableSquares(kingPiece){
-       // console.log('ITT');
+
         const enemySquares = this.getForbiddenSquares(this.getAllForbiddenSquares());
         let kingSquares = this.getAllAvaliableSquares(kingPiece);
         let avaliableSquares = kingSquares.filter( square => !enemySquares.includes(square));
@@ -89,8 +87,8 @@ export const kingMovement = {
 
         availableSquares.forEach((e,i) => {
             kingMove[i] = {
-                collisionFreeSquares : generalMovement.checkCollision([e]).collisionFreeSquares,
-                possibleCollision : generalMovement.checkCollision([e]).possibleCollision
+                collisionFreeSquares : movePieceHandler.checkCollision([e]).collisionFreeSquares,
+                possibleCollision : movePieceHandler.checkCollision([e]).possibleCollision
             }
         })
         return kingMove
@@ -100,9 +98,7 @@ export const kingMovement = {
         const enemySquares = this.getForbiddenSquares(this.getAllForbiddenSquares());
         let kingSquares = this.getAllAvaliableSquares(kingPiece);
         let avaliableSquares = kingSquares.filter( square => !enemySquares.includes(square));
-        console.log('enemySquares',enemySquares);
-        console.log('kingSquares',kingSquares);
-        console.log('avaliableSquares',avaliableSquares);
+
         return avaliableSquares.length > 0 ? true : false;
       }
 

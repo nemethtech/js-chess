@@ -1,8 +1,6 @@
 import { $ } from '../../utils/utils.js'
-import { gameHandler } from '../gameHandler.js'
 import { pieceHandle } from '../pieceHandler.js';
-import { generalMovement } from './general.js'
-
+import { movePieceHandler } from './movePiece.js';
 
 
 export const pawnMovement = {
@@ -65,7 +63,7 @@ export const pawnMovement = {
         }
         return{
             forwardRows : {
-                collisionFreeSquares : generalMovement.checkCollision(forwardSquares).collisionFreeSquares, 
+                collisionFreeSquares : movePieceHandler.checkCollision(forwardSquares).collisionFreeSquares, 
                 possibleCollision    : undefined
             },
             rightCol : {

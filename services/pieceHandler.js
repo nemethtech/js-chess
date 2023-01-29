@@ -9,66 +9,26 @@ export const pieceHandle = {
     handlePieceClick(pieceSettings){
         console.log("checkHandler" , checkHandler.checkHandle);
         if(!gameHandler.pieceTurn(pieceSettings.pieceColor)){
-            console.log('1');
             return ;
         }
         else if(checkHandler.getCheckStatus(pieceSettings.pieceColor)){
             console.log('0');
             if(pieceSettings.pieceType === 'king'){
                 if(kingMovement.canTheKingMove(pieceSettings)){
-                    if(!this.isThereASelectedPiece()){
-                        console.log('0.1');
-                        this.setSelected(pieceSettings.piece);
-                        generalMovement.markPotentialSquares(pieceSettings);
-                        return this;
-                    }
-                    else if(this.ownPieceSelected(pieceSettings)){
-                        console.log('0.2');
-                        this.removeSelected(pieceSettings.piece);
-                        generalMovement.clearPotentialSquares();
-                        //    checkHandler.clearHandlerObj();
-                        return this;
-                    }
+                    this.managePiece(pieceSettings)
                 }
             }
             if(checkHandler.pieceCanBlockCheck(pieceSettings) ){
-
-                if(!this.isThereASelectedPiece()){
-                    console.log('1.2');
-                    this.setSelected(pieceSettings.piece);
-                    generalMovement.markPotentialSquares(pieceSettings);
-                    return this;
-                }
-                else if(this.ownPieceSelected(pieceSettings)){
-                    console.log('1.33');
-                    this.removeSelected(pieceSettings.piece);
-                    generalMovement.clearPotentialSquares();
-                    //    checkHandler.clearHandlerObj();
-                    return this;
-                }
+                console.log('2');
+                this.managePiece(pieceSettings)
             }else{
-                return this;
+                return;
             }
         }
-     /*  van kiválasztva 
-      else if(this.isThereASelectedPiece()){
-            console.log('1.5');
-            return ;
-        } */
-        else if(!this.isThereASelectedPiece()){
+        else{ 
             console.log('3');
-            this.setSelected(pieceSettings.piece);
-            generalMovement.markPotentialSquares(pieceSettings);
-            return this;
+            this.managePiece(pieceSettings)
         }
-        else if(this.ownPieceSelected(pieceSettings)){
-            console.log('4');
-            this.removeSelected(pieceSettings.piece);
-            generalMovement.clearPotentialSquares();
-           // checkHandler.clearHandlerObj();
-            return this;
-        }
-
     },
     handlePieceMouseleave(handleParams){
         if(gameHandler.pieceTurn(handleParams.pieceColor))this.setHoverOnExit(handleParams.piece);
@@ -117,6 +77,29 @@ export const pieceHandle = {
 
     getPieceSquareById(id){
         return $(`[id^="${id}"]`);
+    },
+
+    selectPieceAndSquares(pieceSettings){
+        this.setSelected(pieceSettings.piece);
+        generalMovement.markPotentialSquares(pieceSettings);
+        return this;
+    },
+
+    removeSelectPieceAndSquares(pieceSettings){
+        this.removeSelected(pieceSettings.piece);
+        generalMovement.clearPotentialSquares();
+        return this;
+    },
+
+    managePiece(pieceSettings){
+        if(!this.isThereASelectedPiece()){
+            this.selectPieceAndSquares(pieceSettings);
+        }
+        else if(this.ownPieceSelected(pieceSettings)){
+            this.removeSelectPieceAndSquares(pieceSettings.piece);
+        }
     }
+    
+    
 
 }

@@ -1,6 +1,5 @@
 import { chessConfig } from '../../config/chessConfig.config.js';
-import { gameHandler } from '../gameHandler.js'
-import { generalMovement } from './general.js'
+import { movePieceHandler } from './movePiece.js';
 
 export const knightMovement = {
     
@@ -22,12 +21,12 @@ export const knightMovement = {
                 chessConfig.columns[colIdx+2]+(parseInt(rowPos)+1),
                 chessConfig.columns[colIdx+2]+(parseInt(rowPos)-1)];
 
-        const availableSquares = generalMovement.filterNonExistentSquares(possibleSquares.filter(e => typeof(e) === 'string'));
+        const availableSquares = movePieceHandler.filterNonExistentSquares(possibleSquares.filter(e => typeof(e) === 'string'));
         const horseJump = {};
         availableSquares.forEach((e,i) => {
             horseJump[i] = {
-                collisionFreeSquares : generalMovement.checkCollision([e]).collisionFreeSquares,
-                possibleCollision : generalMovement.checkCollision([e]).possibleCollision
+                collisionFreeSquares : movePieceHandler.checkCollision([e]).collisionFreeSquares,
+                possibleCollision : movePieceHandler.checkCollision([e]).possibleCollision
             }
         })
 

@@ -1,4 +1,4 @@
-import { $, $$, $$$ } from '../utils/utils.js'
+import { $, $$ } from '../utils/utils.js'
 import { normalGame }  from '../config/normalGameInit.config.js'
 import { chessConfig }  from '../config/chessConfig.config.js'
 import { pieceHandle } from '../services/pieceHandler.js'
@@ -62,7 +62,6 @@ export const piecesRender = {
             piece.removeEventListener( 'mouseenter', this.piecesEventListeners[ piecePosition ][ 'mouseenter' ])
             piece.removeEventListener( 'mouseleave', this.piecesEventListeners[ piecePosition ][ 'mouseleave' ])
             piece.removeEventListener( 'click', this.piecesEventListeners[ piecePosition ][ 'click' ])
-
         })
     },
 
