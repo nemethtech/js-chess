@@ -22,6 +22,7 @@ export const movePieceHandler = {
     },
 
     movePiece : function(event) {
+        console.log('EVENT',event);
         const piece = pieceHandle.pieceSelected();
         let newSqaureValue ;
         if(pieceHandle.isTargetEnemyPiece(event.target)){
@@ -37,6 +38,26 @@ export const movePieceHandler = {
         pieceHandle.removeSelected();
         checkHandler.clearHandlerObj();
         gameHandler.endTurn();
+    }, 
+
+    movePiece2 : function(square) {
+            console.log('movePiece2');
+        const piece = pieceHandle.pieceSelected();
+        let newSqaureValue ;
+        const targetDiv = pieceHandle.getPieceSquareById(square);
+        if(this.checkPossibleEnemy(square)){
+            targetDiv.removeChild(targetDiv.firstChild);
+            targetDiv.append(piece);
+            newSqaureValue = targetDiv.getAttribute('id');
+        }else{
+            newSqaureValue = targetDiv.getAttribute('id');
+            targetDiv.append(piece);
+        }
+        piece.setAttribute('new-piece-square', newSqaureValue);
+       // pieceHandle.removeSelected();
+      //  checkHandler.clearHandlerObj();
+        pieceHandle.removeSelected();
+        gameHandler.endTurn2();
     }, 
     
     checkPossibleEnemy(square){

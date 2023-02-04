@@ -8,7 +8,7 @@ import { kingMovement } from './pieceMovement/king.js';
 export const pieceHandle = {
    
     handlePieceClick(pieceSettings){
-        console.log('pieceHandle pieceSettings',pieceSettings);
+     //   console.log('pieceHandle pieceSettings',pieceSettings);
       //  console.log("checkHandler" , checkHandler.checkHandle);
         if(!gameHandler.pieceTurn(pieceSettings.pieceColor)){
             return this;
@@ -32,6 +32,7 @@ export const pieceHandle = {
             this.managePiece(pieceSettings)
         }
     },
+
     handlePieceMouseleave(handleParams){
         if(gameHandler.pieceTurn(handleParams.pieceColor))this.setHoverOnExit(handleParams.piece);
     },
@@ -88,8 +89,8 @@ export const pieceHandle = {
         return this;
     },
 
-    removeSelectPieceAndSquares(pieceSettings){
-        this.removeSelected(pieceSettings.piece);
+    removeSelectPieceAndSquares(){
+        this.removeSelected();
         generalMovement.clearPotentialSquares();
         return this;
     },

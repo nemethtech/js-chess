@@ -91,6 +91,7 @@ export const piecesRender = {
     },
 
     startGame(){
+        console.log('startGame');
         this.createPieces();
         this.setEventListeners();
     },
