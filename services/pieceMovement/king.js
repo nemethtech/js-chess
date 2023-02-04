@@ -9,12 +9,7 @@ import { movePieceHandler } from './movePiece.js';
 export const kingMovement = {
 
     returnAvailableSquares(kingPiece){
-        
-     //   console.log('king');
-     //   console.log("canTheKingMove",this.canTheKingMove(kingPiece));
-     //   this.getAvaliableSquares(kingPiece);
         return this.getAvailableSquares(kingPiece);
-        // this.getAvaliableSquares(kingPiece);
     },
 
     getAllAvaliableSquares(kingPiece){
@@ -50,22 +45,12 @@ export const kingMovement = {
                 }
             
                 if(pieceType !== 'king'){
-                    allForbiddenSquares.push(this.getEnemyCollisionSquares(generalMovement.getPotentialSquares(handleParams ,  true)));
+                    allForbiddenSquares.push(generalMovement.getCollisionFreeSquares(generalMovement.getPotentialSquares(handleParams ,  true)));
                 }
           })
         return allForbiddenSquares;
       } , 
   
-      getEnemyCollisionSquares(verifiedSquares){
-        const enemyCollisionSquares = [];
-        Object.values(verifiedSquares).forEach(val => {      
-            val.collisionFreeSquares.forEach(freeSquareId => {
-                enemyCollisionSquares.push(freeSquareId);
-            })              
-        });        
-        return enemyCollisionSquares;
-      },
-
       getForbiddenSquares(allForbiddenSquares){
         const mergedSquares = allForbiddenSquares.flat(1);
         const resArr =  mergedSquares.filter((element, index) => {

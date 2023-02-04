@@ -1,7 +1,5 @@
 import { chessConfig }  from '../../config/chessConfig.config.js'
-import { generalMovement } from './general.js'
 import { movePieceHandler } from './movePiece.js';
-
 
 
 export const bishopMovement = {

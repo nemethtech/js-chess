@@ -1,12 +1,11 @@
 import { chessConfig }  from '../../config/chessConfig.config.js'
 import { movePieceHandler } from './movePiece.js';
 
+
 export const rookMovement = {
     
-    potentialSquares : {},
-  
+
     returnAvailableSquares(rookPiece , bool){
-        this.potentialSquares = {};
         return this.getAvaliableSquares(rookPiece , bool);
     },
 

@@ -1,6 +1,7 @@
 import { chessConfig } from '../../config/chessConfig.config.js';
 import { movePieceHandler } from './movePiece.js';
 
+
 export const knightMovement = {
     
     returnAvailableSquares(knightPiece){

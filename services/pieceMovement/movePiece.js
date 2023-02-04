@@ -5,7 +5,6 @@ import { pieceHandle } from './../pieceHandler.js'
 import { checkHandler } from '../checkHandler.js';
 
 
-
 export const movePieceHandler = {
 
     clearPotentialSquares(){

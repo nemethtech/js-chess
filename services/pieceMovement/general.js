@@ -6,6 +6,7 @@ import { pawnMovement } from './pawn.js';
 import { movePieceHandler } from './movePiece.js';
 import { $ , $$ } from '../../utils/utils.js';
 
+
 export const generalMovement = {
 
 

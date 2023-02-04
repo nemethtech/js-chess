@@ -3,7 +3,7 @@ import { chessConfig }  from '../config/chessConfig.config.js'
 import { piecesRender } from '../services/pieceRender.js'
 import { gameHandler } from '../services/gameHandler.js'
 import { generalMovement } from '../services/pieceMovement/general.js'
-import { pieceHandle } from './pieceHandler.js'
+
 
 export const checkHandler = {
 
@@ -48,7 +48,7 @@ export const checkHandler = {
           
       },
   
-        checkCheckPossiblity(verifiedSquares ,piecePosition){
+      checkCheckPossiblity(verifiedSquares ,piecePosition){
           Object.values(verifiedSquares).forEach(val => {                
               if(val.possibleCollision){
                   if(this.checkKing(val.possibleCollision)){   

@@ -4,12 +4,14 @@ import { gameHandler } from './gameHandler.js';
 import { checkHandler } from './checkHandler.js';
 import { kingMovement } from './pieceMovement/king.js';
 
+
 export const pieceHandle = {
    
     handlePieceClick(pieceSettings){
-        console.log("checkHandler" , checkHandler.checkHandle);
+        console.log('pieceHandle pieceSettings',pieceSettings);
+      //  console.log("checkHandler" , checkHandler.checkHandle);
         if(!gameHandler.pieceTurn(pieceSettings.pieceColor)){
-            return ;
+            return this;
         }
         else if(checkHandler.getCheckStatus(pieceSettings.pieceColor)){
             console.log('0');
@@ -80,6 +82,7 @@ export const pieceHandle = {
     },
 
     selectPieceAndSquares(pieceSettings){
+    //    console.log("selectPieceAndSquarespieceHandle" , pieceSettings);
         this.setSelected(pieceSettings.piece);
         generalMovement.markPotentialSquares(pieceSettings);
         return this;
