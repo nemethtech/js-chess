@@ -40,12 +40,15 @@ export const movePieceHandler = {
         gameHandler.endTurn();
     }, 
 
-    movePiece2 : function(square) {
-            console.log('movePiece2');
-        const piece = pieceHandle.pieceSelected();
+    movePieceForEnemy(pieceSettings, squareToMove){
+        console.log('pieceSettings',pieceSettings);
+        console.log('squareToMove',squareToMove);
+        const piece = pieceSettings.piece;
         let newSqaureValue ;
-        const targetDiv = pieceHandle.getPieceSquareById(square);
-        if(this.checkPossibleEnemy(square)){
+        const targetDiv = pieceHandle.getPieceSquareById(squareToMove);
+        console.log('targetDiv',targetDiv);
+        console.log('this.checkPossibleEnemyForEnemy(squareToMove)',this.checkPossibleEnemyForEnemy(squareToMove));
+        if(this.checkPossibleEnemyForEnemy(squareToMove)){
             targetDiv.removeChild(targetDiv.firstChild);
             targetDiv.append(piece);
             newSqaureValue = targetDiv.getAttribute('id');
@@ -53,19 +56,26 @@ export const movePieceHandler = {
             newSqaureValue = targetDiv.getAttribute('id');
             targetDiv.append(piece);
         }
-        piece.setAttribute('new-piece-square', newSqaureValue);
-       // pieceHandle.removeSelected();
-      //  checkHandler.clearHandlerObj();
-        pieceHandle.removeSelected();
-        gameHandler.endTurn2();
+        pieceSettings.piece.setAttribute('new-piece-square', newSqaureValue);
     }, 
     
-    checkPossibleEnemy(square){
+    checkAndMarkPossibleEnemy(square){
         let pieceSquare = $(`[id^="${square}"]`);
         let pieceColor = pieceSquare.firstChild.getAttribute('piece-type').includes('white') ? 'white' : 'black';
         if(!gameHandler.pieceTurn(pieceColor)){ 
             pieceSquare.classList.add('potential-enemy'); 
             return true;
+        }
+        return undefined;
+    },
+
+    checkPossibleEnemyForEnemy(square){
+        let pieceSquare = $(`[id^="${square}"]`);
+        if(pieceSquare.firstChild){
+            let pieceColor = pieceSquare.firstChild.getAttribute('piece-type').includes('white') ? 'white' : 'black';
+            if(!gameHandler.pieceTurn(pieceColor)){ 
+                return true;
+            }
         }
         return undefined;
     },
@@ -80,6 +90,7 @@ export const movePieceHandler = {
 
             if( pieceColor === gameHandler.whosTurn() && pieceType === 'king' && bool){
                 console.log('king2!!',a);
+                console.log('king bool !!',bool);
                 possibleCollision = undefined;
             }
         }

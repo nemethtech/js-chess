@@ -8,8 +8,7 @@ import { kingMovement } from './pieceMovement/king.js';
 export const pieceHandle = {
    
     handlePieceClick(pieceSettings){
-     //   console.log('pieceHandle pieceSettings',pieceSettings);
-      //  console.log("checkHandler" , checkHandler.checkHandle);
+
         if(!gameHandler.pieceTurn(pieceSettings.pieceColor)){
             return this;
         }
@@ -17,10 +16,10 @@ export const pieceHandle = {
             console.log('0');
             if(pieceSettings.pieceType === 'king'){
                 if(kingMovement.canTheKingMove(pieceSettings)){
+                    console.log('haló nem ingyen');
                     this.managePiece(pieceSettings)
                 }
-            }
-            if(checkHandler.pieceCanBlockCheck(pieceSettings) ){
+            }else if(checkHandler.pieceCanBlockCheck(pieceSettings) ){
                 console.log('2');
                 this.managePiece(pieceSettings)
             }else{
@@ -83,7 +82,7 @@ export const pieceHandle = {
     },
 
     selectPieceAndSquares(pieceSettings){
-    //    console.log("selectPieceAndSquarespieceHandle" , pieceSettings);
+        console.log("selectPieceAndSquarespieceHandle" , pieceSettings);
         this.setSelected(pieceSettings.piece);
         generalMovement.markPotentialSquares(pieceSettings);
         return this;

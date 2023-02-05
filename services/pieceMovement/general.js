@@ -43,10 +43,13 @@ export const generalMovement = {
     },
 
     getPossibleCollisionquares(verifiedSquares){
+
         const collisionSquares = [];
         Object.values(verifiedSquares).forEach(val => {
+            
             if(val.possibleCollision)collisionSquares.push(val.possibleCollision);             
         });      
+
         return collisionSquares;
     },
 
@@ -55,7 +58,7 @@ export const generalMovement = {
             val.collisionFreeSquares.forEach(freeSquareId => {
                 $(`[id^="${freeSquareId}"]`).classList.add( 'potential-square');
             })                   
-            if(val.possibleCollision)movePieceHandler.checkPossibleEnemy(val.possibleCollision);
+            if(val.possibleCollision)movePieceHandler.checkAndMarkPossibleEnemy(val.possibleCollision);
         });        
     },
 

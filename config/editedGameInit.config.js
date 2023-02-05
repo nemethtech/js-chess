@@ -1,8 +1,10 @@
 export const editedGame = {
 
-    'a7': 'black_pawn',
-    'b7': 'black_pawn',
-    'c7': 'black_pawn',
+    'g4': 'black_pawn',
+    'h7': 'black_pawn',
+    'd1': 'black_pawn',
+    
+   /*
     'd7': 'black_pawn',
     'e7': 'black_pawn',
     'f7': 'black_pawn',
@@ -13,10 +15,17 @@ export const editedGame = {
     'a5': 'white_pawn',
     'b5': 'white_pawn',
     'c5': 'white_pawn',
-    'd5': 'white_pawn',
+    'd5': 'white_king',
     'e5': 'white_pawn',
     'f5': 'white_pawn',
     'g5': 'white_pawn',
-    'h5': 'white_pawn',
+    'h5': 'white_pawn',*/
+
+    'a2': 'white_pawn',
+    'c7': 'white_pawn',
+    'b8': 'white_pawn',
+    'f4': 'white_pawn',
+
+    'e5': 'black_pawn',
 
 };

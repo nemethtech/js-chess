@@ -15,16 +15,16 @@ export const gameHandler = {
         this.changeTurnSettings();
         generalMovement.clearPotentialSquares();
         piecesRender.resetRound();
-        this.makeRandomMoveForEnemy();
+       // this.makeRandomMoveForEnemy();
     },
 
     endTurn2(){
         console.log('itt');
         
    //     checkHandler.checkIfCheckIsOn();
+   //     this.changeTurnSettings();
         this.changeTurnSettings();
-        this.changeTurnSettings();
-        generalMovement.clearPotentialSquares();
+     //   generalMovement.clearPotentialSquares();
         piecesRender.resetRound();
   //      this.makeRandomMoveForEnemy();
     },
@@ -78,25 +78,20 @@ export const gameHandler = {
                     if(!!poti2.length){
                         console.log('ütni akarok');
                         let square = poti2[Math.floor(Math.random() * poti2.length)];
-                        if(movePieceHandler.checkPossibleEnemy(square)){
+                        console.log('square:',square);
+                        if(movePieceHandler.checkPossibleEnemyForEnemy(square)){
                             console.log('ütök is vele:',piece);
                             console.log('ide:',square);
-                            pieceHandle.handlePieceClick(handleParams);
-                            movePieceHandler.movePiece2(square);
-                     //       piece.click();
-                    //        piece.click();
 
-                  //          $(`[id^="${square}"]`).click();
-                    //        gameHandler.endTurn2();
+                            movePieceHandler.movePieceForEnemy(handleParams, square);
+                            gameHandler.endTurn2();
                             bool = true;
                             
                         }
-                        //    $(`[id^="${square}"]`).click();
                     }else if(!!poti.length){
                         console.log('ide is belépek');
                         let square = poti[Math.floor(Math.random() * poti.length)];
-                        piece.click();
-                        $(`[id="${square}"]`).click();
+                        movePieceHandler.movePieceForEnemy(handleParams, square);
                         gameHandler.endTurn2();
                         bool = true;
                     }
