@@ -47,7 +47,7 @@ export const generalMovement = {
         const collisionSquares = [];
         Object.values(verifiedSquares).forEach(val => {
             
-            if(val.possibleCollision)collisionSquares.push(val.possibleCollision);             
+            if(!this.valueNullOrUndefined(val.possibleCollision))collisionSquares.push(val.possibleCollision);             
         });      
 
         return collisionSquares;
@@ -55,10 +55,14 @@ export const generalMovement = {
 
     setSquares(verifiedSquares){
         Object.values(verifiedSquares).forEach(val => {
-            val.collisionFreeSquares.forEach(freeSquareId => {
-                $(`[id^="${freeSquareId}"]`).classList.add( 'potential-square');
-            })                   
-            if(val.possibleCollision)movePieceHandler.checkAndMarkPossibleEnemy(val.possibleCollision);
+            if(!this.valueNullOrUndefined(val.collisionFreeSquares)){
+                val.collisionFreeSquares.forEach(freeSquareId => {
+                    $(`[id^="${freeSquareId}"]`).classList.add( 'potential-square');
+                })                   
+            }
+            if(!this.valueNullOrUndefined(val.possibleCollision)){
+                movePieceHandler.checkAndMarkPossibleEnemy(val.possibleCollision.toString());
+            }
         });        
     },
 
@@ -74,6 +78,11 @@ export const generalMovement = {
         $$('.potential-square , .potential-enemy').forEach(pieceBox => {
             pieceBox.addEventListener( 'click', movePieceHandler.movePiece)
         });
+    },
+
+    valueNullOrUndefined(value){
+        return value == null ? true : false;
+
     },
 
 

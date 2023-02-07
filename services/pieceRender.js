@@ -3,7 +3,6 @@ import { normalGame }  from '../config/normalGameInit.config.js'
 import { chessConfig }  from '../config/chessConfig.config.js'
 import { pieceHandle } from '../services/pieceHandler.js'
 import { editedGame } from '../config/editedGameInit.config.js'
-import { gameHandler } from './gameHandler.js'
 
 
 export const piecesRender = {

@@ -73,10 +73,6 @@ export const pieceHandle = {
         return target.classList.contains('piece');
     },
 
-    getIdByIdVal(idVal){
-        return $(`[id_val^="${idVal}"]`).getAttribute('id');
-    },
-
     getPieceSquareById(id){
         return $(`[id^="${id}"]`);
     },

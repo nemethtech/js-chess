@@ -2,7 +2,7 @@ export const editedGame = {
 
     'g4': 'black_pawn',
     'h7': 'black_pawn',
-    'd1': 'black_pawn',
+    'd3': 'black_pawn',
     
    /*
     'd7': 'black_pawn',
@@ -23,7 +23,7 @@ export const editedGame = {
 
     'a2': 'white_pawn',
     'c7': 'white_pawn',
-    'b8': 'white_pawn',
+    'b5': 'white_pawn',
     'f4': 'white_pawn',
 
     'e5': 'black_pawn',

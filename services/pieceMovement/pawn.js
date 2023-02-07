@@ -1,43 +1,36 @@
+import { $$ } from '../../utils/utils.js'
 import { chessConfig } from '../../config/chessConfig.config.js';
-import { $ } from '../../utils/utils.js'
-import { pieceHandle } from '../pieceHandler.js';
+import { generalMovement } from './general.js';
 import { movePieceHandler } from './movePiece.js';
-
+import { gameHandler } from '../gameHandler.js';
+import { piecesRender } from '../pieceRender.js';
 
 export const pawnMovement = {
     
     returnAvailableSquares(pawnPiece){
-        console.log('pawn!!');
-        console.log('this.getSquaresForPawn!',this.getAvailableSquares(pawnPiece));
-
+        console.log("this.checkPawnsPromotion()" , this.checkPawnsPromotion());
         return this.getAvailableSquares(pawnPiece);
     },
-
-    isTheFirstMove(pawnPiece){
-        if(pawnPiece.pieceColor === 'white' &&
-           pawnPiece.piecePosition[1] === '2' ||
-           pawnPiece.pieceColor === 'black' &&
-           pawnPiece.piecePosition[1] === '7') {
-            return true;
-        } else{
-            return false;
-        }
-    },
   
-    
-    checkSideSquares(rowIdx , colIdx , moveSide){
+    checkSideSquares( pawnPiece ){
         let rightSideToAttack = undefined; 
         let leftSideToAttack = undefined; 
+        const moveSide = this.getPawnMoveOrder(pawnPiece);
+        const ownSquareCol = pawnPiece.piecePosition[0];
+        const ownSquareRow = parseInt(pawnPiece.piecePosition[1]);
+        const colIdx = chessConfig.columns.indexOf(ownSquareCol);
+        const rowIdx = chessConfig.rows.indexOf(ownSquareRow);
         const rowToAttack = chessConfig.rows[rowIdx + ( 1 * moveSide)] ? chessConfig.rows[rowIdx + ( 1 * moveSide)] : undefined ;
         const rightCol = chessConfig.columns[colIdx + 1] ? chessConfig.columns[colIdx +  1 * moveSide] : undefined ;
         const leftCol = chessConfig.columns[colIdx -1] ? chessConfig.columns[colIdx-1] : undefined ;
-        if(rowToAttack && leftCol){
+
+       !generalMovement.valueNullOrUndefined(rowToAttack) && !generalMovement.valueNullOrUndefined(leftCol) 
+        if(!generalMovement.valueNullOrUndefined(rowToAttack) && !generalMovement.valueNullOrUndefined(leftCol) ){
             leftSideToAttack = leftCol + rowToAttack;
         }
-        if(rowToAttack && rightCol){
+        if(!generalMovement.valueNullOrUndefined(rowToAttack) && !generalMovement.valueNullOrUndefined(rightCol) ){
             rightSideToAttack = rightCol + rowToAttack;
         }
-        console.log('checkSideSquares',{rightSideToAttack,leftSideToAttack });
         return {
             rightSideToAttack,
             leftSideToAttack
@@ -49,12 +42,10 @@ export const pawnMovement = {
             forwardRows : {
                 collisionFreeSquares : movePieceHandler.checkCollision(forwardSquares).collisionFreeSquares, 
             },
-            rightCol : {
-                collisionFreeSquares : [] , 
+            rightColumn : {
                 possibleCollision    : sideSquares.rightSideToAttack,
             },
-            leftCol : {
-                collisionFreeSquares : [] , 
+            leftColumn : {
                 possibleCollision    : sideSquares.leftSideToAttack,
             },
         }
@@ -63,7 +54,6 @@ export const pawnMovement = {
     getForwardSquares(pawnPiece){
         const rowIdx = this.getPawnPosition(pawnPiece).rowIdx ;
         const moveSide = this.getPawnMoveOrder(pawnPiece)
-
         const forwardSquares = [];
 
         if(( rowIdx + (1 * moveSide) >= 0 ) && (rowIdx + (1 * moveSide) <= 7)){ 
@@ -74,12 +64,11 @@ export const pawnMovement = {
                 }
             }
         }
-        console.log('forwardSquares',forwardSquares);
         return forwardSquares;
    },
 
    getAvailableSquares(pawnPiece){
-        return this.buildPawnMove(this.getForwardSquares(pawnPiece), this.checkSideSquares(this.getPawnPosition(pawnPiece)));
+        return this.buildPawnMove(this.getForwardSquares(pawnPiece), this.checkSideSquares(pawnPiece));
    },
 
    getPawnPosition(pawnPiece){
@@ -95,8 +84,48 @@ export const pawnMovement = {
 
    getPawnMoveOrder(pawnPiece){
         return  pawnPiece.pieceColor === 'white' ? 1 : -1;
-   }
+   },
 
+   promotePawn(pawnPiece){
+        const queenImgSrc = `pieces/"${pawnPiece.pieceColor}"_queen.png`;
+        pawnPiece.setAttribute( 'src'  , queenImgSrc);
+        pawnPiece.setAttribute( 'pieceType'  , queen);
+   },
 
+   
+
+   checkPawnsPromotion(){
+    $$(`[piece-type=${gameHandler.whosTurn()}_pawn`).forEach( piece => {
+        const piecePosition = piecesRender.checkPiecePosition(piece);
+        const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
+            if(this.pawnCanBePromoted(piecePosition , pieceColor)){
+                console.log('promot time' , piece);
+            }
+        })
+   },
+
+   isTheFirstMove(pawnPiece){
+    if(pawnPiece.pieceColor === 'white' &&
+       pawnPiece.piecePosition[1] === '2' ||
+       pawnPiece.pieceColor === 'black' &&
+       pawnPiece.piecePosition[1] === '7') 
+        {
+            return true; } else 
+        {
+            return false;
+        }
+    },
+
+pawnCanBePromoted(piecePosition , pieceColor){
+    if(pieceColor === 'white' &&
+        piecePosition[1] === '8' ||
+        pieceColor === 'black' &&
+        piecePosition[1] === '1') 
+        {
+            return true; } else 
+        {
+            return false;
+        }
+   },
 }
 

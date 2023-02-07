@@ -3,6 +3,7 @@ import { chessConfig } from '../../config/chessConfig.config.js'
 import { gameHandler } from '../gameHandler.js';
 import { pieceHandle } from './../pieceHandler.js'
 import { checkHandler } from '../checkHandler.js';
+import { generalMovement } from './general.js';
 
 
 export const movePieceHandler = {
@@ -25,6 +26,10 @@ export const movePieceHandler = {
         console.log('EVENT',event);
         const piece = pieceHandle.pieceSelected();
         let newSqaureValue ;
+    //    const t = event.target;
+    //    console.log('event.target',event.target);
+    //    console.log('event.originalTarget',event.originalTarget);
+    //    console.log('event.firstChild',event.firstChild);
         if(pieceHandle.isTargetEnemyPiece(event.target)){
             const targetDiv = event.target.parentNode;
             targetDiv.removeChild(event.target);
@@ -60,18 +65,27 @@ export const movePieceHandler = {
     }, 
     
     checkAndMarkPossibleEnemy(square){
-        let pieceSquare = $(`[id^="${square}"]`);
-        let pieceColor = pieceSquare.firstChild.getAttribute('piece-type').includes('white') ? 'white' : 'black';
-        if(!gameHandler.pieceTurn(pieceColor)){ 
-            pieceSquare.classList.add('potential-enemy'); 
-            return true;
+
+        let squareChild = $(`[id^="${square.toString()}"]`).firstChild === null ? undefined : $(`[id^="${square}"]`).firstChild ;
+      //  console.log('square',square);
+      //  console.log(' $(`[id^="${square.toString()}"]`).firstChild ', $(`[id^="${square.toString()}"]`).firstChild );
+
+     //   console.log('squareChild',squareChild);
+        let pieceColor = undefined;
+
+        if(!generalMovement.valueNullOrUndefined(squareChild)){
+            pieceColor = squareChild.getAttribute('piece-type').includes('white') ? 'white' : 'black';
+            if(!gameHandler.pieceTurn(pieceColor)){ 
+                $(`[id^="${square}"]`).classList.add('potential-enemy'); 
+                return true;
+            }
         }
         return undefined;
     },
 
     checkPossibleEnemyForEnemy(square){
         let pieceSquare = $(`[id^="${square}"]`);
-        if(pieceSquare.firstChild){
+        if(!generalMovement.valueNullOrUndefined(squareChild)){
             let pieceColor = pieceSquare.firstChild.getAttribute('piece-type').includes('white') ? 'white' : 'black';
             if(!gameHandler.pieceTurn(pieceColor)){ 
                 return true;

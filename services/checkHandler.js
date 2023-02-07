@@ -35,22 +35,25 @@ export const checkHandler = {
       },
   
       checkKing(square){
+    //    console.log('checkKing(square)',square);
+    //    console.log('checkKing(pieceSquare)',$(`[id^="${square}"]`));
           let pieceSquare = $(`[id^="${square}"]`);
-          let pieceColor = pieceSquare.firstChild.getAttribute('piece-type').includes('white') ? 'white' : 'black';
-          let kingPiece  = pieceSquare.firstChild.getAttribute('piece-type').includes('king') ? true : false;
-          if(!gameHandler.pieceTurn(pieceColor) && kingPiece){ 
-              console.log('Chekk');
-              this.checkHandle.checkColor = pieceColor;
-              this.checkHandle.isCheck = true;
-              return true;
-          }
-          return false;
-          
+          if(!generalMovement.valueNullOrUndefined(pieceSquare.firstChild)){
+              let pieceColor = pieceSquare.firstChild.getAttribute('piece-type').includes('white') ? 'white' : 'black';
+              let kingPiece  = pieceSquare.firstChild.getAttribute('piece-type').includes('king') ? true : false;
+              if(!gameHandler.pieceTurn(pieceColor) && kingPiece){ 
+                  console.log('Chekk');
+                  this.checkHandle.checkColor = pieceColor;
+                  this.checkHandle.isCheck = true;
+                  return true;
+                }
+                return false;
+            }  
       },
   
       checkCheckPossiblity(verifiedSquares ,piecePosition){
           Object.values(verifiedSquares).forEach(val => {                
-              if(val.possibleCollision){
+              if(!generalMovement.valueNullOrUndefined(val.possibleCollision)){
                   if(this.checkKing(val.possibleCollision)){   
                     this.checkHandle.resolvableSquares.push(val.collisionFreeSquares); 
                     this.checkHandle.attackerSquare.push(piecePosition);
