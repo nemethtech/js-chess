@@ -44,18 +44,16 @@ export const kingMovement = {
                   pieceColor,
                 }
             
-                if(pieceType !== 'king'){
+                
+                if(pieceType === 'pawn'){
+                  //  allForbiddenSquares.push(generalMovement.getCollisionFreeSquares(generalMovement.getPotentialSquares(handleParams ,  true)));
+                  allForbiddenSquares.push(generalMovement.getPossibleCollisionquares(generalMovement.getPotentialSquares(handleParams ,  true)));
+                  //  let a = generalMovement.getPotentialSquares(handleParams ,  true) 
+                }else if(pieceType !== 'king'){
                   allForbiddenSquares.push(generalMovement.getCollisionFreeSquares(generalMovement.getPotentialSquares(handleParams ,  true)));
-                  const piecePosition = piecesRender.checkPiecePosition(piece);
-                  if(pieceType === 'pawn' && piecePosition === "e5"){
-                    let a = generalMovement.getPotentialSquares(handleParams ,  true) 
-                    Object.values(a).forEach(val => {
-                      console.log('val' , val);                 
-                  });      
-                }    
-              }
-          })
-        return allForbiddenSquares;
+                }
+             })
+          return allForbiddenSquares;
       } , 
   
       getForbiddenSquares(allForbiddenSquares){
@@ -86,11 +84,9 @@ export const kingMovement = {
       },
 
       canTheKingMove(kingPiece){
-        const enemySquares = this.getForbiddenSquares(this.getAllForbiddenSquares());
-        let kingSquares = this.getAllAvaliableSquares(kingPiece);
-        let avaliableSquares = kingSquares.filter( square => !enemySquares.includes(square));
-
-        return avaliableSquares.length > 0 ? true : false;
+        let kingSquares = generalMovement.getCollisionFreeSquares(this.getAvailableSquares(kingPiece));
+        console.log('kingSquares',kingSquares);
+        return kingSquares.length > 0 ? true : false;
       }
 
       

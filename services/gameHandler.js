@@ -4,7 +4,7 @@ import { generalMovement } from '../services/pieceMovement/general.js'
 import { checkHandler } from './checkHandler.js'
 import { $$ } from '../utils/utils.js'
 import { movePieceHandler } from '../services/pieceMovement/movePiece.js'
-import { pieceHandle } from './pieceHandler.js'
+import { kingMovement } from './pieceMovement/king.js'
 
 
 export const gameHandler = {
@@ -100,6 +100,36 @@ export const gameHandler = {
 
         }
     },
+
+    getGameOverStatus(){
+        let gameOver = undefined;
+        if(checkHandler.checkHandle.isCheck){
+            gameOver = true;
+            $$(chessConfig.chessPieceSelector).forEach(piece => {
+                
+                const piecePosition = piecesRender.checkPiecePosition(piece);
+                const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
+                const pieceType = piece.getAttribute( 'piece-type' ).split('_')[1];
+                
+                const handleParams = {
+                    piece,
+                    pieceType, 
+                    piecePosition,
+                    pieceColor,
+                }
+
+                if(pieceType === 'king'){
+                    if(kingMovement.canTheKingMove(handleParams)){
+                        gameOver = false;
+                    }
+                }else if(checkHandler.pieceCanBlockCheck(handleParams) ){
+                        gameOver = false;
+                }
+                
+            })
+        }
+        return gameOver;
+    }
 
     
 

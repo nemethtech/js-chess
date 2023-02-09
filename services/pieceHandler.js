@@ -12,14 +12,15 @@ export const pieceHandle = {
         if(!gameHandler.pieceTurn(pieceSettings.pieceColor)){
             return this;
         }
-        else if(checkHandler.getCheckStatus(pieceSettings.pieceColor)){
+        else if(checkHandler.getCheckStatusForColor(pieceSettings.pieceColor)){
             console.log('0');
             if(pieceSettings.pieceType === 'king'){
-                if(kingMovement.canTheKingMove(pieceSettings)){
-                    console.log('haló nem ingyen');
+                if(kingMovement.canTheKingMove(pieceSettings) || checkHandler.pieceCanBlockCheck(pieceSettings)){
+                    console.log('canTheKingMove');
                     this.managePiece(pieceSettings)
                 }
             }else if(checkHandler.pieceCanBlockCheck(pieceSettings) ){
+                console.log('canTTheKingMove');
                 console.log('2');
                 this.managePiece(pieceSettings)
             }else{
@@ -78,7 +79,7 @@ export const pieceHandle = {
     },
 
     selectPieceAndSquares(pieceSettings){
-        console.log("selectPieceAndSquarespieceHandle" , pieceSettings);
+     //   console.log("selectPieceAndSquarespieceHandle" , pieceSettings);
         this.setSelected(pieceSettings.piece);
         generalMovement.markPotentialSquares(pieceSettings);
         return this;

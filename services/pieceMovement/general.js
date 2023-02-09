@@ -35,9 +35,11 @@ export const generalMovement = {
     getCollisionFreeSquares(verifiedSquares){
         const collisionFreeSquares = [];
         Object.values(verifiedSquares).forEach(val => {
-            val.collisionFreeSquares.forEach(freeSquareId => {
-                collisionFreeSquares.push(freeSquareId);
-            })                   
+            if(!generalMovement.valueNullOrUndefined(val.collisionFreeSquares)){
+                val.collisionFreeSquares.forEach(freeSquareId => {
+                    collisionFreeSquares.push(freeSquareId);
+                })                   
+            }
         });      
         return collisionFreeSquares;
     },

@@ -23,7 +23,7 @@ export const movePieceHandler = {
     },
 
     movePiece : function(event) {
-        console.log('EVENT',event);
+    //    console.log('EVENT',event);
         const piece = pieceHandle.pieceSelected();
         let newSqaureValue ;
     //    const t = event.target;

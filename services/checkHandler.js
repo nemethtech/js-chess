@@ -19,6 +19,7 @@ export const checkHandler = {
 
 
     checkIfCheckIsOn(){ 
+        console.log('checkIfCheckIsOn');
           $$(`[piece-type^="${chessConfig.currentTurn}"]`).forEach(piece => {
               const piecePosition = piecesRender.checkPiecePosition(piece);
               const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
@@ -30,7 +31,7 @@ export const checkHandler = {
                   piecePosition,
                   pieceColor,
               }
-              this.checkCheckPossiblity(generalMovement.getPotentialSquares(handleParams),piecePosition);
+              this.checkCheckPossiblity(generalMovement.getPotentialSquares(handleParams),piecePosition , pieceType);
           })
       },
   
@@ -51,12 +52,18 @@ export const checkHandler = {
             }  
       },
   
-      checkCheckPossiblity(verifiedSquares ,piecePosition){
+      checkCheckPossiblity(verifiedSquares ,piecePosition , pieceType){
           Object.values(verifiedSquares).forEach(val => {                
               if(!generalMovement.valueNullOrUndefined(val.possibleCollision)){
                   if(this.checkKing(val.possibleCollision)){   
-                    this.checkHandle.resolvableSquares.push(val.collisionFreeSquares); 
+                    console.log('belép');
+                    console.log('pieceType' , pieceType);
+                    (pieceType === 'pawn') ?
+                        this.checkHandle.resolvableSquares.push(val.possibleCollision) :   
+                        this.checkHandle.resolvableSquares.push(val.collisionFreeSquares); 
+                        
                     this.checkHandle.attackerSquare.push(piecePosition);
+                    console.log('checkH',this.checkHandle);
                 }
             }
         });        
@@ -74,13 +81,15 @@ export const checkHandler = {
         return this;
       },
 
-      getCheckStatus(color){
+      getCheckStatusForColor(color){
         return this.checkHandle.checkColor === color;
       },
 
       pieceCanBlockCheck(pieceSettings){
-        
+       
         let pieceCanBlockCheck = false;
+        //    console.log('checkHandler' , checkHandler.checkHandle);
+     //   console.log('pieceCanBlockCheck' , pieceSettings);
         if(checkHandler.checkHandle.resolvableSquares.length !== 1){
             return pieceCanBlockCheck;
         }

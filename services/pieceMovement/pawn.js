@@ -8,7 +8,7 @@ import { piecesRender } from '../pieceRender.js';
 export const pawnMovement = {
     
     returnAvailableSquares(pawnPiece){
-        console.log("this.checkPawnsPromotion()" , this.checkPawnsPromotion());
+       // console.log('this.getAvailableSquares(pawnPiece)',this.getAvailableSquares(pawnPiece));
         return this.getAvailableSquares(pawnPiece);
     },
   
@@ -86,10 +86,10 @@ export const pawnMovement = {
         return  pawnPiece.pieceColor === 'white' ? 1 : -1;
    },
 
-   promotePawn(pawnPiece){
-        const queenImgSrc = `pieces/"${pawnPiece.pieceColor}"_queen.png`;
+   promotePawn(pawnPiece , pieceColor){
+        const queenImgSrc = `pieces/${pieceColor}_queen.png`;
         pawnPiece.setAttribute( 'src'  , queenImgSrc);
-        pawnPiece.setAttribute( 'pieceType'  , queen);
+        pawnPiece.setAttribute( 'piece-type'  , `${pieceColor}_queen`);
    },
 
    
@@ -99,6 +99,7 @@ export const pawnMovement = {
         const piecePosition = piecesRender.checkPiecePosition(piece);
         const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
             if(this.pawnCanBePromoted(piecePosition , pieceColor)){
+                this.promotePawn(piece , pieceColor);
                 console.log('promot time' , piece);
             }
         })
