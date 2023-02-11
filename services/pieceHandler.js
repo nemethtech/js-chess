@@ -79,7 +79,6 @@ export const pieceHandle = {
     },
 
     selectPieceAndSquares(pieceSettings){
-     //   console.log("selectPieceAndSquarespieceHandle" , pieceSettings);
         this.setSelected(pieceSettings.piece);
         generalMovement.markPotentialSquares(pieceSettings);
         return this;

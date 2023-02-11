@@ -3,6 +3,7 @@ import { chessConfig }  from '../config/chessConfig.config.js'
 import { piecesRender } from '../services/pieceRender.js'
 import { gameHandler } from '../services/gameHandler.js'
 import { generalMovement } from '../services/pieceMovement/general.js'
+import { kingMovement } from '../services/pieceMovement/king.js'
 
 
 export const checkHandler = {
@@ -13,6 +14,7 @@ export const checkHandler = {
         canTheKingMove : false ,
         kingMove : undefined ,
         attackerSquare : [] ,
+        attacketBackedup : false , 
         resolvableSquares : [],
         forbiddenSqures : []
     },
@@ -20,8 +22,8 @@ export const checkHandler = {
 
     checkIfCheckIsOn(){ 
         console.log('checkIfCheckIsOn');
-          $$(`[piece-type^="${chessConfig.currentTurn}"]`).forEach(piece => {
-              const piecePosition = piecesRender.checkPiecePosition(piece);
+        $$(`[piece-type^="${chessConfig.currentTurn}"]`).forEach(piece => {
+            const piecePosition = piecesRender.checkPiecePosition(piece);
               const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
               const pieceType = piece.getAttribute( 'piece-type' ).split('_')[1];
               
@@ -30,14 +32,13 @@ export const checkHandler = {
                   pieceType, 
                   piecePosition,
                   pieceColor,
-              }
+                }
               this.checkCheckPossiblity(generalMovement.getPotentialSquares(handleParams),piecePosition , pieceType);
-          })
-      },
+            })
+            console.log('moveAbleSquares' ,  this.isAttackerBackedUp());
+        },
   
       checkKing(square){
-    //    console.log('checkKing(square)',square);
-    //    console.log('checkKing(pieceSquare)',$(`[id^="${square}"]`));
           let pieceSquare = $(`[id^="${square}"]`);
           if(!generalMovement.valueNullOrUndefined(pieceSquare.firstChild)){
               let pieceColor = pieceSquare.firstChild.getAttribute('piece-type').includes('white') ? 'white' : 'black';
@@ -55,12 +56,14 @@ export const checkHandler = {
       checkCheckPossiblity(verifiedSquares ,piecePosition , pieceType){
           Object.values(verifiedSquares).forEach(val => {                
               if(!generalMovement.valueNullOrUndefined(val.possibleCollision)){
-                  if(this.checkKing(val.possibleCollision)){   
+                  if(this.checkKing(val.possibleCollision)){
                     console.log('belép');
                     console.log('pieceType' , pieceType);
-                    (pieceType === 'pawn') ?
-                        this.checkHandle.resolvableSquares.push(val.possibleCollision) :   
+                    if(pieceType === 'pawn') {
+                        this.checkHandle.resolvableSquares.push(val.possibleCollision);   
+                    } else {
                         this.checkHandle.resolvableSquares.push(val.collisionFreeSquares); 
+                    }
                         
                     this.checkHandle.attackerSquare.push(piecePosition);
                     console.log('checkH',this.checkHandle);
@@ -71,13 +74,14 @@ export const checkHandler = {
       },
 
       clearHandlerObj(){
-        this.checkHandle.isCheck = false ;
-        this.checkHandle.checkColor = undefined ;
-        this.checkHandle.canTheKingMove = false ;
+        this.checkHandle.isCheck = false;
+        this.checkHandle.checkColor = undefined;
+        this.checkHandle.canTheKingMove = false;
         this.checkHandle.kingMove = undefined;
         this.checkHandle.resolvableSquares = [];
         this.checkHandle.attackerSquare = [];
         this.checkHandle.forbiddenSqures = [];
+        this.attacketBackedup = false;
         return this;
       },
 
@@ -85,11 +89,8 @@ export const checkHandler = {
         return this.checkHandle.checkColor === color;
       },
 
-      pieceCanBlockCheck(pieceSettings){
-       
+      pieceCanBlockCheck(pieceSettings){    
         let pieceCanBlockCheck = false;
-        //    console.log('checkHandler' , checkHandler.checkHandle);
-     //   console.log('pieceCanBlockCheck' , pieceSettings);
         if(checkHandler.checkHandle.resolvableSquares.length !== 1){
             return pieceCanBlockCheck;
         }
@@ -101,10 +102,35 @@ export const checkHandler = {
             }
         });   
         arrPossibleCollisionquares.forEach(possibleCollisionquares => {
-            if(checkHandler.checkHandle.attackerSquare.includes(possibleCollisionquares)){
+            if(checkHandler.checkHandle.attackerSquare.includes(possibleCollisionquares) && !checkHandler.checkHandle.attacketBackedup ){
                 pieceCanBlockCheck = true;
             }
         });   
         return pieceCanBlockCheck;
+    }, 
+
+    isAttackerBackedUp(){
+        const moveAbleSquares = [];
+        $$(`[piece-type^=${gameHandler.whosTurn()}]`).forEach(piece => {
+            const piecePosition = piecesRender.checkPiecePosition(piece);
+            const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
+            const pieceType = piece.getAttribute( 'piece-type' ).split('_')[1];
+            const handleParams = {
+                piece,
+                pieceType, 
+                piecePosition,
+                pieceColor,
+                }
+            
+            moveAbleSquares.push(generalMovement.getPossibleCollisionquares(generalMovement.getPotentialSquares(handleParams ,  true)));
+            if(pieceType !== 'pawn'){
+                moveAbleSquares.push(generalMovement.getCollisionFreeSquares(generalMovement.getPotentialSquares(handleParams ,  true)));
+            }
+        })
+        if(kingMovement.getForbiddenSquares(moveAbleSquares).includes(this.checkHandle.attackerSquare[0])){
+            this.checkHandle.attacketBackedup = true;
+            console.log('true');
+        }
+        return this;
     }
 }
