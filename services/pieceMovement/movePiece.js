@@ -12,13 +12,13 @@ export const movePieceHandler = {
         $$('.potential-square , .potential-enemy').forEach(pieceBox => {
             pieceBox.classList.remove( 'potential-enemy' );
             pieceBox.classList.remove( 'potential-square' );;
-            pieceBox.removeEventListener( 'click', this.movePiece)
+            pieceBox.removeEventListener( 'click', this.movePiece )
         });
     },
     
     setEventsOnPotentialSquares(){
         $$('.potential-square , .potential-enemy').forEach(pieceBox => {
-            pieceBox.addEventListener( 'click', this.movePiece)
+            pieceBox.addEventListener( 'click', this.movePiece )
         });
     },
 
@@ -65,10 +65,6 @@ export const movePieceHandler = {
     checkAndMarkPossibleEnemy(square){
 
         let squareChild = $(`[id^="${square.toString()}"]`).firstChild === null ? undefined : $(`[id^="${square}"]`).firstChild ;
-      //  console.log('square',square);
-      //  console.log(' $(`[id^="${square.toString()}"]`).firstChild ', $(`[id^="${square.toString()}"]`).firstChild );
-
-     //   console.log('squareChild',squareChild);
         let pieceColor = undefined;
 
         if(!generalMovement.valueNullOrUndefined(squareChild)){

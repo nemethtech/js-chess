@@ -10,21 +10,17 @@ import { Player } from './playerClass.js'
 
 export const gameHandler = {
 
-    endTurn(){
-        
-        Player.instanceByColor('white').getPiecesAndSquares();
-        Player.instanceByColor('black').getPiecesAndSquares();
+    startGame(){
+        piecesRender.createPieces();
+        piecesRender.setEventListeners();
+        Player.resetPlayerPieces();
+    },
 
-        console.log('playerOne', Player.instanceByColor('white'));
-        console.log('playerTwo',Player.instanceByColor('black'));
-  //      playerTwo.getPiecesAndSquares();
-  //      console.log('playerOne',playerOne);
-  //      console.log('playerTwo',playerTwo);
-        
+    endTurn(){
+        Player.resetPlayerPieces();
         this.changeTurnSettings();
         generalMovement.clearPotentialSquares();
         piecesRender.resetRound();
-       // this.makeRandomMoveForEnemy();
     },
 
     endTurn2(){

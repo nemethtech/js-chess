@@ -113,45 +113,5 @@ export const checkHandler = {
     }, 
 
 
-    backedUpSqaures(){
-        const backedUpSquares = [];
-        $$(`[piece-type^=${gameHandler.notCurrentTurnFor()}]`).forEach(piece => {
-            const piecePosition = piecesRender.checkPiecePosition(piece);
-            const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
-            const pieceType = piece.getAttribute( 'piece-type' ).split('_')[1];
-            const handleParams = {
-                piece,
-                pieceType, 
-                piecePosition,
-                pieceColor,
-                }
-            
-            backedUpSquares.push(generalMovement.getPossibleCollisionquares(generalMovement.getPotentialSquares(handleParams ,  true)));
-            if(pieceType !== 'pawn'){
-                backedUpSquares.push(generalMovement.getCollisionFreeSquares(generalMovement.getPotentialSquares(handleParams ,  true)));
-            }
-        })
-        return backedUpSquares;
-    },
-
-    getPieces(){ 
-        console.log('checkIfCheckIsOn');
-        $$(`[piece-type^="${chessConfig.currentTurn}"]`).forEach(piece => {
-            const piecePosition = piecesRender.checkPiecePosition(piece);
-            const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
-            const pieceType = piece.getAttribute( 'piece-type' ).split('_')[1];
-            
-            const handleParams = {
-                piece,
-                pieceType, 
-                piecePosition,
-                pieceColor,
-            }
-            gameHandler.playerOne.randomArr.push(handleParams);
-           // this.checkCheckPossiblity(generalMovement.getPotentialSquares(handleParams),piecePosition , pieceType);
-        })
-          //   this.isAttackerBackedUp();
-        
-        },
-     
+   
 }

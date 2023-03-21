@@ -11,7 +11,6 @@ export const pieceHandle = {
    
     handlePieceClick(pieceSettings){
 
-        console.log('kingMovement.canTheKingMove',kingMovement.canTheKingMove(pieceSettings));
         if(!gameHandler.pieceTurn(pieceSettings.pieceColor)){
             return this;
         }

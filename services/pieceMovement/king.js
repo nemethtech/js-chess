@@ -50,7 +50,6 @@ export const kingMovement = {
     },
     
   canTheKingMove(kingPiece){
-      console.log('this.getAvailableSquares(kingPiece)',this.getAvailableSquares(kingPiece));
       return this.getAvailableSquares(kingPiece).length > 0 ? true : false;
     },
 
@@ -66,11 +65,10 @@ export const kingMovement = {
         }
       })
 
-      let kingMoveArray = kingMoveArray.filter(kingMove => {
+      let filteredKingMoveArray = kingMoveArray.filter(kingMove => {
           return !backedUpKingAttackSqaures.includes(kingMove);
       });
-
-      return kingMoveArray;
+      return filteredKingMoveArray;
   },
   
 }

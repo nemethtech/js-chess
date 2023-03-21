@@ -1,4 +1,3 @@
-import {  piecesRender }  from './services/pieceRender.js'
+import { gameHandler } from './services/gameHandler.js';
 
-
-piecesRender.startGame();
+gameHandler.startGame();

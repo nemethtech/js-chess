@@ -14,7 +14,7 @@ class Player {
       Player.instances[color] = this;
     }
     
-    getPieces(){
+    getPlayerPieces(){
       $$(`[piece-type^="${this.playerColor}"]`).forEach(piece => {
           const piecePosition = piecesRender.checkPiecePosition(piece);
           const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
@@ -61,20 +61,12 @@ class Player {
       })
     }
 
-    getPiecePositions(){
-      this.playerPiecesPosition = [];
-      this.playerPieces.forEach( piece =>{
-        this.playerPiecesPosition.push(piece.piecePosition);
-      })
-    }
-
     getPiecesAndSquares(){
       this.playerPieces = [];
       this.attackSquares = [];
-      this.getPieces();
+      this.getPlayerPieces();
       this.getAttackerSquares();
       this.setPieceBackUp();
-      this.getPiecePositions();
     }
 
   }
@@ -84,9 +76,14 @@ class Player {
   Player.instanceByColor = function(color) {
     return Player.instances[color];
   }
-
-const playerOne = new Player('white');
+  
 const playerTwo = new Player('black');
+const playerOne = new Player('white');
+Player.resetPlayerPieces = function(){
+  Player.instanceByColor('white').getPiecesAndSquares();
+  Player.instanceByColor('black').getPiecesAndSquares();
+}
+
 
 
 export { Player};
