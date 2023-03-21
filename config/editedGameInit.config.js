@@ -1,5 +1,5 @@
 export const editedGame = {
-
+/*
     'a8': 'black_rook',
     'b8': 'black_knight',
     'c8': 'black_bishop',
@@ -33,7 +33,12 @@ export const editedGame = {
     'f4': 'white_pawn',
     'g5': 'white_pawn',
     'h2': 'white_pawn',
-    
-    
+ */   
+    'a1': 'white_king',
+    'e8': 'black_king',
+    'e3': 'white_rook',
+    'e6': 'white_bishop',
+    'c8': 'black_bishop',
+    'b3': 'white_queen',
 
 };

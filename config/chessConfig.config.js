@@ -8,6 +8,6 @@ export const chessConfig = {
     maxIdVal : 64 ,
     minIdVal : 1 ,
     enemyUsed : false , 
-    enemyColor : 'black' 
+    enemyColor : 'black' , 
     
 }   

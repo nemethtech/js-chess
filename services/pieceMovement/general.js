@@ -87,5 +87,12 @@ export const generalMovement = {
 
     },
 
+    simplifyArray(array){
+        const mergedSquares = array.flat(1);
+        const simplifiedArray =  mergedSquares.filter((element, index) => {
+            return mergedSquares.indexOf(element) === index;
+        });
+        return simplifiedArray;
+      },
 
 }

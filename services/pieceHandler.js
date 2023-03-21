@@ -5,30 +5,30 @@ import { checkHandler } from './checkHandler.js';
 import { kingMovement } from './pieceMovement/king.js';
 
 
+
+
 export const pieceHandle = {
    
     handlePieceClick(pieceSettings){
 
+        console.log('kingMovement.canTheKingMove',kingMovement.canTheKingMove(pieceSettings));
         if(!gameHandler.pieceTurn(pieceSettings.pieceColor)){
             return this;
         }
         else if(checkHandler.getCheckStatusForColor(pieceSettings.pieceColor)){
             console.log('0');
             if(pieceSettings.pieceType === 'king'){
-                if(kingMovement.canTheKingMove(pieceSettings) || checkHandler.pieceCanBlockCheck(pieceSettings)){
-                    console.log('canTheKingMove');
+                if(kingMovement.canTheKingMove(pieceSettings)){
                     this.managePiece(pieceSettings)
                 }
             }else if(checkHandler.pieceCanBlockCheck(pieceSettings) ){
-                console.log('canTTheKingMove');
                 console.log('2');
                 this.managePiece(pieceSettings)
             }else{
                 return;
             }
-        }
-        else{ 
-            console.log('3');
+        } 
+        else { 
             this.managePiece(pieceSettings)
         }
     },

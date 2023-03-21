@@ -23,13 +23,11 @@ export const movePieceHandler = {
     },
 
     movePiece : function(event) {
-    //    console.log('EVENT',event);
+
         const piece = pieceHandle.pieceSelected();
+    //    gameHandler.playerOne.randomArr.push(piece);
         let newSqaureValue ;
-    //    const t = event.target;
-    //    console.log('event.target',event.target);
-    //    console.log('event.originalTarget',event.originalTarget);
-    //    console.log('event.firstChild',event.firstChild);
+   
         if(pieceHandle.isTargetEnemyPiece(event.target)){
             const targetDiv = event.target.parentNode;
             targetDiv.removeChild(event.target);
@@ -103,8 +101,6 @@ export const movePieceHandler = {
             const pieceType = a.getAttribute( 'piece-type' ).split('_')[1];
 
             if( pieceColor === gameHandler.whosTurn() && pieceType === 'king' && bool){
-                console.log('king2!!',a);
-                console.log('king bool !!',bool);
                 possibleCollision = undefined;
             }
         }

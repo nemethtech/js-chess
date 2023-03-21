@@ -1,7 +1,6 @@
 import { chessConfig }  from '../../config/chessConfig.config.js'
 import { movePieceHandler } from './movePiece.js';
 
-
 export const bishopMovement = {
     
     returnAvailableSquares(bishopPiece , bool){

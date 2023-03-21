@@ -5,13 +5,22 @@ import { checkHandler } from './checkHandler.js'
 import { $$ } from '../utils/utils.js'
 import { movePieceHandler } from '../services/pieceMovement/movePiece.js'
 import { kingMovement } from './pieceMovement/king.js'
+import { Player } from './playerClass.js'
 
 
 export const gameHandler = {
 
     endTurn(){
-        console.log('itt');
-        checkHandler.checkIfCheckIsOn();
+        
+        Player.instanceByColor('white').getPiecesAndSquares();
+        Player.instanceByColor('black').getPiecesAndSquares();
+
+        console.log('playerOne', Player.instanceByColor('white'));
+        console.log('playerTwo',Player.instanceByColor('black'));
+  //      playerTwo.getPiecesAndSquares();
+  //      console.log('playerOne',playerOne);
+  //      console.log('playerTwo',playerTwo);
+        
         this.changeTurnSettings();
         generalMovement.clearPotentialSquares();
         piecesRender.resetRound();
@@ -40,6 +49,7 @@ export const gameHandler = {
     changeTurnSettings(){
         chessConfig.whiteTurn = chessConfig.whiteTurn === true ?  false : true;
         chessConfig.currentTurn = chessConfig.currentTurn  === 'white' ? 'black' : 'white';
+        chessConfig.enemyColor = chessConfig.currentTurn  === 'white' ? 'black' : 'white';
     },
 
     notCurrentTurnFor(){
