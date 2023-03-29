@@ -48,13 +48,33 @@ export const generalMovement = {
 
         const collisionSquares = [];
         Object.values(verifiedSquares).forEach(val => {
-            
+            verifiedSquares
             if(!this.valueNullOrUndefined(val.possibleCollision))collisionSquares.push(val.possibleCollision);             
         });      
 
         return collisionSquares;
     },
 
+    getPossibleCollisionquares2(pieceMove){
+        
+        let collisionSquares = [];
+     //   console.log('Object.getOwnPropertyNames(objectToInspect)',Object.getOwnPropertyNames(pieceMove));
+  //      console.log('myObj.constructor.name',pieceMove.name);
+        for (const direction in pieceMove) {
+            if (Object.hasOwn(pieceMove,direction)) {
+                if(!this.valueNullOrUndefined(pieceMove[direction].possibleCollision)){
+                    collisionSquares.push({
+                        direction : direction ,
+                        square : pieceMove[direction].possibleCollision            
+                    })
+                }
+            }
+         //   console.log('direction',direction);
+        }
+          
+
+        return collisionSquares;
+    },
     setSquares(verifiedSquares){
         Object.values(verifiedSquares).forEach(val => {
             if(!this.valueNullOrUndefined(val.collisionFreeSquares)){

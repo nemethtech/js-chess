@@ -3,13 +3,16 @@ import { generalMovement } from '../services/pieceMovement/general.js'
 import { gameHandler } from './gameHandler.js';
 import { checkHandler } from './checkHandler.js';
 import { kingMovement } from './pieceMovement/king.js';
-
+import { checkHandling } from './pieceMovement/playerClassExtend.js';
 
 
 
 export const pieceHandle = {
-   
     handlePieceClick(pieceSettings){
+        console.log('white',checkHandling.instanceByColor('white'));
+        console.log('black',checkHandling.instanceByColor('black'));
+   //     console.log('white pieces: ',checkHandling.instanceByColor('black').getEnemyKingPosition());
+  //      console.log('black pieces: ',checkHandling.instanceByColor('white').getEnemyKingPosition());
 
         if(!gameHandler.pieceTurn(pieceSettings.pieceColor)){
             return this;

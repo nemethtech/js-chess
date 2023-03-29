@@ -44,13 +44,11 @@ export const movePieceHandler = {
     }, 
 
     movePieceForEnemy(pieceSettings, squareToMove){
-        console.log('pieceSettings',pieceSettings);
-        console.log('squareToMove',squareToMove);
+
         const piece = pieceSettings.piece;
         let newSqaureValue ;
         const targetDiv = pieceHandle.getPieceSquareById(squareToMove);
-        console.log('targetDiv',targetDiv);
-        console.log('this.checkPossibleEnemyForEnemy(squareToMove)',this.checkPossibleEnemyForEnemy(squareToMove));
+
         if(this.checkPossibleEnemyForEnemy(squareToMove)){
             targetDiv.removeChild(targetDiv.firstChild);
             targetDiv.append(piece);

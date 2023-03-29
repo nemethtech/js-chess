@@ -57,7 +57,7 @@ export const piecesRender = {
         })
     },
     
-    resetEventListeners() {
+    removeEventListeners() {
         $$( chessConfig.chessPieceSelector).forEach( piece => {
             const piecePosition = piece.getAttribute( 'piece-square' );
             piece.removeEventListener( 'mouseenter', this.piecesEventListeners[ piecePosition ][ 'mouseenter' ])
@@ -90,8 +90,8 @@ export const piecesRender = {
         return piecePosition;
     },
 
-    resetRound(){
-        this.resetEventListeners();
+    resetEventListeners(){
+        this.removeEventListeners();
         this.setEventListeners();
         if(gameHandler.getGameOverStatus())console.log('GAME OVER');
         

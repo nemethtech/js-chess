@@ -5,22 +5,23 @@ import { checkHandler } from './checkHandler.js'
 import { $$ } from '../utils/utils.js'
 import { movePieceHandler } from '../services/pieceMovement/movePiece.js'
 import { kingMovement } from './pieceMovement/king.js'
-import { Player } from './playerClass.js'
-
+import { checkHandling } from './pieceMovement/playerClassExtend.js'
+//import { Player } from './playerClass.js'
+//checkHandling
 
 export const gameHandler = {
 
     startGame(){
         piecesRender.createPieces();
         piecesRender.setEventListeners();
-        Player.resetPlayerPieces();
+        checkHandling.resetPlayerPieces();
     },
 
     endTurn(){
-        Player.resetPlayerPieces();
+        checkHandling.resetPlayerPieces();
         this.changeTurnSettings();
         generalMovement.clearPotentialSquares();
-        piecesRender.resetRound();
+        piecesRender.resetEventListeners();
     },
 
     endTurn2(){
