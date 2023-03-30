@@ -8,8 +8,8 @@ import { Player } from './playerClassExtend.js';
 
 export const pieceHandle = {
     handlePieceClick(pieceSettings){
- //       console.log('white',checkHandling.instanceByColor('white').clgCollisions());
- //       console.log('black',checkHandling.instanceByColor('black').clgCollisions());
+  //          console.log('white',Player.instanceByColor('white'));
+  //      console.log('black',Player.instanceByColor('black'));
 
         if(!gameHandler.pieceTurn(pieceSettings.pieceColor)){
             return this;

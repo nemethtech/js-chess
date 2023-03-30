@@ -20,7 +20,7 @@ class BasePlayer {
     getPlayerPieces(){
       this.playerPieces = [];
       $$(`[piece-type^="${this.playerColor}"]`).forEach(piece => {
-          const piecePosition = piecesRender.checkPiecePosition(piece);
+          const piecePosition = piece.getAttribute( 'piece-square' );
           const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
           const pieceType = piece.getAttribute( 'piece-type' ).split('_')[1];
           
@@ -88,8 +88,9 @@ class BasePlayer {
     } 
 
     clgCollisions(){
+      console.log("clgCollisions",this.playerColor);
       this.pieceCollisions.forEach(pieceCollision =>{
-        console.log("itt");
+        console.log('pieceCollision',pieceCollision);
         if(pieceCollision.enemyPieceType.includes('king')){
           console.log('CSEKK!');
         }
@@ -120,11 +121,9 @@ class BasePlayer {
   }
 
   BasePlayer.resetPlayerPieces = () => {
-    console.log('Player.instances',Player.instances);
-    Player.instances.forEach(player =>{
-      player.setPlayerPieces();
-      console.log('player',player);
-    })
+    BasePlayer.instanceByColor('black').setPlayerPieces();
+    BasePlayer.instanceByColor('white').setPlayerPieces();
   }
+  
 
 export { BasePlayer };

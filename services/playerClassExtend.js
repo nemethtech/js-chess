@@ -16,16 +16,10 @@ class Player extends BasePlayer {
         }
     });
    }
-  
-    // ...
   }
 
 const playerExtendedTwo = new Player('black');
 const playerExtendedOne = new Player('white');
-Player.resetPlayerPieces = function(){
-  Player.instanceByColor('white').setPlayerPieces();
-  Player.instanceByColor('black').setPlayerPieces();
-}
 
 
 export { Player };

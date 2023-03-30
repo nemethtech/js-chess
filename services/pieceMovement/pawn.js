@@ -22,7 +22,7 @@ export const pawnMovement = {
         const rowIdx = chessConfig.rows.indexOf(ownSquareRow);
         const rowToAttack = chessConfig.rows[rowIdx + ( 1 * moveSide)] ? chessConfig.rows[rowIdx + ( 1 * moveSide)] : undefined ;
         const rightCol = chessConfig.columns[colIdx + 1] ? chessConfig.columns[colIdx +  1 * moveSide] : undefined ;
-        const leftCol = chessConfig.columns[colIdx -1] ? chessConfig.columns[colIdx-1] : undefined ;
+        const leftCol = chessConfig.columns[colIdx -1] ? chessConfig.columns[colIdx-1 * moveSide] : undefined ;
 
        !generalMovement.valueNullOrUndefined(rowToAttack) && !generalMovement.valueNullOrUndefined(leftCol) 
         if(!generalMovement.valueNullOrUndefined(rowToAttack) && !generalMovement.valueNullOrUndefined(leftCol) ){
@@ -96,7 +96,7 @@ export const pawnMovement = {
 
    checkPawnsPromotion(){
     $$(`[piece-type=${gameHandler.whosTurn()}_pawn`).forEach( piece => {
-        const piecePosition = piecesRender.checkPiecePosition(piece);
+        const piecePosition = piece.getAttribute( 'piece-square' );
         const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
             if(this.pawnCanBePromoted(piecePosition , pieceColor)){
                 this.promotePawn(piece , pieceColor);

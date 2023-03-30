@@ -4,6 +4,7 @@ import { gameHandler } from '../gameHandler.js';
 import { pieceHandle } from './../pieceHandler.js'
 import { checkHandler } from '../checkHandler.js';
 import { generalMovement } from './general.js';
+import { piecesRender } from '../pieceRender.js';
 
 
 export const movePieceHandler = {
@@ -25,22 +26,25 @@ export const movePieceHandler = {
     movePiece : function(event) {
 
         const piece = pieceHandle.pieceSelected();
+        const targetDiv = event.target.parentNode;
     //    gameHandler.playerOne.randomArr.push(piece);
         let newSqaureValue ;
    
         if(pieceHandle.isTargetEnemyPiece(event.target)){
-            const targetDiv = event.target.parentNode;
+            newSqaureValue = event.target.parentNode.getAttribute('id');
             targetDiv.removeChild(event.target);
             targetDiv.append(piece);
-            newSqaureValue = targetDiv.getAttribute('id');
         }else{
             newSqaureValue = event.target.getAttribute('id');
             event.target.append(piece);
         }
-        piece.setAttribute('new-piece-square', newSqaureValue);
         pieceHandle.removeSelected();
         checkHandler.clearHandlerObj();
-        gameHandler.endTurn();
+        piecesRender.removeEventListeners();
+        piece.setAttribute('piece-square', newSqaureValue);
+        piecesRender.setEventListeners();
+   //     piecesRender.checkAndUpdatePiecePosition(piece);
+        gameHandler.changeTurnSettings();
     }, 
 
     movePieceForEnemy(pieceSettings, squareToMove){

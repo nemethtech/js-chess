@@ -11,7 +11,9 @@ export const piecesRender = {
     piecesEventListeners : {},
 
     createPieces(){
+
         const gameStart = chessConfig.useNormalGame ? normalGame : editedGame;
+
         for(let postion in gameStart){
 
             const imgPiece = document.createElement( 'img' );
@@ -27,7 +29,7 @@ export const piecesRender = {
 
         $$(chessConfig.chessPieceSelector).forEach(piece => {
 
-            const piecePosition = this.checkAndUpdatePiecePosition(piece);
+            const piecePosition = piece.getAttribute( 'piece-square' );
             const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
             const pieceType = piece.getAttribute( 'piece-type' ).split('_')[1];
             
@@ -58,39 +60,20 @@ export const piecesRender = {
     },
     
     removeEventListeners() {
+
         $$( chessConfig.chessPieceSelector).forEach( piece => {
+
             const piecePosition = piece.getAttribute( 'piece-square' );
+
             piece.removeEventListener( 'mouseenter', this.piecesEventListeners[ piecePosition ][ 'mouseenter' ])
             piece.removeEventListener( 'mouseleave', this.piecesEventListeners[ piecePosition ][ 'mouseleave' ])
             piece.removeEventListener( 'click', this.piecesEventListeners[ piecePosition ][ 'click' ])
         })
     },
 
-    checkAndUpdatePiecePosition(piece){
-        
-        let piecePosition ;
-        if(!piece.getAttribute('new-piece-square')){
-            piecePosition = piece.getAttribute( 'piece-square' );
-        }else{
-            piecePosition = piece.getAttribute('new-piece-square');
-            piece.setAttribute( 'piece-square', piecePosition);
-            piece.removeAttribute('new-piece-square');
-        }
-        return piecePosition;
-    },
-
-    checkPiecePosition(piece){
-        
-        let piecePosition ;
-        if(!piece.getAttribute('new-piece-square')){
-            piecePosition = piece.getAttribute( 'piece-square' );
-        }else{
-            piecePosition = piece.getAttribute('new-piece-square');
-        }
-        return piecePosition;
-    },
 
     resetEventListeners(){
+        
         this.removeEventListeners();
         this.setEventListeners();
         if(gameHandler.getGameOverStatus())console.log('GAME OVER');

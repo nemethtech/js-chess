@@ -6,15 +6,13 @@ import { $$ } from '../utils/utils.js'
 import { movePieceHandler } from '../services/pieceMovement/movePiece.js'
 import { kingMovement } from './pieceMovement/king.js'
 import { Player } from './playerClassExtend.js'
-//checkHandling
 
 export const gameHandler = {
 
     startGame(){
         piecesRender.createPieces();
         piecesRender.setEventListeners();
-        console.log('Player.resetPlayerPieces()',Player.resetPlayerPieces());
-        // Player.resetPlayerPieces();
+        Player.resetPlayerPieces();
     },
     
     endTurn(){
@@ -22,10 +20,19 @@ export const gameHandler = {
         this.changeTurnSettings();
         generalMovement.clearPotentialSquares();
         piecesRender.resetEventListeners();
-        console.log('Player.resetPlayerPieces()',Player.resetPlayerPieces());
         Player.resetPlayerPieces();
+        Player.instanceByColor('black').clgCollisions();
+        Player.instanceByColor('white').clgCollisions();
     },
-
+    endTurn3(){
+        
+        this.changeTurnSettings();
+        generalMovement.clearPotentialSquares();
+        piecesRender.resetEventListeners();
+        Player.resetPlayerPieces();
+        Player.instanceByColor('black').clgCollisions();
+        Player.instanceByColor('white').clgCollisions();
+    },
     endTurn2(){
 
         this.changeTurnSettings();
@@ -65,7 +72,7 @@ export const gameHandler = {
                 let piece = enemyPieces[Math.floor(Math.random() * enemyPieces.length)];
             //  let piece = $(`[piece-type^="${chessConfig.enemyColor.toString()}"]`);
             //    pieceHandle.setHoverOnEnter(randomPiece);
-                const piecePosition = piecesRender.checkPiecePosition(piece);
+                const piecePosition = piece.getAttribute( 'piece-square' );;
                 const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
                 const pieceType = piece.getAttribute( 'piece-type' ).split('_')[1];
                 
@@ -112,7 +119,7 @@ export const gameHandler = {
             gameOver = true;
             $$(chessConfig.chessPieceSelector).forEach(piece => {
                 
-                const piecePosition = piecesRender.checkPiecePosition(piece);
+                const piecePosition = piece.getAttribute( 'piece-square' );;
                 const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
                 const pieceType = piece.getAttribute( 'piece-type' ).split('_')[1];
                 
