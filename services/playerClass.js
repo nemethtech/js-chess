@@ -4,7 +4,7 @@ import { piecesRender } from "./pieceRender.js";
 
 
 
-class Player {
+class BasePlayer {
     constructor(color) {
   //    this.playerName = name;
       this.playerColor = color;
@@ -14,7 +14,7 @@ class Player {
       this.pieceCollisions = [];
       this.hasTheKingMoved = false;
       this.isPlayerInCheck = false;
-      Player.instances[color] = this;
+      BasePlayer.instances[color] = this;
     }
     
     getPlayerPieces(){
@@ -50,7 +50,7 @@ class Player {
  
     }
 
-    setSttackSquares2(){
+    setPieceCollisions(){
       this.pieceCollisions = [];
 
       this.playerPieces.forEach(piece => {
@@ -58,7 +58,7 @@ class Player {
         if(collisionArray.length > 0){
           collisionArray.forEach(collision =>{
           let collisionPiece = $(`[id^="${collision.square}"]`);
-            console.log('collisionPiece',collisionPiece.firstChild);
+         //   console.log('collisionPiece',collisionPiece.firstChild);
             if(!generalMovement.valueNullOrUndefined(collisionPiece.firstChild)){
               if(collisionPiece.firstChild.getAttribute('piece-type').includes(this.enemyColor)){
 
@@ -85,6 +85,15 @@ class Player {
 
       })
 //      return collisionArray.flat(1);
+    } 
+
+    clgCollisions(){
+      this.pieceCollisions.forEach(pieceCollision =>{
+        console.log("itt");
+        if(pieceCollision.enemyPieceType.includes('king')){
+          console.log('CSEKK!');
+        }
+      } )
     }
 
 /*    setPieceBackUp(){
@@ -96,7 +105,7 @@ class Player {
     }*/
 
     setPlayerPieces(){
-      this.setSttackSquares2();
+      this.setPieceCollisions();
       this.getPlayerPieces();
       this.getAttackerSquares();
     //  this.setPieceBackUp();
@@ -104,11 +113,18 @@ class Player {
 
   }
   
-  Player.instances = {};
+  BasePlayer.instances = {};
   
-  Player.instanceByColor = function(color) {
-    return Player.instances[color];
+  BasePlayer.instanceByColor = (color) => {
+    return BasePlayer.instances[color];
   }
 
+  BasePlayer.resetPlayerPieces = () => {
+    console.log('Player.instances',Player.instances);
+    Player.instances.forEach(player =>{
+      player.setPlayerPieces();
+      console.log('player',player);
+    })
+  }
 
-export { Player};
+export { BasePlayer };

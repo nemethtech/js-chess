@@ -58,8 +58,6 @@ export const generalMovement = {
     getPossibleCollisionquares2(pieceMove){
         
         let collisionSquares = [];
-     //   console.log('Object.getOwnPropertyNames(objectToInspect)',Object.getOwnPropertyNames(pieceMove));
-  //      console.log('myObj.constructor.name',pieceMove.name);
         for (const direction in pieceMove) {
             if (Object.hasOwn(pieceMove,direction)) {
                 if(!this.valueNullOrUndefined(pieceMove[direction].possibleCollision)){
@@ -69,10 +67,8 @@ export const generalMovement = {
                     })
                 }
             }
-         //   console.log('direction',direction);
         }
           
-
         return collisionSquares;
     },
     setSquares(verifiedSquares){
@@ -104,7 +100,6 @@ export const generalMovement = {
 
     valueNullOrUndefined(value){
         return value == null ? true : false;
-
     },
 
     simplifyArray(array){

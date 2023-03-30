@@ -1,7 +1,6 @@
 import { chessConfig }  from '../../config/chessConfig.config.js';
-import { generalMovement } from './general.js'
 import { movePieceHandler } from './movePiece.js';
-import {  Player} from '../playerClass.js';
+import {  Player } from '../playerClassExtend.js';
 
 export const kingMovement = {
 

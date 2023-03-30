@@ -5,8 +5,7 @@ import { checkHandler } from './checkHandler.js'
 import { $$ } from '../utils/utils.js'
 import { movePieceHandler } from '../services/pieceMovement/movePiece.js'
 import { kingMovement } from './pieceMovement/king.js'
-import { checkHandling } from './pieceMovement/playerClassExtend.js'
-//import { Player } from './playerClass.js'
+import { Player } from './playerClassExtend.js'
 //checkHandling
 
 export const gameHandler = {
@@ -14,25 +13,24 @@ export const gameHandler = {
     startGame(){
         piecesRender.createPieces();
         piecesRender.setEventListeners();
-        checkHandling.resetPlayerPieces();
+        console.log('Player.resetPlayerPieces()',Player.resetPlayerPieces());
+        // Player.resetPlayerPieces();
     },
-
+    
     endTurn(){
-        checkHandling.resetPlayerPieces();
+        
         this.changeTurnSettings();
         generalMovement.clearPotentialSquares();
         piecesRender.resetEventListeners();
+        console.log('Player.resetPlayerPieces()',Player.resetPlayerPieces());
+        Player.resetPlayerPieces();
     },
 
     endTurn2(){
-        console.log('itt');
-        
-   //     checkHandler.checkIfCheckIsOn();
-   //     this.changeTurnSettings();
+
         this.changeTurnSettings();
-     //   generalMovement.clearPotentialSquares();
         piecesRender.resetRound();
-  //      this.makeRandomMoveForEnemy();
+
     },
 
     pieceTurn(color){

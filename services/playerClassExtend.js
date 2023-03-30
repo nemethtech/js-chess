@@ -1,6 +1,6 @@
-import { Player } from "./../playerClass.js";
+import { BasePlayer } from "./playerClass.js";
 
-class checkHandling extends Player {
+class Player extends BasePlayer {
 
    setIsPlayerCheckIsOn(){
 
@@ -20,12 +20,12 @@ class checkHandling extends Player {
     // ...
   }
 
-const playerExtendedTwo = new checkHandling('black');
-const playerExtendedOne = new checkHandling('white');
+const playerExtendedTwo = new Player('black');
+const playerExtendedOne = new Player('white');
 Player.resetPlayerPieces = function(){
   Player.instanceByColor('white').setPlayerPieces();
   Player.instanceByColor('black').setPlayerPieces();
 }
 
 
-export { checkHandling};
+export { Player };
