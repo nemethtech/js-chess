@@ -5,10 +5,12 @@ import {  Player } from '../playerClassExtend.js';
 export const kingMovement = {
 
   returnAvailableSquares(kingPiece){
+
       return this.getAvailableSquares(kingPiece);
   },
 
   getAllAvaliableSquares(kingPiece){
+
       const columnPos = kingPiece.piecePosition[0];
       const rowPos    = parseInt(kingPiece.piecePosition[1]);
       const colIdx    = chessConfig.columns.indexOf(columnPos);
@@ -23,6 +25,7 @@ export const kingMovement = {
               chessConfig.columns[colIdx+1]+(parseInt(rowPos)-1)];
 
       const availableSquares = movePieceHandler.filterNonExistentSquares(possibleSquares.filter(e => typeof(e) === 'string'));
+
       return availableSquares;
   },
 
@@ -36,7 +39,9 @@ export const kingMovement = {
   },
 
   buildKingMove(availableSquares , enemySquares){
+
       const kingMove = [];
+      
       availableSquares.forEach((e,i) => {
           if(!enemySquares.includes(e)){
             kingMove[i] = {
@@ -45,10 +50,12 @@ export const kingMovement = {
             }
           }
       })
+
       return kingMove
     },
     
   canTheKingMove(kingPiece){
+
       return this.getAvailableSquares(kingPiece).length > 0 ? true : false;
     },
 
@@ -65,8 +72,11 @@ export const kingMovement = {
       })
 
       let filteredKingMoveArray = kingMoveArray.filter(kingMove => {
+
           return !backedUpKingAttackSqaures.includes(kingMove);
+
       });
+
       return filteredKingMoveArray;
   },
   

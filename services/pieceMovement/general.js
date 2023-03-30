@@ -9,23 +9,25 @@ import { $ , $$ } from '../../utils/utils.js';
 
 export const generalMovement = {
 
-
-    getPotentialSquares(piece, bool){
-        if(piece.pieceType === 'rook'){
-            return rookMovement.returnAvailableSquares(piece , bool);
-        }else if(piece.pieceType === 'pawn'){
+    getPotentialSquares(piece, bool) {
+        switch (piece.pieceType) {
+          case 'rook':
+            return rookMovement.returnAvailableSquares(piece, bool);
+          case 'pawn':
             return pawnMovement.returnAvailableSquares(piece);
-        }else if(piece.pieceType === 'bishop'){
-            return bishopMovement.returnAvailableSquares(piece , bool);
-        }else if(piece.pieceType === 'knight'){
+          case 'bishop':
+            return bishopMovement.returnAvailableSquares(piece, bool);
+          case 'knight':
             return knightMovement.returnAvailableSquares(piece);
-        }else if(piece.pieceType === 'king'){
+          case 'king':
             return kingMovement.returnAvailableSquares(piece);
-        }else if(piece.pieceType === 'queen'){
-            return { ...rookMovement.returnAvailableSquares(piece , bool), 
-                     ...bishopMovement.returnAvailableSquares(piece ,bool)};
+          case 'queen':
+            return {
+              ...rookMovement.returnAvailableSquares(piece, bool),
+              ...bishopMovement.returnAvailableSquares(piece, bool)
+            }
         }
-    },
+      },
     
     markPotentialSquares(piece){
         this.setSquares(this.getPotentialSquares(piece));

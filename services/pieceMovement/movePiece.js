@@ -26,25 +26,19 @@ export const movePieceHandler = {
     movePiece : function(event) {
 
         const piece = pieceHandle.pieceSelected();
-        const targetDiv = event.target.parentNode;
-    //    gameHandler.playerOne.randomArr.push(piece);
-        let newSqaureValue ;
-   
-        if(pieceHandle.isTargetEnemyPiece(event.target)){
-            newSqaureValue = event.target.parentNode.getAttribute('id');
+        const isTargetEnemyPiece = pieceHandle.isTargetEnemyPiece(event.target);
+        const targetDiv = isTargetEnemyPiece ? event.target.parentNode  :  event.target;
+        const newSquareValue = targetDiv.getAttribute('id');
+        
+        if (isTargetEnemyPiece) {
             targetDiv.removeChild(event.target);
-            targetDiv.append(piece);
-        }else{
-            newSqaureValue = event.target.getAttribute('id');
-            event.target.append(piece);
         }
+        
+        targetDiv.append(piece);
         pieceHandle.removeSelected();
-        checkHandler.clearHandlerObj();
         piecesRender.removeEventListeners();
-        piece.setAttribute('piece-square', newSqaureValue);
-        piecesRender.setEventListeners();
-   //     piecesRender.checkAndUpdatePiecePosition(piece);
-        gameHandler.changeTurnSettings();
+        piece.setAttribute('piece-square', newSquareValue);
+        gameHandler.endTurn();
     }, 
 
     movePieceForEnemy(pieceSettings, squareToMove){

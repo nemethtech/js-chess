@@ -19,20 +19,11 @@ export const gameHandler = {
         
         this.changeTurnSettings();
         generalMovement.clearPotentialSquares();
-        piecesRender.resetEventListeners();
+        piecesRender.setEventListeners();
         Player.resetPlayerPieces();
-        Player.instanceByColor('black').clgCollisions();
-        Player.instanceByColor('white').clgCollisions();
-    },
-    endTurn3(){
         
-        this.changeTurnSettings();
-        generalMovement.clearPotentialSquares();
-        piecesRender.resetEventListeners();
-        Player.resetPlayerPieces();
-        Player.instanceByColor('black').clgCollisions();
-        Player.instanceByColor('white').clgCollisions();
     },
+
     endTurn2(){
 
         this.changeTurnSettings();
