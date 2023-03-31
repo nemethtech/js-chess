@@ -8,7 +8,8 @@ import { piecesRender } from '../pieceRender.js';
 
 export const movePieceHandler = {
 
-    clearPotentialSquares(){
+    clearPotentialSquares(){ű
+        
         $$('.potential-square , .potential-enemy').forEach(pieceBox => {
             pieceBox.classList.remove( 'potential-enemy' );
             pieceBox.classList.remove( 'potential-square' );;
@@ -17,6 +18,7 @@ export const movePieceHandler = {
     },
     
     setEventsOnPotentialSquares(){
+
         $$('.potential-square , .potential-enemy').forEach(pieceBox => {
             pieceBox.addEventListener( 'click', this.movePiece )
         });
@@ -72,7 +74,21 @@ export const movePieceHandler = {
         return undefined;
     },
 
-    checkPossibleEnemyForEnemy(square){
+    checkIfEnemeyOnSquare(square){
+
+        const squareElement = $(`[id^="${square.toString()}"]`);
+        let enemyOnSquare = false;
+        if(squareElement.firstChild != null  ){
+            if(squareElement.firstChild.getAttribute('piece-type').includes(gameHandler.notCurrentTurnFor())){
+                enemyOnSquare = true;
+            }
+        }
+
+        return enemyOnSquare;
+    },
+
+    checkPossibleEnemyOnSquarecheckPossibleEnemyOnSquare(square){
+
         let pieceSquare = $(`[id^="${square}"]`);
         if(!generalMovement.valueNullOrUndefined(squareChild)){
             let pieceColor = pieceSquare.firstChild.getAttribute('piece-type').includes('white') ? 'white' : 'black';
@@ -83,26 +99,8 @@ export const movePieceHandler = {
         return undefined;
     },
 
-    checkCollisionWithKing(arr, bool){         
-        let collisionArray = arr.filter( e => $(`[id^="${e}"]`).hasChildNodes());
-        let possibleCollision = collisionArray.length === 0 ? undefined  : collisionArray[0];
-        if(pieceHandle.getPieceSquareById(possibleCollision)){
-            let a = pieceHandle.getPieceSquareById(possibleCollision).firstChild;
-            const pieceColor = a.getAttribute( 'piece-type' ).split('_')[0];
-            const pieceType = a.getAttribute( 'piece-type' ).split('_')[1];
-
-            if( pieceColor === gameHandler.whosTurn() && pieceType === 'king' && bool){
-                possibleCollision = undefined;
-            }
-        }
-        let collisionFreeSquares = possibleCollision === undefined ? arr : arr.slice(0,(arr.indexOf(possibleCollision)));
-        return {
-            collisionFreeSquares , 
-            possibleCollision
-        }  
-    },
-
     checkCollision(arr){         
+
         let collisionArray = arr.filter( e => $(`[id^="${e}"]`).hasChildNodes());
         let possibleCollision = collisionArray.length === 0 ? undefined  : collisionArray[0];
         let collisionFreeSquares = possibleCollision === undefined ? arr : arr.slice(0,(arr.indexOf(possibleCollision)));
@@ -113,6 +111,7 @@ export const movePieceHandler = {
     },
 
     filterNonExistentSquares(squareArray){
+
         return squareArray.filter(e => e.length === 2).filter( e => chessConfig.rows.indexOf(parseInt(e[1])) !== -1);
     },
 }

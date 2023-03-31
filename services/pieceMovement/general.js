@@ -9,22 +9,22 @@ import { $ , $$ } from '../../utils/utils.js';
 
 export const generalMovement = {
 
-    getPotentialSquares(piece, bool) {
+    getPotentialSquares(piece) {
         switch (piece.pieceType) {
           case 'rook':
-            return rookMovement.returnAvailableSquares(piece, bool);
+            return rookMovement.returnAvailableSquares(piece);
           case 'pawn':
             return pawnMovement.returnAvailableSquares(piece);
           case 'bishop':
-            return bishopMovement.returnAvailableSquares(piece, bool);
+            return bishopMovement.returnAvailableSquares(piece);
           case 'knight':
             return knightMovement.returnAvailableSquares(piece);
           case 'king':
             return kingMovement.returnAvailableSquares(piece);
           case 'queen':
             return {
-              ...rookMovement.returnAvailableSquares(piece, bool),
-              ...bishopMovement.returnAvailableSquares(piece, bool)
+              ...rookMovement.returnAvailableSquares(piece),
+              ...bishopMovement.returnAvailableSquares(piece)
             }
         }
       },
@@ -73,6 +73,7 @@ export const generalMovement = {
           
         return collisionSquares;
     },
+    
     setSquares(verifiedSquares){
         Object.values(verifiedSquares).forEach(val => {
             if(!this.valueNullOrUndefined(val.collisionFreeSquares)){

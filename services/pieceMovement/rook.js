@@ -5,8 +5,8 @@ import { movePieceHandler } from './movePiece.js';
 export const rookMovement = {
     
 
-    returnAvailableSquares(rookPiece , bool){
-        return this.getAvaliableSquares(rookPiece , bool);
+    returnAvailableSquares(rookPiece ){
+        return this.getAvaliableSquares(rookPiece);
     },
 
   

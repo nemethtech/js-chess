@@ -95,7 +95,7 @@ export const pawnMovement = {
    
 
    checkPawnsPromotion(){
-    $$(`[piece-type=${gameHandler.whosTurn()}_pawn`).forEach( piece => {
+    $$(`[piece-type=${gameHandler.currentTurnFor()}_pawn`).forEach( piece => {
         const piecePosition = piece.getAttribute( 'piece-square' );
         const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
             if(this.pawnCanBePromoted(piecePosition , pieceColor)){

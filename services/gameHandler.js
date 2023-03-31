@@ -10,6 +10,7 @@ import { Player } from './playerClassExtend.js'
 export const gameHandler = {
 
     startGame(){
+        
         piecesRender.createPieces();
         piecesRender.setEventListeners();
         Player.resetPlayerPieces();
@@ -19,10 +20,10 @@ export const gameHandler = {
         
         this.changeTurnSettings();
         generalMovement.clearPotentialSquares();
-        piecesRender.setEventListeners();
         Player.resetPlayerPieces();
-        Player.instanceByColor('black').clgCollisions();
-        Player.instanceByColor('white').clgCollisions();
+        piecesRender.setEventListeners();
+        Player.instanceByColor('white').consoleCheckSit();
+        Player.instanceByColor('black').consoleCheckSit();
         
     },
 
@@ -37,7 +38,7 @@ export const gameHandler = {
         return chessConfig.currentTurn === color ? true : false;
     },
 
-    whosTurn(){
+    currentTurnFor(){
         return chessConfig.currentTurn;
     },
 

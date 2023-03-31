@@ -35,7 +35,7 @@ export const kingMovement = {
       const enemySquares = Player.instanceByColor(chessConfig.enemyColor).attackSquares;
       let kingSquares = this.getAllAvaliableSquares(kingPiece);
       let avaliableSquares = kingSquares.filter( square => !enemySquares.includes(square));
-      return this.checkKingAttackSquares(this.buildKingMove(avaliableSquares , enemySquares));
+      return this.checkKingMove(this.buildKingMove(avaliableSquares , enemySquares));
   },
 
   buildKingMove(availableSquares , enemySquares){
@@ -59,25 +59,22 @@ export const kingMovement = {
       return this.getAvailableSquares(kingPiece).length > 0 ? true : false;
     },
 
-  checkKingAttackSquares(kingMoveArray){
-      let backedUpKingAttackSqaures = [];
+  checkKingMove(kingMoveArray){
+
+      let backedUpEnemySquares = []; 
+      Player.instanceByColor(chessConfig.enemyColor).playerPieces.forEach( enemyPiece => {
+        if(enemyPiece.isBackedUp){
+          backedUpEnemySquares.push(enemyPiece.piecePosition)
+        }
+      })
+      
       kingMoveArray.forEach( (kingMove )  => {
-        if(kingMove.possibleCollision){
-          Player.instanceByColor(chessConfig.enemyColor).playerPieces.forEach( enemyPiece =>{
-            if(enemyPiece.piecePosition === kingMove.possibleCollision && enemyPiece.isBackedUp){
-              backedUpKingAttackSqaures.push(kingMove);
-            }
-          })
+        if(backedUpEnemySquares.includes(kingMove.possibleCollision)){
+          kingMove.possibleCollision = undefined;
         }
       })
 
-      let filteredKingMoveArray = kingMoveArray.filter(kingMove => {
-
-          return !backedUpKingAttackSqaures.includes(kingMove);
-
-      });
-
-      return filteredKingMoveArray;
+      return kingMoveArray;
   },
   
 }

@@ -2,21 +2,40 @@ import { BasePlayer } from "./playerClass.js";
 
 class Player extends BasePlayer {
 
-   setIsPlayerCheckIsOn(){
+  setIfPlayerCheckIsOn(){
 
-   }
-
-   getEnemyKingPosition(){
-   // let enemyColor = this.playerColor === 'white' ? 'black' : 'white';
-    Player.instanceByColor(this.enemyColor).playerPieces.forEach(enemyPiece => {
-        if(enemyPiece.pieceType === 'king'){
-  //          console.log('KING:',enemyPiece);
-  //          console.log('KING POS:',enemyPiece);
-            
-        }
-    });
-   }
+    Player.instanceByColor(this.enemyColor).pieceCollisions.forEach( pieceCollision => {
+      
+      if(pieceCollision.colPieceType.includes('king') && pieceCollision.colType === 'enemy'){
+        this.isPlayerInCheck = true;
+        return;
+      }
+    })
   }
+
+  consoleCheckSit(){
+
+    this.setIfPlayerCheckIsOn();
+    this.setPieceIsBackedUp();
+    console.log('Color : ' , this.playerColor , ' Csekk? : ' , this.isPlayerInCheck);
+    this.playerPieces.forEach( e => {
+      if(e.isBackedUp ){
+        console.log('backed up', e);
+      }
+    })
+  }
+   
+
+  setPieceIsBackedUp(){
+    this.pieceCollisions.forEach( pieceCollision => {
+      if(pieceCollision.colType === 'ally'){
+        const playerPiece = this.playerPieces.find( playerPiece => playerPiece.piecePosition === pieceCollision.colPiecePosition);
+        playerPiece.isBackedUp = true;
+      }
+    })
+  }
+
+}
 
 const playerExtendedTwo = new Player('black');
 const playerExtendedOne = new Player('white');

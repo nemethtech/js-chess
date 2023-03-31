@@ -3,8 +3,9 @@ import { movePieceHandler } from './movePiece.js';
 
 export const bishopMovement = {
     
-    returnAvailableSquares(bishopPiece , bool){
-        return this.getAvaliableSquares(bishopPiece , bool);
+    returnAvailableSquares(bishopPiece){
+        
+        return this.getAvaliableSquares(bishopPiece);
     },
 
    getAvaliableSquares(bishopPiece){

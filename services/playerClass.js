@@ -1,4 +1,6 @@
 import { $ , $$ } from "../../utils/utils.js";
+import { chessConfig } from "../config/chessConfig.config.js";
+import { gameHandler } from "./gameHandler.js";
 import { generalMovement } from "./pieceMovement/general.js";
 import { piecesRender } from "./pieceRender.js";
 
@@ -18,7 +20,7 @@ class BasePlayer {
     }
     
     getPlayerPieces(){
-      this.playerPieces = [];
+
       $$(`[piece-type^="${this.playerColor}"]`).forEach(piece => {
           const piecePosition = piece.getAttribute( 'piece-square' );
           const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
@@ -35,12 +37,12 @@ class BasePlayer {
     }
 
     getAttackerSquares(){
-      this.attackSquares = [];
+
       this.playerPieces.forEach(piece => {
         if(piece.pieceType === 'pawn'){
-          this.attackSquares.push(generalMovement.getPossibleCollisionquares(generalMovement.getPotentialSquares(piece ,  true)));
+          this.attackSquares.push(generalMovement.getPossibleCollisionquares(generalMovement.getPotentialSquares(piece)));
         }else {
-          this.attackSquares.push(generalMovement.getCollisionFreeSquares(generalMovement.getPotentialSquares(piece ,  true)));
+          this.attackSquares.push(generalMovement.getCollisionFreeSquares(generalMovement.getPotentialSquares(piece)));
         }
       })
       this.attackSquares = this.attackSquares.flat(1);
@@ -51,31 +53,30 @@ class BasePlayer {
     }
 
     setPieceCollisions(){
-      this.pieceCollisions = [];
 
       this.playerPieces.forEach(piece => {
 
-        let collisionArray = generalMovement.getPossibleCollisionquares2(generalMovement.getPotentialSquares(piece ,  true));
-        
+        let collisionArray = generalMovement.getPossibleCollisionquares2(generalMovement.getPotentialSquares(piece));
+
         if(collisionArray.length > 0){
 
           collisionArray.forEach(collision =>{
 
           let collisionPiece = $(`[id^="${collision.square}"]`);
 
-            if(!generalMovement.valueNullOrUndefined(collisionPiece.firstChild)){
+            if(!(collisionPiece.firstChild == null)){
 
-              if(collisionPiece.firstChild.getAttribute('piece-type').includes(this.enemyColor)){
-
-                let enemyPieceType = collisionPiece.firstChild.getAttribute('piece-type');
-  
-                  this.pieceCollisions.push({
-                    playerPieceType : piece.pieceType , 
-                    attackSquare : collision.square ,
-                    direction : collision.direction ,
-                    enemyPieceType , 
-                  })
-              }
+              const collisionType = collisionPiece.firstChild.getAttribute('piece-type').includes(this.enemyColor) ? 'enemy' : 'ally';
+              const collisionPieceType = collisionPiece.firstChild.getAttribute('piece-type');
+            
+              this.pieceCollisions.push({
+                playerPieceType : piece.pieceType , 
+                playerPiecePosition : piece.piecePosition,
+                direction : collision.direction ,
+                colPiecePosition : collision.square ,
+                colType  : collisionType, 
+                colPieceType : collisionPieceType , 
+              }) 
             }   
           })
         }
@@ -83,38 +84,19 @@ class BasePlayer {
     }
 
 
-    getCollisionSquares(){
-
-      this.playerPieces.forEach(piece => {
-   //     let collisionArray = generalMovement.getPossibleCollisionquares2(generalMovement.getPotentialSquares(piece ,  true));
-
-      })
-//      return collisionArray.flat(1);
-    } 
-
-    clgCollisions(){
-      console.log("this.playerColor",this.playerColor);
-      console.log('this.pieceCollisions',this.pieceCollisions);
-      this.pieceCollisions.forEach(pieceCollision =>{
-     //   console.log('pieceCollision',pieceCollision);
-        if(pieceCollision.enemyPieceType.includes('king')){
-     //     console.log('CSEKK!');
-        }
-      } )
+    setPlayerValuesToDefault(){
+      this.pieceCollisions = [];
+      this.attackSquares = [];
+      this.playerPieces = [];
+      this.isPlayerInCheck  = false;
     }
 
-/*    setPieceBackUp(){
-      let colSquares = this.getCollisionSquares();
-      this.playerPieces.forEach(piece => {
-        let isBackedUp = colSquares.includes(piece.piecePosition) ? true : false;
-        piece.isBackedUp = isBackedUp;
-      })
-    }*/
 
     setPlayerPieces(){
+      this.setPlayerValuesToDefault();
       this.getPlayerPieces();
-      this.setPieceCollisions();
       this.getAttackerSquares();
+      this.setPieceCollisions();
     //  this.setPieceBackUp();
     }
 
@@ -127,8 +109,8 @@ BasePlayer.instanceByColor = (color) => {
 }
 
 BasePlayer.resetPlayerPieces = () => {
-  BasePlayer.instanceByColor('black').setPlayerPieces();
-  BasePlayer.instanceByColor('white').setPlayerPieces();
+  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).setPlayerPieces();
+  BasePlayer.instanceByColor(gameHandler.currentTurnFor()).setPlayerPieces();
 }
   
 
