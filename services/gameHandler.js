@@ -21,6 +21,8 @@ export const gameHandler = {
         generalMovement.clearPotentialSquares();
         piecesRender.setEventListeners();
         Player.resetPlayerPieces();
+        Player.instanceByColor('black').clgCollisions();
+        Player.instanceByColor('white').clgCollisions();
         
     },
 

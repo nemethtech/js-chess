@@ -2,7 +2,6 @@ import { $, $$ } from '../../utils/utils.js'
 import { chessConfig } from '../../config/chessConfig.config.js'
 import { gameHandler } from '../gameHandler.js';
 import { pieceHandle } from './../pieceHandler.js'
-import { checkHandler } from '../checkHandler.js';
 import { generalMovement } from './general.js';
 import { piecesRender } from '../pieceRender.js';
 

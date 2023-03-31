@@ -34,11 +34,11 @@ export const editedGame = {
     'g5': 'white_pawn',
     'h2': 'white_pawn',
  */   
-    'a1': 'white_king',
+    'a1': 'white_rook',
     'e8': 'black_king',
     'e3': 'white_rook',
     'e6': 'white_bishop',
-    'c8': 'black_bishop',
-    'b3': 'white_queen',
+    'c8': 'black_rook',
+    'b3': 'white_rook',
 
 };

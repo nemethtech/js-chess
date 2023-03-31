@@ -53,9 +53,10 @@ export const piecesRender = {
                 }
             }
             
-            piece.addEventListener( 'mouseenter', this.piecesEventListeners[ piecePosition ][ 'mouseenter' ])
-            piece.addEventListener( 'mouseleave', this.piecesEventListeners[ piecePosition ][ 'mouseleave' ])
-            piece.addEventListener( 'click', this.piecesEventListeners[ piecePosition ][ 'click' ])
+            piece.addEventListener( 'mouseenter', this.piecesEventListeners[ piecePosition ][ 'mouseenter' ]);
+            piece.addEventListener( 'mouseleave', this.piecesEventListeners[ piecePosition ][ 'mouseleave' ]);
+            piece.addEventListener( 'click', this.piecesEventListeners[ piecePosition ][ 'click' ]);
+
         })
     },
     
@@ -65,9 +66,10 @@ export const piecesRender = {
 
             const piecePosition = piece.getAttribute( 'piece-square' );
 
-            piece.removeEventListener( 'mouseenter', this.piecesEventListeners[ piecePosition ][ 'mouseenter' ])
-            piece.removeEventListener( 'mouseleave', this.piecesEventListeners[ piecePosition ][ 'mouseleave' ])
-            piece.removeEventListener( 'click', this.piecesEventListeners[ piecePosition ][ 'click' ])
+            piece.removeEventListener( 'mouseenter', this.piecesEventListeners[ piecePosition ][ 'mouseenter' ]);
+            piece.removeEventListener( 'mouseleave', this.piecesEventListeners[ piecePosition ][ 'mouseleave' ]);
+            piece.removeEventListener( 'click', this.piecesEventListeners[ piecePosition ][ 'click' ]);
+            
         })
     },
 

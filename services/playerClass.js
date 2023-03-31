@@ -54,12 +54,17 @@ class BasePlayer {
       this.pieceCollisions = [];
 
       this.playerPieces.forEach(piece => {
+
         let collisionArray = generalMovement.getPossibleCollisionquares2(generalMovement.getPotentialSquares(piece ,  true));
+        
         if(collisionArray.length > 0){
+
           collisionArray.forEach(collision =>{
+
           let collisionPiece = $(`[id^="${collision.square}"]`);
-         //   console.log('collisionPiece',collisionPiece.firstChild);
+
             if(!generalMovement.valueNullOrUndefined(collisionPiece.firstChild)){
+
               if(collisionPiece.firstChild.getAttribute('piece-type').includes(this.enemyColor)){
 
                 let enemyPieceType = collisionPiece.firstChild.getAttribute('piece-type');
@@ -88,11 +93,12 @@ class BasePlayer {
     } 
 
     clgCollisions(){
-      console.log("clgCollisions",this.playerColor);
+      console.log("this.playerColor",this.playerColor);
+      console.log('this.pieceCollisions',this.pieceCollisions);
       this.pieceCollisions.forEach(pieceCollision =>{
-        console.log('pieceCollision',pieceCollision);
+     //   console.log('pieceCollision',pieceCollision);
         if(pieceCollision.enemyPieceType.includes('king')){
-          console.log('CSEKK!');
+     //     console.log('CSEKK!');
         }
       } )
     }
@@ -106,24 +112,24 @@ class BasePlayer {
     }*/
 
     setPlayerPieces(){
-      this.setPieceCollisions();
       this.getPlayerPieces();
+      this.setPieceCollisions();
       this.getAttackerSquares();
     //  this.setPieceBackUp();
     }
 
   }
-  
-  BasePlayer.instances = {};
-  
-  BasePlayer.instanceByColor = (color) => {
-    return BasePlayer.instances[color];
-  }
 
-  BasePlayer.resetPlayerPieces = () => {
-    BasePlayer.instanceByColor('black').setPlayerPieces();
-    BasePlayer.instanceByColor('white').setPlayerPieces();
-  }
+BasePlayer.instances = {};
+
+BasePlayer.instanceByColor = (color) => {
+  return BasePlayer.instances[color];
+}
+
+BasePlayer.resetPlayerPieces = () => {
+  BasePlayer.instanceByColor('black').setPlayerPieces();
+  BasePlayer.instanceByColor('white').setPlayerPieces();
+}
   
 
 export { BasePlayer };

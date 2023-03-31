@@ -89,14 +89,14 @@ export const generalMovement = {
     clearPotentialSquares(){
         $$('.potential-square , .potential-enemy').forEach(pieceBox => {
             pieceBox.classList.remove( 'potential-enemy' );
-            pieceBox.classList.remove( 'potential-square' );;
-            pieceBox.removeEventListener( 'click', movePieceHandler.movePiece)
+            pieceBox.classList.remove( 'potential-square' );
+            pieceBox.removeEventListener( 'click', movePieceHandler.movePiece);
         });
     },
     
     setEventsOnPotentialSquares(){
         $$('.potential-square , .potential-enemy').forEach(pieceBox => {
-            pieceBox.addEventListener( 'click', movePieceHandler.movePiece)
+            pieceBox.addEventListener( 'click', movePieceHandler.movePiece);
         });
     },
 
