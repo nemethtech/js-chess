@@ -16,6 +16,7 @@ class BasePlayer {
       this.pieceCollisions = [];
       this.hasTheKingMoved = false;
       this.isPlayerInCheck = false;
+      this.checkThreat = [];
       BasePlayer.instances[color] = this;
     }
     
@@ -56,8 +57,9 @@ class BasePlayer {
 
       this.playerPieces.forEach(piece => {
 
-        let collisionArray = generalMovement.getPossibleCollisionquares2(generalMovement.getPotentialSquares(piece));
-
+        let pieceAllMoveSquare = generalMovement.getPotentialSquares(piece);
+        let collisionArray = generalMovement.getPossibleCollisionquares2(pieceAllMoveSquare);
+        
         if(collisionArray.length > 0){
 
           collisionArray.forEach(collision =>{
@@ -66,6 +68,8 @@ class BasePlayer {
 
             if(!(collisionPiece.firstChild == null)){
 
+              let collisionMoveSquares = pieceAllMoveSquare[collision.direction].collisionFreeSquares;
+         //     console.log("collisionFreeSquares",collisionMoveSquares);
               const collisionType = collisionPiece.firstChild.getAttribute('piece-type').includes(this.enemyColor) ? 'enemy' : 'ally';
               const collisionPieceType = collisionPiece.firstChild.getAttribute('piece-type');
             
@@ -76,6 +80,7 @@ class BasePlayer {
                 colPiecePosition : collision.square ,
                 colType  : collisionType, 
                 colPieceType : collisionPieceType , 
+                colMoveSquares :  collisionMoveSquares,
               }) 
             }   
           })
@@ -88,6 +93,7 @@ class BasePlayer {
       this.pieceCollisions = [];
       this.attackSquares = [];
       this.playerPieces = [];
+      this.checkThreat = [];
       this.isPlayerInCheck  = false;
     }
 

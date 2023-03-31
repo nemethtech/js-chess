@@ -62,6 +62,7 @@ export const kingMovement = {
   checkKingMove(kingMoveArray){
 
       let backedUpEnemySquares = []; 
+      
       Player.instanceByColor(chessConfig.enemyColor).playerPieces.forEach( enemyPiece => {
         if(enemyPiece.isBackedUp){
           backedUpEnemySquares.push(enemyPiece.piecePosition)

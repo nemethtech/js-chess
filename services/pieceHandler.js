@@ -4,6 +4,7 @@ import { gameHandler } from './gameHandler.js';
 import { checkHandler } from './checkHandler.js';
 import { kingMovement } from './pieceMovement/king.js';
 import { Player } from './playerClassExtend.js';
+import { chessConfig } from '../config/chessConfig.config.js';
 
 
 export const pieceHandle = {
@@ -14,13 +15,13 @@ export const pieceHandle = {
         if(!gameHandler.pieceTurn(pieceSettings.pieceColor)){
             return this;
         }
-        else if(checkHandler.getCheckStatusForColor(pieceSettings.pieceColor)){
+        else if(Player.instanceByColor(chessConfig.currentTurn).isPlayerInCheck){
             console.log('0');
             if(pieceSettings.pieceType === 'king'){
                 if(kingMovement.canTheKingMove(pieceSettings)){
                     this.managePiece(pieceSettings)
                 }
-            }else if(checkHandler.pieceCanBlockCheck(pieceSettings) ){
+            }else if(Player.instanceByColor(chessConfig.currentTurn).pieceCanBlockCheck(pieceSettings)){
                 console.log('2');
                 this.managePiece(pieceSettings)
             }else{

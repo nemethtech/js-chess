@@ -40,5 +40,7 @@ export const editedGame = {
     'd3': 'white_queen',
     'c8': 'black_rook',
     'b3': 'white_rook',
+    'g6': 'white_rook',
+    'h5': 'white_bishop',
 
 };

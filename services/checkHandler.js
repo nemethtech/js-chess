@@ -88,7 +88,7 @@ export const checkHandler = {
         return this;
       },
 
-      getCheckStatusForColor(color){
+    getCheckStatusForColor(color){
         return this.checkHandle.checkColor === color;
       },
 
