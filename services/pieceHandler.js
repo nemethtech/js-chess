@@ -1,7 +1,6 @@
 import { $ } from '../utils/utils.js'
 import { generalMovement } from '../services/pieceMovement/general.js'
 import { gameHandler } from './gameHandler.js';
-import { checkHandler } from './checkHandler.js';
 import { kingMovement } from './pieceMovement/king.js';
 import { Player } from './playerClassExtend.js';
 import { chessConfig } from '../config/chessConfig.config.js';
@@ -9,8 +8,6 @@ import { chessConfig } from '../config/chessConfig.config.js';
 
 export const pieceHandle = {
     handlePieceClick(pieceSettings){
-  //          console.log('white',Player.instanceByColor('white'));
-  //      console.log('black',Player.instanceByColor('black'));
 
         if(!gameHandler.pieceTurn(pieceSettings.pieceColor)){
             return this;

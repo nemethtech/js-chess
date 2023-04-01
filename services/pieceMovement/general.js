@@ -5,11 +5,15 @@ import { rookMovement } from './rook.js';
 import { pawnMovement } from './pawn.js';
 import { movePieceHandler } from './movePiece.js';
 import { $ , $$ } from '../../utils/utils.js';
+import { Player } from '../playerClassExtend.js';
+import { chessConfig } from '../../config/chessConfig.config.js';
 
 
 export const generalMovement = {
 
-    getPotentialSquares(piece) {
+
+
+    getPieceMove(piece) {
         switch (piece.pieceType) {
           case 'rook':
             return rookMovement.returnAvailableSquares(piece);
@@ -30,7 +34,12 @@ export const generalMovement = {
       },
     
     markPotentialSquares(piece){
-        this.setSquares(this.getPotentialSquares(piece));
+        let pieceMove = this.getPieceMove(piece);
+        //filterPieceMoveIfPlayerUnderCheck
+        if(Player.instanceByColor(chessConfig.currentTurn).isPlayerInCheck && piece.pieceType !== 'king'){
+            pieceMove =  Player.instanceByColor(chessConfig.currentTurn).filterPieceMoveIfPlayerUnderCheck(piece , pieceMove)
+        }
+        this.setSquares(pieceMove);
         this.setEventsOnPotentialSquares();
     },
 
@@ -60,6 +69,7 @@ export const generalMovement = {
     getPossibleCollisionquares2(pieceMove){
         
         let collisionSquares = [];
+
         for (const direction in pieceMove) {
             if (Object.hasOwn(pieceMove,direction)) {
                 if(!this.valueNullOrUndefined(pieceMove[direction].possibleCollision)){
@@ -74,6 +84,22 @@ export const generalMovement = {
         return collisionSquares;
     },
     
+    getCollisionFreeSquares2(pieceMove){
+        const collisionFreeSquares = [];
+        for (const direction in pieceMove) {
+            if (Object.hasOwn(pieceMove,direction)) {
+                if(!this.valueNullOrUndefined(pieceMove[direction].collisionFreeSquares)){
+                    collisionFreeSquares.push({
+                        direction : direction ,
+                        square : pieceMove[direction].collisionFreeSquares            
+                    })
+                }
+            }
+        }  
+        
+        return collisionFreeSquares;
+    },
+
     setSquares(verifiedSquares){
         Object.values(verifiedSquares).forEach(val => {
             if(!this.valueNullOrUndefined(val.collisionFreeSquares)){

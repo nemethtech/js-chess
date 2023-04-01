@@ -14,6 +14,7 @@ class BasePlayer {
       this.playerPieces = [];
       this.attackSquares = [];
       this.pieceCollisions = [];
+      this.pieceColFreeMoves = [];
       this.hasTheKingMoved = false;
       this.isPlayerInCheck = false;
       this.checkThreat = [];
@@ -41,9 +42,9 @@ class BasePlayer {
 
       this.playerPieces.forEach(piece => {
         if(piece.pieceType === 'pawn'){
-          this.attackSquares.push(generalMovement.getPossibleCollisionquares(generalMovement.getPotentialSquares(piece)));
+          this.attackSquares.push(generalMovement.getPossibleCollisionquares(generalMovement.getPieceMove(piece)));
         }else {
-          this.attackSquares.push(generalMovement.getCollisionFreeSquares(generalMovement.getPotentialSquares(piece)));
+          this.attackSquares.push(generalMovement.getCollisionFreeSquares(generalMovement.getPieceMove(piece)));
         }
       })
       this.attackSquares = this.attackSquares.flat(1);
@@ -57,7 +58,7 @@ class BasePlayer {
 
       this.playerPieces.forEach(piece => {
 
-        let pieceAllMoveSquare = generalMovement.getPotentialSquares(piece);
+        let pieceAllMoveSquare = generalMovement.getPieceMove(piece);
         let collisionArray = generalMovement.getPossibleCollisionquares2(pieceAllMoveSquare);
         
         if(collisionArray.length > 0){
@@ -69,7 +70,6 @@ class BasePlayer {
             if(!(collisionPiece.firstChild == null)){
 
               let collisionMoveSquares = pieceAllMoveSquare[collision.direction].collisionFreeSquares;
-         //     console.log("collisionFreeSquares",collisionMoveSquares);
               const collisionType = collisionPiece.firstChild.getAttribute('piece-type').includes(this.enemyColor) ? 'enemy' : 'ally';
               const collisionPieceType = collisionPiece.firstChild.getAttribute('piece-type');
             
@@ -89,7 +89,33 @@ class BasePlayer {
     }
 
 
+    setPieceColFreeMoves(){
+
+      this.playerPieces.forEach(piece => {
+
+        let pieceAllMoveSquare = generalMovement.getPieceMove(piece);
+        let colFreeMoves = generalMovement.getCollisionFreeSquares2(pieceAllMoveSquare);
+        
+        if(colFreeMoves.length > 0){
+
+          colFreeMoves.forEach( colFreeMove => {
+            if(colFreeMove.square.length > 0){
+
+              this.pieceColFreeMoves.push({
+                playerPieceType : piece.pieceType , 
+                playerPiecePosition : piece.piecePosition,
+                direction : colFreeMove.direction ,
+                colFreeMoveSquares :  colFreeMove.square,
+              }) 
+            }
+            
+          })
+        }
+      })
+    }
+
     setPlayerValuesToDefault(){
+      this.pieceColFreeMoves = [];
       this.pieceCollisions = [];
       this.attackSquares = [];
       this.playerPieces = [];
@@ -97,14 +123,16 @@ class BasePlayer {
       this.isPlayerInCheck  = false;
     }
 
-
-    setPlayerPieces(){
-      this.setPlayerValuesToDefault();
-      this.getPlayerPieces();
-      this.getAttackerSquares();
-      this.setPieceCollisions();
-    //  this.setPieceBackUp();
+    
+    setPieceIsBackedUp(){
+      this.pieceCollisions.forEach( pieceCollision => {
+        if(pieceCollision.colType === 'ally'){
+          const playerPiece = this.playerPieces.find( playerPiece => playerPiece.piecePosition === pieceCollision.colPiecePosition);
+          playerPiece.isBackedUp = true;
+        }
+      })
     }
+
 
   }
 

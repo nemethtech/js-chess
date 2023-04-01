@@ -22,9 +22,8 @@ export const gameHandler = {
         generalMovement.clearPotentialSquares();
         Player.resetPlayerPieces();
         piecesRender.setEventListeners();
-        Player.instanceByColor('white').consoleCheckSit();
-        Player.instanceByColor('black').consoleCheckSit();
-        
+        console.log('white playerPieces',Player.instanceByColor('white').playerPieces);
+        console.log('black playerPieces',Player.instanceByColor('black').playerPieces);
     },
 
     endTurn2(){
@@ -77,8 +76,8 @@ export const gameHandler = {
                     pieceColor,
                 }
                 
-                let poti = generalMovement.getCollisionFreeSquares(generalMovement.getPotentialSquares(handleParams));
-                let poti2 = generalMovement.getPossibleCollisionquares(generalMovement.getPotentialSquares(handleParams));
+                let poti = generalMovement.getCollisionFreeSquares(generalMovement.getPieceMove(handleParams));
+                let poti2 = generalMovement.getPossibleCollisionquares(generalMovement.getPieceMove(handleParams));
                 
                 if(!!poti.length || !!poti2.length){
                     if(!!poti2.length){
