@@ -1,10 +1,6 @@
 import { chessConfig }  from '../config/chessConfig.config.js'
 import { piecesRender } from '../services/pieceRender.js'
 import { generalMovement } from '../services/pieceMovement/general.js'
-import { checkHandler } from './checkHandler.js'
-import { $$ } from '../utils/utils.js'
-import { movePieceHandler } from '../services/pieceMovement/movePiece.js'
-import { kingMovement } from './pieceMovement/king.js'
 import { Player } from './playerClassExtend.js'
 
 export const gameHandler = {
@@ -20,10 +16,13 @@ export const gameHandler = {
         
         this.changeTurnSettings();
         generalMovement.clearPotentialSquares();
-        Player.resetPlayerPieces();
         piecesRender.setEventListeners();
-        console.log('white playerPieces',Player.instanceByColor('white').playerPieces);
-        console.log('black playerPieces',Player.instanceByColor('black').playerPieces);
+        Player.resetPlayerPieces();
+        console.log('Player Player.getPlayer().pieceCollisions',Player.getPlayer().pieceCollisions);
+        console.log('Enemy Player.getPlayer().pieceCollisions ',Player.getEnemyPlayer().pieceCollisions);
+  
+        //     console.log('white canPlayerKingMove',Player.instanceByColor('white').canPlayerKingMove());
+   //      console.log('black canPlayerKingMove',Player.instanceByColor('black').canPlayerKingMove());
     },
 
     endTurn2(){
@@ -50,21 +49,17 @@ export const gameHandler = {
     notCurrentTurnFor(){
         return  chessConfig.whiteTurn === true ?  'black' : 'white';
     },
-
+/*
     makeRandomMoveForEnemy(){
         console.log('makeRandomMoveForEnemy');
         if(chessConfig.currentTurn === chessConfig.enemyColor){
             console.log('makeRandomMoveForEnemy belép');
             let bool = false;
-           // const enemyPieces = $$(`[piece-type^="${chessConfig.enemyColor.toString()}"]`);
             const enemyPieces = $$(`[piece-type^="${chessConfig.enemyColor.toString()+"_pawn"}"]`);
             while(bool === false){
-
-                    //  while(chessConfig.currentTurn === chessConfig.enemyColor){
-                        
+      
                 let piece = enemyPieces[Math.floor(Math.random() * enemyPieces.length)];
-            //  let piece = $(`[piece-type^="${chessConfig.enemyColor.toString()}"]`);
-            //    pieceHandle.setHoverOnEnter(randomPiece);
+
                 const piecePosition = piece.getAttribute( 'piece-square' );;
                 const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
                 const pieceType = piece.getAttribute( 'piece-type' ).split('_')[1];
@@ -81,12 +76,9 @@ export const gameHandler = {
                 
                 if(!!poti.length || !!poti2.length){
                     if(!!poti2.length){
-                        console.log('ütni akarok');
                         let square = poti2[Math.floor(Math.random() * poti2.length)];
-                        console.log('square:',square);
+
                         if(movePieceHandler.checkPossibleEnemyForEnemy(square)){
-                            console.log('ütök is vele:',piece);
-                            console.log('ide:',square);
 
                             movePieceHandler.movePieceForEnemy(handleParams, square);
                             gameHandler.endTurn2();
@@ -94,7 +86,7 @@ export const gameHandler = {
                             
                         }
                     }else if(!!poti.length){
-                        console.log('ide is belépek');
+   
                         let square = poti[Math.floor(Math.random() * poti.length)];
                         movePieceHandler.movePieceForEnemy(handleParams, square);
                         gameHandler.endTurn2();
@@ -104,38 +96,9 @@ export const gameHandler = {
             }
 
         }
-    },
+    },*/
 
-    getGameOverStatus(){
-        let gameOver = undefined;
-        if(checkHandler.checkHandle.isCheck){
-            gameOver = true;
-            $$(chessConfig.chessPieceSelector).forEach(piece => {
-                
-                const piecePosition = piece.getAttribute( 'piece-square' );;
-                const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
-                const pieceType = piece.getAttribute( 'piece-type' ).split('_')[1];
-                
-                const handleParams = {
-                    piece,
-                    pieceType, 
-                    piecePosition,
-                    pieceColor,
-                }
-
-                if(pieceType === 'king'){
-                    if(kingMovement.canTheKingMove(handleParams)){
-                        gameOver = false;
-                    }
-                }else if(checkHandler.pieceCanBlockCheck(handleParams) ){
-                        gameOver = false;
-                }
-                
-            })
-        }
-        return gameOver;
-    }
-
+  
     
 
 }

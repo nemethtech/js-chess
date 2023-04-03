@@ -78,7 +78,6 @@ export const piecesRender = {
         
         this.removeEventListeners();
         this.setEventListeners();
-        if(gameHandler.getGameOverStatus())console.log('GAME OVER');
         
     }
  

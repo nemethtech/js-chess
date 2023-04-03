@@ -1,10 +1,6 @@
 import { $ , $$ } from "../../utils/utils.js";
-import { chessConfig } from "../config/chessConfig.config.js";
 import { gameHandler } from "./gameHandler.js";
 import { generalMovement } from "./pieceMovement/general.js";
-import { piecesRender } from "./pieceRender.js";
-
-
 
 class BasePlayer {
     constructor(color) {
@@ -12,7 +8,6 @@ class BasePlayer {
       this.playerColor = color;
       this.enemyColor = color === 'white' ? 'black' : 'white';
       this.playerPieces = [];
-      this.attackSquares = [];
       this.pieceCollisions = [];
       this.pieceColFreeMoves = [];
       this.hasTheKingMoved = false;
@@ -38,20 +33,14 @@ class BasePlayer {
       }); 
     }
 
-    getAttackerSquares(){
+    getPlayerPiecesMoveSquares(){
 
-      this.playerPieces.forEach(piece => {
-        if(piece.pieceType === 'pawn'){
-          this.attackSquares.push(generalMovement.getPossibleCollisionquares(generalMovement.getPieceMove(piece)));
-        }else {
-          this.attackSquares.push(generalMovement.getCollisionFreeSquares(generalMovement.getPieceMove(piece)));
-        }
+      let piecesMovesSquares = [];
+
+      this.pieceColFreeMoves.forEach( piceMove => {
+        piecesMovesSquares.push(piceMove.colFreeMoveSquares);
       })
-      this.attackSquares = this.attackSquares.flat(1);
-      this.attackSquares = this.attackSquares.filter((element, index) => {
-        return this.attackSquares.indexOf(element) === index;
-    });
- 
+      return generalMovement.simplifyArray(piecesMovesSquares);
     }
 
     setPieceCollisions(){
@@ -63,7 +52,7 @@ class BasePlayer {
         
         if(collisionArray.length > 0){
 
-          collisionArray.forEach(collision =>{
+          collisionArray.forEach(collision => {
 
           let collisionPiece = $(`[id^="${collision.square}"]`);
 
@@ -82,10 +71,22 @@ class BasePlayer {
                 colPieceType : collisionPieceType , 
                 colMoveSquares :  collisionMoveSquares,
               }) 
+              if(piece.pieceType === 'pawn'){
+                console.log('pawn col ', {
+                  playerPieceType : piece.pieceType , 
+                  playerPiecePosition : piece.piecePosition,
+                  direction : collision.direction ,
+                  colPiecePosition : collision.square ,
+                  colType  : collisionType, 
+                  colPieceType : collisionPieceType , 
+                });
+
+              }
             }   
           })
         }
       })
+      
     }
 
 
@@ -114,15 +115,7 @@ class BasePlayer {
       })
     }
 
-    setPlayerValuesToDefault(){
-      this.pieceColFreeMoves = [];
-      this.pieceCollisions = [];
-      this.attackSquares = [];
-      this.playerPieces = [];
-      this.checkThreat = [];
-      this.isPlayerInCheck  = false;
-    }
-
+    
     
     setPieceIsBackedUp(){
       this.pieceCollisions.forEach( pieceCollision => {
@@ -132,20 +125,38 @@ class BasePlayer {
         }
       })
     }
-
+    
+    
+    setPlayerValuesToDefault(){
+      this.pieceColFreeMoves = [];
+      this.pieceCollisions = [];
+      this.playerPieces = [];
+      this.checkThreat = [];
+      this.isPlayerInCheck  = false;
+    }
 
   }
 
 BasePlayer.instances = {};
 
+
 BasePlayer.instanceByColor = (color) => {
   return BasePlayer.instances[color];
+}
+
+BasePlayer.getPlayer = ()  => {
+  return BasePlayer.instances[gameHandler.currentTurnFor()];
+}
+
+BasePlayer.getEnemyPlayer = ()  => {
+  return BasePlayer.instances[gameHandler.notCurrentTurnFor()];
 }
 
 BasePlayer.resetPlayerPieces = () => {
   BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).setPlayerPieces();
   BasePlayer.instanceByColor(gameHandler.currentTurnFor()).setPlayerPieces();
 }
-  
+
+
 
 export { BasePlayer };

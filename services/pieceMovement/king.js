@@ -32,7 +32,7 @@ export const kingMovement = {
 
   getAvailableSquares(kingPiece){
 
-      const enemySquares = Player.instanceByColor(chessConfig.enemyColor).attackSquares;
+      const enemySquares = Player.getEnemyPlayer().getPlayerPiecesMoveSquares();
       let kingSquares = this.getAllAvaliableSquares(kingPiece);
       let avaliableSquares = kingSquares.filter( square => !enemySquares.includes(square));
       return this.checkKingMove(this.buildKingMove(avaliableSquares , enemySquares));
@@ -53,17 +53,13 @@ export const kingMovement = {
 
       return kingMove
     },
-    
-  canTheKingMove(kingPiece){
-
-      return this.getAvailableSquares(kingPiece).length > 0 ? true : false;
-    },
+ 
 
   checkKingMove(kingMoveArray){
 
       let backedUpEnemySquares = []; 
       
-      Player.instanceByColor(chessConfig.enemyColor).playerPieces.forEach( enemyPiece => {
+      Player.getEnemyPlayer().playerPieces.forEach( enemyPiece => {
         if(enemyPiece.isBackedUp){
           backedUpEnemySquares.push(enemyPiece.piecePosition)
         }

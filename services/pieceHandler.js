@@ -1,24 +1,24 @@
 import { $ } from '../utils/utils.js'
 import { generalMovement } from '../services/pieceMovement/general.js'
 import { gameHandler } from './gameHandler.js';
-import { kingMovement } from './pieceMovement/king.js';
 import { Player } from './playerClassExtend.js';
-import { chessConfig } from '../config/chessConfig.config.js';
-
 
 export const pieceHandle = {
+
+
+
     handlePieceClick(pieceSettings){
 
         if(!gameHandler.pieceTurn(pieceSettings.pieceColor)){
             return this;
         }
-        else if(Player.instanceByColor(chessConfig.currentTurn).isPlayerInCheck){
+        else if(Player.getPlayer().isPlayerInCheck){
             console.log('0');
             if(pieceSettings.pieceType === 'king'){
-                if(kingMovement.canTheKingMove(pieceSettings)){
+                if(Player.getPlayer().canPlayerKingMove()){
                     this.managePiece(pieceSettings)
                 }
-            }else if(Player.instanceByColor(chessConfig.currentTurn).pieceCanBlockCheck(pieceSettings)){
+            }else if(Player.getPlayer().pieceCanBlockCheck(pieceSettings)){
                 console.log('2');
                 this.managePiece(pieceSettings)
             }else{

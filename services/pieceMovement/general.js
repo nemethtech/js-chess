@@ -36,8 +36,8 @@ export const generalMovement = {
     markPotentialSquares(piece){
         let pieceMove = this.getPieceMove(piece);
         //filterPieceMoveIfPlayerUnderCheck
-        if(Player.instanceByColor(chessConfig.currentTurn).isPlayerInCheck && piece.pieceType !== 'king'){
-            pieceMove =  Player.instanceByColor(chessConfig.currentTurn).filterPieceMoveIfPlayerUnderCheck(piece , pieceMove)
+        if(Player.getPlayer().isPlayerInCheck && piece.pieceType !== 'king'){
+            pieceMove =  Player.getPlayer().filterPieceMoveIfPlayerUnderCheck(piece , pieceMove);
         }
         this.setSquares(pieceMove);
         this.setEventsOnPotentialSquares();

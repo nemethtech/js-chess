@@ -21,8 +21,8 @@ export const pawnMovement = {
         const colIdx = chessConfig.columns.indexOf(ownSquareCol);
         const rowIdx = chessConfig.rows.indexOf(ownSquareRow);
         const rowToAttack = chessConfig.rows[rowIdx + ( 1 * moveSide)] ? chessConfig.rows[rowIdx + ( 1 * moveSide)] : undefined ;
-        const rightCol = chessConfig.columns[colIdx + 1] ? chessConfig.columns[colIdx +  1 * moveSide] : undefined ;
-        const leftCol = chessConfig.columns[colIdx -1] ? chessConfig.columns[colIdx-1 * moveSide] : undefined ;
+        const rightCol = chessConfig.columns[colIdx + 1 * moveSide] ? chessConfig.columns[colIdx +  1 * moveSide] : undefined ;
+        const leftCol = chessConfig.columns[colIdx - 1 * moveSide] ? chessConfig.columns[colIdx- 1 * moveSide] : undefined ;
 
        !generalMovement.valueNullOrUndefined(rowToAttack) && !generalMovement.valueNullOrUndefined(leftCol) 
         if(!generalMovement.valueNullOrUndefined(rowToAttack) && !generalMovement.valueNullOrUndefined(leftCol) ){

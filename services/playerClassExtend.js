@@ -1,12 +1,10 @@
-import { chessConfig } from "../config/chessConfig.config.js";
 import { BasePlayer } from "./playerClass.js";
 
 class Player extends BasePlayer {
 
   setIfPlayerCheckIsOn(){
 
-    Player.instanceByColor(this.enemyColor).pieceCollisions.forEach( pieceCollision => {
-      
+    Player.getEnemyPlayer().pieceCollisions.forEach( pieceCollision => {
       if(pieceCollision.colPieceType.includes('king') && pieceCollision.colType === 'enemy'){
         this.isPlayerInCheck = true;
         return;
@@ -18,18 +16,13 @@ class Player extends BasePlayer {
 
     this.setIfPlayerCheckIsOn();
     if(this.isPlayerInCheck){
-      this.gatherCheckInfo();
-      this.checkThreat.forEach( threat => {
-        console.log('color ' , this.playerColor);
-        console.log('threat',threat);
-      })
+      this.getCheckThreatInfo();
     }
-    console.log('Color : ' , this.playerColor , ' Csekk? : ' , this.isPlayerInCheck);
   }
    
-  gatherCheckInfo(){
+  getCheckThreatInfo(){
     if(this.isPlayerInCheck){
-      Player.instanceByColor(this.enemyColor).pieceCollisions.forEach( pieceCollision => {
+      Player.getEnemyPlayer().pieceCollisions.forEach( pieceCollision => {
         if(pieceCollision.colPieceType.includes('king') && pieceCollision.colType === 'enemy'){
           this.checkThreat.push(pieceCollision);
         }
@@ -38,72 +31,21 @@ class Player extends BasePlayer {
   }
 
 
+
   pieceCanBlockCheck(piece){   
-
-    let pieceCanBlockCheck = false;
-
-    if(this.checkThreat.length !== 1){
-        return false;
-    }
-    let playerPieceCollisions = Player.instanceByColor(chessConfig.currentTurn).pieceCollisions;
-    let playerPieceColFreeMoves = Player.instanceByColor(chessConfig.currentTurn).pieceColFreeMoves;
-
-    const playerPiecesCanAttackThreat = playerPieceCollisions.filter( pieceCol =>  
-          pieceCol.colPiecePosition === this.checkThreat[0].playerPiecePosition);
-
-    if(playerPiecesCanAttackThreat.length > 0){
-      playerPiecesCanAttackThreat.forEach( pieceCol => {
-        if(pieceCol.playerPiecePosition === piece.piecePosition){
-          console.log('true');
-          pieceCanBlockCheck =  true;
-        }
-      })
-    }
-
-    const playerPieceColFreeeMoves = playerPieceColFreeMoves.filter( pieceColFreeMove =>  
-      pieceColFreeMove.playerPiecePosition === piece.piecePosition);
-    //  console.log('playerPieceColFreeeMoves',playerPieceColFreeeMoves);
-
-    if(playerPieceColFreeeMoves.length > 0){
-      playerPieceColFreeeMoves.forEach( colFreeeMove => {
-        this.checkThreat[0].colMoveSquares.forEach( threatMoveSquare => {
-          if(colFreeeMove.colFreeMoveSquares.includes(threatMoveSquare)){
-            pieceCanBlockCheck = true;
-          }
-        })
-      })
-    }
-
-    return pieceCanBlockCheck;
-  }
-
-  pieceCanBlockCheck2(piece){   
 
     let pieceMoveDirections = [];
     
     if(this.checkThreat.length !== 1){
-        return false;
+        return pieceMoveDirections;
     }
-    let playerPieceCollisions = Player.instanceByColor(chessConfig.currentTurn).pieceCollisions;
-    let playerPieceColFreeMoves = Player.instanceByColor(chessConfig.currentTurn).pieceColFreeMoves;
 
-    const playerPiecesCanAttackThreat = playerPieceCollisions.filter( pieceCol =>  
-          pieceCol.colPiecePosition === this.checkThreat[0].playerPiecePosition);
+    let playerPieceColFreeMoves = Player.getPlayer().pieceColFreeMoves;
 
-    if(playerPiecesCanAttackThreat.length > 0){
-      playerPiecesCanAttackThreat.forEach( pieceCol => {
-        if(pieceCol.playerPiecePosition === piece.piecePosition){
-          console.log('true');
-          pieceMoveDirections.push(pieceCol.direction);
-        }
-      })
-    }
-    
     const playerPieceColFreeeMoves = playerPieceColFreeMoves.filter( pieceColFreeMove =>  
       pieceColFreeMove.playerPiecePosition === piece.piecePosition);
-      //  console.log('playerPieceColFreeeMoves',playerPieceColFreeeMoves);
-      
-      if(playerPieceColFreeeMoves.length > 0){
+
+      if(Array.isArray(playerPieceColFreeeMoves)){
         playerPieceColFreeeMoves.forEach( colFreeeMove => {
           this.checkThreat[0].colMoveSquares.forEach( threatMoveSquare => {
             if(colFreeeMove.colFreeMoveSquares.includes(threatMoveSquare)){
@@ -114,46 +56,118 @@ class Player extends BasePlayer {
     }
 
     return pieceMoveDirections;
+
+  }
+
+  pieceCanAttackCheckThreat(piece){
+    let pieceCanAttackThreat = false;
+    
+    if(this.checkThreat.length !== 1){
+        return pieceCanAttackThreat;
+    }
+
+    let playerPieceCollisions = Player.getPlayer().pieceCollisions;
+
+    const playerPiecesCanAttackThreat = playerPieceCollisions.filter( pieceCol =>  
+          pieceCol.colPiecePosition === this.checkThreat[0].playerPiecePosition);
+
+    if(Array.isArray(playerPiecesCanAttackThreat)){
+      playerPiecesCanAttackThreat.forEach( pieceCol => {
+        if(pieceCol.playerPiecePosition === piece.piecePosition){
+          pieceCanAttackThreat = true;
+        }
+      })
+    }
+  
+    return pieceCanAttackThreat;
   }
 
   setPlayerPiecesInCheck(){
     if(this.isPlayerInCheck){
-      Player.instanceByColor(this.playerColor).playerPieces.forEach( playerPiece => {
-        if(this.pieceCanBlockCheck2(playerPiece).length !== 0){
+      this.playerPieces.forEach( playerPiece => {
+        if(this.pieceCanBlockCheck(playerPiece).length !== 0){
           playerPiece.canBlockCheck = true;
-          playerPiece.canBlockCheckDirections = this.pieceCanBlockCheck2(playerPiece);
+          playerPiece.canBlockCheckDirections = this.pieceCanBlockCheck(playerPiece);
+        }
+        if(this.pieceCanAttackCheckThreat(playerPiece)){
+          playerPiece.canAttackThreat = true;
         }
       })
     }
-
   }
 
   filterPieceMoveIfPlayerUnderCheck(piece , pieceMove){
+
     const playerPiece = this.playerPieces.find( playerPiece => playerPiece.piecePosition === piece.piecePosition);
     let filteredMove = {};
-    if(playerPiece.canBlockCheck){
 
-        for (const direction in pieceMove) {
-          if (playerPiece.canBlockCheckDirections.includes(direction)) {
-            filteredMove[direction] = pieceMove[direction];
-          }
-        } 
+    if(playerPiece.canBlockCheck){
+      for (const direction in pieceMove) {
+        if (playerPiece.canBlockCheckDirections.includes(direction)) {
+          let squares  = pieceMove[direction].collisionFreeSquares.filter(element => this.checkThreat[0].colMoveSquares.includes(element));
+          filteredMove[direction] = { collisionFreeSquares : squares };
+        }
+      } 
     }
+
+    if(playerPiece.canAttackThreat){
+      for (const direction in pieceMove) {
+        if (pieceMove[direction].possibleCollision === this.checkThreat[0].playerPiecePosition) {
+          filteredMove[direction] = { possibleCollision : this.checkThreat[0].playerPiecePosition };
+        }
+      } 
+    }
+
     return filteredMove;
   }
+
+  canPlayerKingMove(){
+    
+    const kingColFreeeMoves = this.pieceColFreeMoves.filter( pieceColFreeMove =>  
+      pieceColFreeMove.playerPieceType === 'king');
+    
+    const kingHasMoveSquare = kingColFreeeMoves.length > 0 ;
+
+    let kingCanAttack = false;
+
+    const kingColMoves = this.pieceCollisions.filter( pieceCollision =>  
+      pieceCollision.playerPieceType === 'king' && pieceCollision.colType === 'enemy');
+    
+    kingColMoves.forEach( kingColMove => {
+      const enemyPiece = Player.getEnemyPlayer().playerPieces.find( playerPiece => 
+                         playerPiece.piecePosition === kingColMove.colPiecePosition);
+      if(!enemyPiece.isBackedUp){
+        kingCanAttack = true;
+      }
+    })
+
+    const canTheKingMove = kingHasMoveSquare || kingCanAttack;
+
+    return canTheKingMove;
+
+    }
+
+
+
+
+
+
+
+
+
 
   setPlayerPieces(){
 
     this.setPlayerValuesToDefault();
     this.getPlayerPieces();
-    this.setPieceIsBackedUp();
-    this.getAttackerSquares();
     this.setPieceCollisions();
+    this.setPieceIsBackedUp();
     this.setPieceColFreeMoves();
     this.checkIfPlayerInCheck();
     this.setPlayerPiecesInCheck();
 
   }
+
   
 }
 
