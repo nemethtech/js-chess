@@ -14,12 +14,12 @@ export const gameHandler = {
     
     endTurn(){
         
-        this.changeTurnSettings();
         generalMovement.clearPotentialSquares();
         piecesRender.setEventListeners();
         Player.resetPlayerPieces();
-        console.log('Player Player.getPlayer().pieceCollisions',Player.getPlayer().pieceCollisions);
-        console.log('Enemy Player.getPlayer().pieceCollisions ',Player.getEnemyPlayer().pieceCollisions);
+        this.changeTurnSettings();
+        console.log('Player Player.getPlayer().playerPieces',Player.getPlayer());
+        console.log('Enemy Player.getPlayer().playerPieces ',Player.getEnemyPlayer());
   
         //     console.log('white canPlayerKingMove',Player.instanceByColor('white').canPlayerKingMove());
    //      console.log('black canPlayerKingMove',Player.instanceByColor('black').canPlayerKingMove());

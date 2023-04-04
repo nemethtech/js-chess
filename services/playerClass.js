@@ -58,7 +58,7 @@ class BasePlayer {
 
             if(!(collisionPiece.firstChild == null)){
 
-              let collisionMoveSquares = pieceAllMoveSquare[collision.direction].collisionFreeSquares;
+              const collisionMoveSquares = pieceAllMoveSquare[collision.direction].collisionFreeSquares;
               const collisionType = collisionPiece.firstChild.getAttribute('piece-type').includes(this.enemyColor) ? 'enemy' : 'ally';
               const collisionPieceType = collisionPiece.firstChild.getAttribute('piece-type');
             
@@ -71,17 +71,8 @@ class BasePlayer {
                 colPieceType : collisionPieceType , 
                 colMoveSquares :  collisionMoveSquares,
               }) 
-              if(piece.pieceType === 'pawn'){
-                console.log('pawn col ', {
-                  playerPieceType : piece.pieceType , 
-                  playerPiecePosition : piece.piecePosition,
-                  direction : collision.direction ,
-                  colPiecePosition : collision.square ,
-                  colType  : collisionType, 
-                  colPieceType : collisionPieceType , 
-                });
 
-              }
+
             }   
           })
         }
@@ -89,6 +80,38 @@ class BasePlayer {
       
     }
 
+    setPieceCollisions2(piece , pieceAllMoveSquare){
+
+      let collisionArray = generalMovement.getPossibleCollisionquares2(pieceAllMoveSquare);
+      
+      if(collisionArray.length > 0){
+      
+        piece.collisions = [];
+
+        collisionArray.forEach(collision => {
+
+        let collisionPiece = $(`[id^="${collision.square}"]`);
+
+          if(!(collisionPiece.firstChild == null)){
+
+            const collisionMoveSquares = pieceAllMoveSquare[collision.direction].collisionFreeSquares;
+            const collisionType = collisionPiece.firstChild.getAttribute('piece-type').includes(this.enemyColor) ? 'enemy' : 'ally';
+            const collisionPieceType = collisionPiece.firstChild.getAttribute('piece-type');
+          
+            piece.collisions.push({
+              direction : collision.direction ,
+              colPiecePosition : collision.square ,
+              colType  : collisionType, 
+              colPieceType : collisionPieceType , 
+              colMoveSquares :  collisionMoveSquares,
+
+            });
+            
+          }   
+        })
+      }
+      
+    }
 
     setPieceColFreeMoves(){
 
@@ -115,17 +138,54 @@ class BasePlayer {
       })
     }
 
+    getEnemyPlayer(){
+      return BasePlayer.instanceByColor(this.enemyColor);
+    }
+
+    setPieceColFreeMoves2(piece , pieceAllMoveSquare ){
+
+      let colFreeMoves = generalMovement.getCollisionFreeSquares2(pieceAllMoveSquare);
     
-    
-    setPieceIsBackedUp(){
-      this.pieceCollisions.forEach( pieceCollision => {
-        if(pieceCollision.colType === 'ally'){
-          const playerPiece = this.playerPieces.find( playerPiece => playerPiece.piecePosition === pieceCollision.colPiecePosition);
-          playerPiece.isBackedUp = true;
-        }
+      if(colFreeMoves.length > 0){
+
+        piece.moveSquares = [];
+
+        colFreeMoves.forEach( colFreeMove => {
+
+          if(colFreeMove.square.length > 0){
+
+            piece.moveSquares.push({
+              direction : colFreeMove.direction ,
+              colFreeMoveSquares :  colFreeMove.square,
+            }) 
+          }
+        })
+      }
+    }
+
+
+    setPlayerPiecesMoves(){
+      this.playerPieces.forEach( piece => {
+        let pieceAllMoveSquare = generalMovement.getPieceMove(piece);
+        this.setPieceColFreeMoves2(piece , pieceAllMoveSquare);
+        this.setPieceCollisions2(piece , pieceAllMoveSquare);
       })
     }
+
+
     
+    setPieceIsBackedUp(){
+      this.playerPieces.forEach( playerPiece => {
+        if(playerPiece.collisions){
+          playerPiece.collisions.forEach( pieceCollision => {
+            if(pieceCollision.colType === 'ally'){
+              const playerPiece = this.playerPieces.find( playerPiece => playerPiece.piecePosition === pieceCollision.colPiecePosition);
+              playerPiece.isBackedUp = true;
+            }
+          })
+        }
+     })
+    } 
     
     setPlayerValuesToDefault(){
       this.pieceColFreeMoves = [];
@@ -153,8 +213,8 @@ BasePlayer.getEnemyPlayer = ()  => {
 }
 
 BasePlayer.resetPlayerPieces = () => {
-  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).setPlayerPieces();
   BasePlayer.instanceByColor(gameHandler.currentTurnFor()).setPlayerPieces();
+  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).setPlayerPieces();
 }
 
 

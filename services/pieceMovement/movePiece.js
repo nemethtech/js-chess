@@ -87,6 +87,19 @@ export const movePieceHandler = {
         return enemyOnSquare;
     },
 
+    checkIfPieceOnSquare(square){
+
+        let pieceOnSquare = null;
+        if(square === undefined){
+            return pieceOnSquare;
+        }
+        const squareElement = $(`[id^="${square.toString()}"]`);
+        if(squareElement.firstChild != null  ){
+            pieceOnSquare = square;
+        }
+
+        return pieceOnSquare;
+    },
     checkPossibleEnemyOnSquarecheckPossibleEnemyOnSquare(square){
 
         let pieceSquare = $(`[id^="${square}"]`);

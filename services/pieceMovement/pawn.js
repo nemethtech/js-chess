@@ -38,15 +38,20 @@ export const pawnMovement = {
     },
 
     buildPawnMove(forwardSquares , sideSquares){
+
+       
         return{
             forwardRows : {
                 collisionFreeSquares : movePieceHandler.checkCollision(forwardSquares).collisionFreeSquares, 
             },
             rightColumn : {
-                possibleCollision    : sideSquares.rightSideToAttack,
+                
+                possibleCollision    : movePieceHandler.checkIfPieceOnSquare(sideSquares.rightSideToAttack),
             },
+            // [movePieceHandler.checkCollision([sideSquares.rightSideToAttack]).possibleCollision],
             leftColumn : {
-                possibleCollision    : sideSquares.leftSideToAttack,
+                possibleCollision    : movePieceHandler.checkIfPieceOnSquare(sideSquares.leftSideToAttack),
+               
             },
         }
     },
