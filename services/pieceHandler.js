@@ -16,6 +16,7 @@ export const pieceHandle = {
             console.log('0');
             if(pieceSettings.pieceType === 'king'){
                 if(Player.getPlayer().canPlayerKingMove()){
+                    console.log('1');
                     this.managePiece(pieceSettings)
                 }
             }else if(Player.getPlayer().pieceCanBlockCheck(pieceSettings)){

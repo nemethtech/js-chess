@@ -14,10 +14,10 @@ export const gameHandler = {
     
     endTurn(){
         
+        this.changeTurnSettings();
         generalMovement.clearPotentialSquares();
         piecesRender.setEventListeners();
         Player.resetPlayerPieces();
-        this.changeTurnSettings();
         console.log('Player Player.getPlayer().playerPieces',Player.getPlayer());
         console.log('Enemy Player.getPlayer().playerPieces ',Player.getEnemyPlayer());
   

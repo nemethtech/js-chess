@@ -33,6 +33,7 @@ export const kingMovement = {
   getAvailableSquares(kingPiece){
 
       const enemySquares = Player.getEnemyPlayer().getPlayerPiecesMoveSquares();
+      console.log('enemySquares',enemySquares);
       let kingSquares = this.getAllAvaliableSquares(kingPiece);
       let avaliableSquares = kingSquares.filter( square => !enemySquares.includes(square));
       return this.checkKingMove(this.buildKingMove(avaliableSquares , enemySquares));

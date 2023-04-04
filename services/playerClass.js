@@ -8,8 +8,6 @@ class BasePlayer {
       this.playerColor = color;
       this.enemyColor = color === 'white' ? 'black' : 'white';
       this.playerPieces = [];
-      this.pieceCollisions = [];
-      this.pieceColFreeMoves = [];
       this.hasTheKingMoved = false;
       this.isPlayerInCheck = false;
       this.checkThreat = [];
@@ -37,50 +35,19 @@ class BasePlayer {
 
       let piecesMovesSquares = [];
 
-      this.pieceColFreeMoves.forEach( piceMove => {
-        piecesMovesSquares.push(piceMove.colFreeMoveSquares);
+      this.playerPieces.forEach( playerPiece => {
+        if(Array.isArray(playerPiece.moveSquares) && playerPiece.moveSquares.length > 0){
+          playerPiece.moveSquares.forEach( move => {
+            piecesMovesSquares.push(move.colFreeMoveSquares);
+          })
+        }
       })
       return generalMovement.simplifyArray(piecesMovesSquares);
     }
 
-    setPieceCollisions(){
-
-      this.playerPieces.forEach(piece => {
-
-        let pieceAllMoveSquare = generalMovement.getPieceMove(piece);
-        let collisionArray = generalMovement.getPossibleCollisionquares2(pieceAllMoveSquare);
-        
-        if(collisionArray.length > 0){
-
-          collisionArray.forEach(collision => {
-
-          let collisionPiece = $(`[id^="${collision.square}"]`);
-
-            if(!(collisionPiece.firstChild == null)){
-
-              const collisionMoveSquares = pieceAllMoveSquare[collision.direction].collisionFreeSquares;
-              const collisionType = collisionPiece.firstChild.getAttribute('piece-type').includes(this.enemyColor) ? 'enemy' : 'ally';
-              const collisionPieceType = collisionPiece.firstChild.getAttribute('piece-type');
-            
-              this.pieceCollisions.push({
-                playerPieceType : piece.pieceType , 
-                playerPiecePosition : piece.piecePosition,
-                direction : collision.direction ,
-                colPiecePosition : collision.square ,
-                colType  : collisionType, 
-                colPieceType : collisionPieceType , 
-                colMoveSquares :  collisionMoveSquares,
-              }) 
 
 
-            }   
-          })
-        }
-      })
-      
-    }
-
-    setPieceCollisions2(piece , pieceAllMoveSquare){
+    setPieceCollisions(piece , pieceAllMoveSquare){
 
       let collisionArray = generalMovement.getPossibleCollisionquares2(pieceAllMoveSquare);
       
@@ -113,47 +80,20 @@ class BasePlayer {
       
     }
 
-    setPieceColFreeMoves(){
 
-      this.playerPieces.forEach(piece => {
-
-        let pieceAllMoveSquare = generalMovement.getPieceMove(piece);
-        let colFreeMoves = generalMovement.getCollisionFreeSquares2(pieceAllMoveSquare);
-        
-        if(colFreeMoves.length > 0){
-
-          colFreeMoves.forEach( colFreeMove => {
-            if(colFreeMove.square.length > 0){
-
-              this.pieceColFreeMoves.push({
-                playerPieceType : piece.pieceType , 
-                playerPiecePosition : piece.piecePosition,
-                direction : colFreeMove.direction ,
-                colFreeMoveSquares :  colFreeMove.square,
-              }) 
-            }
-            
-          })
-        }
-      })
-    }
-
-    getEnemyPlayer(){
-      return BasePlayer.instanceByColor(this.enemyColor);
-    }
-
-    setPieceColFreeMoves2(piece , pieceAllMoveSquare ){
-
-      let colFreeMoves = generalMovement.getCollisionFreeSquares2(pieceAllMoveSquare);
     
+    setPieceColFreeMoves(piece , pieceAllMoveSquare ){
+      
+      let colFreeMoves = generalMovement.getCollisionFreeSquares2(pieceAllMoveSquare);
+      
       if(colFreeMoves.length > 0){
-
+        
         piece.moveSquares = [];
 
         colFreeMoves.forEach( colFreeMove => {
-
+          
           if(colFreeMove.square.length > 0){
-
+            
             piece.moveSquares.push({
               direction : colFreeMove.direction ,
               colFreeMoveSquares :  colFreeMove.square,
@@ -167,12 +107,12 @@ class BasePlayer {
     setPlayerPiecesMoves(){
       this.playerPieces.forEach( piece => {
         let pieceAllMoveSquare = generalMovement.getPieceMove(piece);
-        this.setPieceColFreeMoves2(piece , pieceAllMoveSquare);
-        this.setPieceCollisions2(piece , pieceAllMoveSquare);
+        this.setPieceColFreeMoves(piece , pieceAllMoveSquare);
+        this.setPieceCollisions(piece , pieceAllMoveSquare);
       })
     }
-
-
+    
+    
     
     setPieceIsBackedUp(){
       this.playerPieces.forEach( playerPiece => {
@@ -185,26 +125,28 @@ class BasePlayer {
           })
         }
      })
-    } 
+    }
+
+    getEnemyPlayer(){
+      return BasePlayer.instanceByColor(this.enemyColor);
+    }
     
     setPlayerValuesToDefault(){
-      this.pieceColFreeMoves = [];
-      this.pieceCollisions = [];
       this.playerPieces = [];
       this.checkThreat = [];
       this.isPlayerInCheck  = false;
     }
 
   }
-
-BasePlayer.instances = {};
-
-
-BasePlayer.instanceByColor = (color) => {
-  return BasePlayer.instances[color];
-}
-
-BasePlayer.getPlayer = ()  => {
+  
+  BasePlayer.instances = {};
+  
+  
+  BasePlayer.instanceByColor = (color) => {
+    return BasePlayer.instances[color];
+  }
+  
+  BasePlayer.getPlayer = ()  => {
   return BasePlayer.instances[gameHandler.currentTurnFor()];
 }
 
@@ -213,10 +155,15 @@ BasePlayer.getEnemyPlayer = ()  => {
 }
 
 BasePlayer.resetPlayerPieces = () => {
-  BasePlayer.instanceByColor(gameHandler.currentTurnFor()).setPlayerPieces();
   BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).setPlayerPieces();
+  BasePlayer.instanceByColor(gameHandler.currentTurnFor()).setPlayerPieces();
 }
 
-
+BasePlayer.resetPlayerPieces = () => {
+  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).resetPlayerPieces();
+  BasePlayer.instanceByColor(gameHandler.currentTurnFor()).resetPlayerPieces();
+  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).resetPieceMoves();
+  BasePlayer.instanceByColor(gameHandler.currentTurnFor()).resetPieceMoves();
+}
 
 export { BasePlayer };
