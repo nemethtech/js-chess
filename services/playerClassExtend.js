@@ -73,7 +73,7 @@ class Player extends BasePlayer {
           playerPiece.canBlockCheckDirections = this.setPieceCanBlockThreat(playerPiece);
         }
         if(this.setPieceCanAttackThreat(playerPiece)){
-          playerPiece.pieceCanAttackThreat = true;
+          playerPiece.canAttackThreat = true;
         
         }
       })
@@ -96,6 +96,7 @@ class Player extends BasePlayer {
 
     if(playerPiece.canAttackThreat){
       for (const direction in pieceMove) {
+      
         if (pieceMove[direction].possibleCollision === this.checkThreat[0].piecePosition) {
           filteredMove[direction] = { possibleCollision : this.checkThreat[0].piecePosition };
         }
@@ -107,17 +108,23 @@ class Player extends BasePlayer {
 
   canPlayerKingMove(){
     const kingPiece = this.playerPieces.find( piece => piece.pieceType === 'king');
-    console.log('kingPiece',kingPiece);
-    const kingHasMoveSquare = kingPiece.moveSquares !== [];
-
-    let kingCanAttack = false;
-
-    const enemyPiece = Player.getEnemyPlayer().playerPieces.find( playerPiece => 
-      playerPiece.piecePosition === this.checkThreat[0].piecePosition);
-    if(!enemyPiece.isBackedUp && kingPiece.canAttackThreat){
-      kingCanAttack = true;
+   // console.log('kingPiece',kingPiece);
+    let kingHasMoveSquare = false ;
+    if(kingPiece.hasOwnProperty("moveSquares") && kingPiece.moveSquares.length > 0){
+    
+      kingHasMoveSquare = true;
     }
 
+    let kingCanAttack = false;
+    console.log('kingPiece',kingPiece);
+    console.log('kingHasMoveSquare',kingHasMoveSquare);
+    const enemyPiece = Player.getEnemyPlayer().playerPieces.find( playerPiece => 
+      playerPiece.piecePosition === this.checkThreat[0].piecePosition);
+      if(!enemyPiece.isBackedUp && kingPiece.pieceCanAttackThreat){
+        kingCanAttack = true;
+      }
+      
+      console.log('kingCanAttack',kingCanAttack);
 
     const canTheKingMove = kingHasMoveSquare || kingCanAttack;
 
@@ -126,8 +133,9 @@ class Player extends BasePlayer {
     }
 
     pieceCanBlockCheck(piece){
+   //   console.log('this.playerPieces' , this.playerPieces);
       const playerPiece = this.playerPieces.find( playerPiece => playerPiece.piecePosition === piece.piecePosition);
-      return playerPiece.canBlockCheck;
+      return playerPiece.canBlockCheck || playerPiece.canAttackThreat;
     }
 
 
@@ -138,10 +146,16 @@ class Player extends BasePlayer {
     this.setPieceIsBackedUp();
   }
   
+  resetPlayerPieces3(){
+ //   this.setPlayerKingMoves();
+ //   this.setPieceIsBackedUp();
+  }
+
   resetPieceMoves(){
     this.setIfPlayerCheckIsOn();
     this.setPlayerPiecesInCheck();
   }
+  
 }
 
 const playerTwo = new Player('black');

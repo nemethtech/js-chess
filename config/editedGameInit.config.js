@@ -36,6 +36,7 @@ export const editedGame = {
  */   
     'a1': 'white_rook',
     'e8': 'black_king',
+    'g2': 'white_king',
     'f3': 'white_rook',
     'd4': 'white_queen',
     'h8': 'black_queen',

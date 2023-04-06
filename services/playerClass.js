@@ -106,13 +106,26 @@ class BasePlayer {
 
     setPlayerPiecesMoves(){
       this.playerPieces.forEach( piece => {
-        let pieceAllMoveSquare = generalMovement.getPieceMove(piece);
-        this.setPieceColFreeMoves(piece , pieceAllMoveSquare);
-        this.setPieceCollisions(piece , pieceAllMoveSquare);
+        if(piece.pieceType !== 'king'){ 
+
+          let pieceAllMoveSquare = generalMovement.getPieceMove(piece);
+          this.setPieceColFreeMoves(piece , pieceAllMoveSquare);
+          this.setPieceCollisions(piece , pieceAllMoveSquare);
+        }
       })
     }
     
-    
+    setPlayerKingMoves(){
+
+      const kingPiece = this.playerPieces.find( piece => piece.pieceType === 'king');
+      let pieceAllMoveSquare = generalMovement.getPieceMove(kingPiece);
+      this.setPieceColFreeMoves(kingPiece , pieceAllMoveSquare);
+      this.setPieceCollisions(kingPiece , pieceAllMoveSquare);
+   //   console.log('kingPiece pieceAllMoveSquare',kingPiece , pieceAllMoveSquare);
+   //   this.setPieceColFreeMoves(piece , pieceAllMoveSquare);
+   //    this.setPieceCollisions(piece , pieceAllMoveSquare);
+
+    }
     
     setPieceIsBackedUp(){
       this.playerPieces.forEach( playerPiece => {
@@ -155,15 +168,18 @@ BasePlayer.getEnemyPlayer = ()  => {
 }
 
 BasePlayer.resetPlayerPieces = () => {
-  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).setPlayerPieces();
-  BasePlayer.instanceByColor(gameHandler.currentTurnFor()).setPlayerPieces();
-}
-
-BasePlayer.resetPlayerPieces = () => {
   BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).resetPlayerPieces();
   BasePlayer.instanceByColor(gameHandler.currentTurnFor()).resetPlayerPieces();
-  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).resetPieceMoves();
+}
+
+BasePlayer.resetPlayerPieces2 = () => {
+  BasePlayer.instanceByColor(gameHandler.currentTurnFor()).resetPlayerPieces();
+  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).resetPlayerPieces();
+ 
+  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).setPlayerKingMoves();
+  BasePlayer.instanceByColor(gameHandler.currentTurnFor()).setPlayerKingMoves();
   BasePlayer.instanceByColor(gameHandler.currentTurnFor()).resetPieceMoves();
+  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).resetPieceMoves();
 }
 
 export { BasePlayer };

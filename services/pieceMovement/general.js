@@ -36,6 +36,7 @@ export const generalMovement = {
     markPotentialSquares(piece){
         let pieceMove = this.getPieceMove(piece);
         //filterPieceMoveIfPlayerUnderCheck
+   
         if(Player.getPlayer().isPlayerInCheck && piece.pieceType !== 'king'){
             pieceMove =  Player.getPlayer().filterPieceMoveIfPlayerUnderCheck(piece , pieceMove);
         }

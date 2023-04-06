@@ -32,11 +32,11 @@ export const kingMovement = {
 
   getAvailableSquares(kingPiece){
 
-      const enemySquares = Player.getEnemyPlayer().getPlayerPiecesMoveSquares();
-      console.log('enemySquares',enemySquares);
+      const enemyColor = kingPiece.pieceColor === 'black' ? 'white' : 'black';
+      const enemySquares = Player.instanceByColor(enemyColor).getPlayerPiecesMoveSquares();
       let kingSquares = this.getAllAvaliableSquares(kingPiece);
       let avaliableSquares = kingSquares.filter( square => !enemySquares.includes(square));
-      return this.checkKingMove(this.buildKingMove(avaliableSquares , enemySquares));
+      return this.checkKingMove(this.buildKingMove(avaliableSquares , enemySquares) , enemyColor);
   },
 
   buildKingMove(availableSquares , enemySquares){
@@ -56,11 +56,11 @@ export const kingMovement = {
     },
  
 
-  checkKingMove(kingMoveArray){
+  checkKingMove(kingMoveArray , enemyColor){
 
       let backedUpEnemySquares = []; 
-      
-      Player.getEnemyPlayer().playerPieces.forEach( enemyPiece => {
+
+      Player.instanceByColor(enemyColor).playerPieces.forEach( enemyPiece => {
         if(enemyPiece.isBackedUp){
           backedUpEnemySquares.push(enemyPiece.piecePosition)
         }

@@ -8,18 +8,21 @@ export const gameHandler = {
     startGame(){
         
         piecesRender.createPieces();
-        piecesRender.setEventListeners();
         Player.resetPlayerPieces();
+        piecesRender.setEventListeners();
     },
     
     endTurn(){
         
-        this.changeTurnSettings();
         generalMovement.clearPotentialSquares();
+        this.changeTurnSettings();
+        Player.resetPlayerPieces2();
         piecesRender.setEventListeners();
-        Player.resetPlayerPieces();
-        console.log('Player Player.getPlayer().playerPieces',Player.getPlayer());
-        console.log('Enemy Player.getPlayer().playerPieces ',Player.getEnemyPlayer());
+        console.log('Player ' , Player.playerColor);
+        console.log('Player ',      this.gotMated(Player.getPlayer()));
+        console.log('Player ' , Player.playerColor);
+        console.log(' EnemyPlayer ',this.gotMated(Player.getEnemyPlayer()));
+        //console.log('Enemy Player. ',Player.getEnemyPlayer());
   
         //     console.log('white canPlayerKingMove',Player.instanceByColor('white').canPlayerKingMove());
    //      console.log('black canPlayerKingMove',Player.instanceByColor('black').canPlayerKingMove());
@@ -49,6 +52,36 @@ export const gameHandler = {
     notCurrentTurnFor(){
         return  chessConfig.whiteTurn === true ?  'black' : 'white';
     },
+
+    gotMated(Player){
+        let playerGotMated = false;
+        if(Player.isPlayerInCheck){
+
+            let piecesCanSaveKing = false;
+            Player.playerPieces.forEach( piece => {
+                if(piece.canBlockCheck || piece.canAttackThreat){
+                    piecesCanSaveKing = true;
+                    console.log('piecesCanSaveKing ' , piecesCanSaveKing);
+                }
+            });
+            
+            let kingCanMove = Player.canPlayerKingMove();
+            if(!piecesCanSaveKing && !kingCanMove){
+                playerGotMated = true;
+            }
+            return playerGotMated;
+            console.log('Player ' , Player.playerColor);
+            console.log('kingCanMove' , kingCanMove);
+        }else{
+           // console.log('Player ' , Player.playerColor);
+           // console.log('gotMated? NO ' );
+
+        }
+
+    }
+
+
+
 /*
     makeRandomMoveForEnemy(){
         console.log('makeRandomMoveForEnemy');
