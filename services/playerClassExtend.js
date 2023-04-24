@@ -106,37 +106,50 @@ class Player extends BasePlayer {
     return filteredMove;
   }
 
+
+  playerKingCanAttack(kingPiece){
+    let playerKingCanAttack = false;
+    if(kingPiece.collisions){
+      let enemyCollisions =  kingPiece.collisions.filter( col => col.colType !== 'ally');
+      enemyCollisions.forEach( enemyCol => {
+        const enemyPiece = Player.getEnemyPlayer().playerPieces.find( playerPiece => 
+          playerPiece.piecePosition === enemyCol.colPiecePosition);
+          if(!enemyPiece.isBackedUp){
+            playerKingCanAttack = true;
+          }
+        })
+    }
+    return playerKingCanAttack;
+  }
+
+  
+  playerKingCanAttackCheckThreat(kingPiece){
+    let playerKingCanAttackCheckThreat = false;
+    if(this.isPlayerInCheck){
+      const enemyPiece = Player.getEnemyPlayer().playerPieces.find( playerPiece => 
+        playerPiece.piecePosition === this.checkThreat[0].piecePosition);
+        if(!enemyPiece.isBackedUp && kingPiece.canAttackThreat){
+          playerKingCanAttackCheckThreat = true;
+        }
+      }
+      return playerKingCanAttackCheckThreat;
+  }
+
   canPlayerKingMove(){
     const kingPiece = this.playerPieces.find( piece => piece.pieceType === 'king');
-   // console.log('kingPiece',kingPiece);
-    let kingHasMoveSquare = false ;
-    if(kingPiece.hasOwnProperty("moveSquares") && kingPiece.moveSquares.length > 0){
+    const kingHasMoveSquare = kingPiece.hasOwnProperty("moveSquares") && kingPiece.moveSquares.length > 0;
+    if(this.isPlayerInCheck){
+      return kingHasMoveSquare || this.playerKingCanAttackCheckThreat(kingPiece);
+    } else {
+      return kingHasMoveSquare || this.playerKingCanAttack(kingPiece);
+    }
+  }
     
-      kingHasMoveSquare = true;
-    }
-
-    let kingCanAttack = false;
-    console.log('kingPiece',kingPiece);
-    console.log('kingHasMoveSquare',kingHasMoveSquare);
-    const enemyPiece = Player.getEnemyPlayer().playerPieces.find( playerPiece => 
-      playerPiece.piecePosition === this.checkThreat[0].piecePosition);
-      if(!enemyPiece.isBackedUp && kingPiece.pieceCanAttackThreat){
-        kingCanAttack = true;
-      }
-      
-      console.log('kingCanAttack',kingCanAttack);
-
-    const canTheKingMove = kingHasMoveSquare || kingCanAttack;
-
-    return canTheKingMove;
-
-    }
-
-    pieceCanBlockCheck(piece){
-   //   console.log('this.playerPieces' , this.playerPieces);
-      const playerPiece = this.playerPieces.find( playerPiece => playerPiece.piecePosition === piece.piecePosition);
-      return playerPiece.canBlockCheck || playerPiece.canAttackThreat;
-    }
+  pieceCanBlockCheck(piece){
+  //   console.log('this.playerPieces' , this.playerPieces);
+    const playerPiece = this.playerPieces.find( playerPiece => playerPiece.piecePosition === piece.piecePosition);
+    return playerPiece.canBlockCheck || playerPiece.canAttackThreat;
+  }
 
 
   resetPlayerPieces(){

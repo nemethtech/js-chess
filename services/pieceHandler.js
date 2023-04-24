@@ -2,19 +2,23 @@ import { $ } from '../utils/utils.js'
 import { generalMovement } from '../services/pieceMovement/general.js'
 import { gameHandler } from './gameHandler.js';
 import { Player } from './playerClassExtend.js';
+import { chessConfig } from '../config/chessConfig.config.js';
 
 export const pieceHandle = {
 
 
 
     handlePieceClick(pieceSettings){
-
+        if(chessConfig.gameEnded){
+            return;
+        }
         if(!gameHandler.pieceTurn(pieceSettings.pieceColor)){
             return this;
         }
         else if(Player.getPlayer().isPlayerInCheck){
             console.log('0');
             if(pieceSettings.pieceType === 'king'){
+                
                 if(Player.getPlayer().canPlayerKingMove()){
                     console.log('1');
                     this.managePiece(pieceSettings)
@@ -32,10 +36,16 @@ export const pieceHandle = {
     },
 
     handlePieceMouseleave(handleParams){
+        if(chessConfig.gameEnded){
+            return;
+        }
         if(gameHandler.pieceTurn(handleParams.pieceColor))this.setHoverOnExit(handleParams.piece);
     },
 
     handlePieceMouseenter(handleParams){
+        if(chessConfig.gameEnded){
+            return;
+        }
         if(gameHandler.pieceTurn(handleParams.pieceColor))this.setHoverOnEnter(handleParams.piece);
     },
 

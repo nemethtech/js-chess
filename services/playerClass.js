@@ -121,10 +121,6 @@ class BasePlayer {
       let pieceAllMoveSquare = generalMovement.getPieceMove(kingPiece);
       this.setPieceColFreeMoves(kingPiece , pieceAllMoveSquare);
       this.setPieceCollisions(kingPiece , pieceAllMoveSquare);
-   //   console.log('kingPiece pieceAllMoveSquare',kingPiece , pieceAllMoveSquare);
-   //   this.setPieceColFreeMoves(piece , pieceAllMoveSquare);
-   //    this.setPieceCollisions(piece , pieceAllMoveSquare);
-
     }
     
     setPieceIsBackedUp(){
@@ -137,6 +133,11 @@ class BasePlayer {
             }
           })
         }
+     })
+     this.playerPieces.forEach( playerPiece => {
+      if(!playerPiece.isBackedUp){
+        playerPiece.isBackedUp = false;
+      }
      })
     }
 
@@ -155,27 +156,22 @@ class BasePlayer {
   BasePlayer.instances = {};
   
   
-  BasePlayer.instanceByColor = (color) => {
-    return BasePlayer.instances[color];
-  }
-  
-  BasePlayer.getPlayer = ()  => {
-  return BasePlayer.instances[gameHandler.currentTurnFor()];
+BasePlayer.instanceByColor = (color) => {
+  return BasePlayer.instances[color];
+}
+
+BasePlayer.getPlayer = ()  => {
+return BasePlayer.instances[gameHandler.currentTurnFor()];
 }
 
 BasePlayer.getEnemyPlayer = ()  => {
   return BasePlayer.instances[gameHandler.notCurrentTurnFor()];
 }
 
-BasePlayer.resetPlayerPieces = () => {
-  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).resetPlayerPieces();
-  BasePlayer.instanceByColor(gameHandler.currentTurnFor()).resetPlayerPieces();
-}
 
-BasePlayer.resetPlayerPieces2 = () => {
+BasePlayer.resetPlayerPieces = () => {
   BasePlayer.instanceByColor(gameHandler.currentTurnFor()).resetPlayerPieces();
   BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).resetPlayerPieces();
- 
   BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).setPlayerKingMoves();
   BasePlayer.instanceByColor(gameHandler.currentTurnFor()).setPlayerKingMoves();
   BasePlayer.instanceByColor(gameHandler.currentTurnFor()).resetPieceMoves();

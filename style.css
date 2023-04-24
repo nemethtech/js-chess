@@ -16,7 +16,7 @@ body{
     align-items: center;
 }
 
-.chess_board {
+#chess_board {
     width: 80vh;
     height: 80vh;
     justify-content: center;
@@ -78,7 +78,7 @@ body{
     body{
         background-color: white;
     }
-    .chess_board {
+    #chess_board {
         width: 20vh;
         justify-content: center;
         align-items: center;

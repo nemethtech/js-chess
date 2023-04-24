@@ -16,20 +16,12 @@ export const gameHandler = {
         
         generalMovement.clearPotentialSquares();
         this.changeTurnSettings();
-        Player.resetPlayerPieces2();
+        Player.resetPlayerPieces();
         piecesRender.setEventListeners();
-        console.log('Player ' , Player.playerColor);
-        console.log('Player ',      this.gotMated(Player.getPlayer()));
-        console.log('Player ' , Player.playerColor);
-        console.log(' EnemyPlayer ',this.gotMated(Player.getEnemyPlayer()));
-        //console.log('Enemy Player. ',Player.getEnemyPlayer());
-  
-        //     console.log('white canPlayerKingMove',Player.instanceByColor('white').canPlayerKingMove());
-   //      console.log('black canPlayerKingMove',Player.instanceByColor('black').canPlayerKingMove());
+        this.checkGameStance();
     },
 
     endTurn2(){
-
         this.changeTurnSettings();
         piecesRender.resetRound();
 
@@ -54,33 +46,53 @@ export const gameHandler = {
     },
 
     gotMated(Player){
-        let playerGotMated = false;
         if(Player.isPlayerInCheck){
 
             let piecesCanSaveKing = false;
             Player.playerPieces.forEach( piece => {
                 if(piece.canBlockCheck || piece.canAttackThreat){
                     piecesCanSaveKing = true;
-                    console.log('piecesCanSaveKing ' , piecesCanSaveKing);
                 }
             });
-            
             let kingCanMove = Player.canPlayerKingMove();
             if(!piecesCanSaveKing && !kingCanMove){
-                playerGotMated = true;
+                this.endGame(`${Player.enemyColor} WON !!!`);
             }
-            return playerGotMated;
-            console.log('Player ' , Player.playerColor);
-            console.log('kingCanMove' , kingCanMove);
-        }else{
-           // console.log('Player ' , Player.playerColor);
-           // console.log('gotMated? NO ' );
-
         }
+    },
 
+    staleMate(Player){
+        if(Player.isPlayerInCheck){
+            return ;
+        }
+        let playerHasMoveablePiece = false;
+        let kingCanMove = Player.canPlayerKingMove();
+        Player.playerPieces.forEach( piece => {
+            if(piece.pieceType !== 'king'){
+            if((piece.hasOwnProperty("moveSquares") && piece.moveSquares.length > 0)  ||
+                (piece.hasOwnProperty("collisions") && piece.collisions.length > 0)) {
+                    playerHasMoveablePiece = true;
+                }
+            }
+        });
+
+        if(!playerHasMoveablePiece && !kingCanMove){
+
+            this.endGame('Stale Mate');
+        }
+    },
+
+    checkGameStance(){
+        this.staleMate(Player.getPlayer());
+        this.staleMate(Player.getEnemyPlayer());
+        this.gotMated(Player.getPlayer());
+        this.gotMated(Player.getEnemyPlayer());
+    },
+
+    endGame(endResult){
+        chessConfig.endResult = endResult;
+        chessConfig.gameEnded = true;
     }
-
-
 
 /*
     makeRandomMoveForEnemy(){
