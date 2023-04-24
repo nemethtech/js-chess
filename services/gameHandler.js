@@ -15,6 +15,7 @@ export const gameHandler = {
     endTurn(){
         
         generalMovement.clearPotentialSquares();
+        generalMovement.checkPawnPromotion();
         this.changeTurnSettings();
         Player.resetPlayerPieces();
         piecesRender.setEventListeners();
@@ -77,16 +78,15 @@ export const gameHandler = {
         });
 
         if(!playerHasMoveablePiece && !kingCanMove){
-
             this.endGame('Stale Mate');
         }
     },
 
     checkGameStance(){
-        this.staleMate(Player.getPlayer());
-        this.staleMate(Player.getEnemyPlayer());
-        this.gotMated(Player.getPlayer());
-        this.gotMated(Player.getEnemyPlayer());
+        [Player.getPlayer(),Player.getEnemyPlayer()].forEach( player => {
+            this.staleMate(player);
+            this.gotMated(player);
+        })  
     },
 
     endGame(endResult){

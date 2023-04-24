@@ -35,8 +35,8 @@ export const editedGame = {
     'h2': 'white_pawn',
  */   
 
-    /*
-    mate Test
+    
+  //  mate Test
     'a1': 'white_rook',
     'e8': 'black_king',
     'g2': 'white_king',
@@ -45,13 +45,16 @@ export const editedGame = {
     'h8': 'black_queen',
     'a5': 'black_queen',
     'c8': 'black_rook',
+    'c2': 'black_pawn',
+    'b7': 'white_pawn',
     'b3': 'white_rook',
     'g6': 'white_rook',
     'h5': 'white_bishop',
-*/
+
 
     
   //  staleMate Test
+  /*
     'b8': 'white_king',
     'a7': 'white_pawn',
     'a6': 'black_rook',
@@ -59,5 +62,5 @@ export const editedGame = {
     'h7': 'black_rook',
     
     'h5': 'black_king',
-
+*/
 };

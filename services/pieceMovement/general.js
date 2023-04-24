@@ -140,4 +140,39 @@ export const generalMovement = {
         return simplifiedArray;
       },
 
+    promotePawn(pawnPiece , pieceColor){
+        const queenImgSrc = `pieces/${pieceColor}_queen.png`;
+        pawnPiece.setAttribute( 'src'  , queenImgSrc);
+        pawnPiece.setAttribute( 'piece-type'  , `${pieceColor}_queen`);
+    },
+
+
+   pawnCanBePromoted(piecePosition , pieceColor){
+       if(pieceColor === 'white' &&
+       piecePosition[1] === '8' ||
+       pieceColor === 'black' &&
+       piecePosition[1] === '1') 
+       {
+           return true; } else 
+       {
+           return false;
+       }
+    },
+  
+  checkPromotionForColor(color){
+   $$(`[piece-type=${color}_pawn`).forEach( piece => {
+       const piecePosition = piece.getAttribute( 'piece-square' );
+       const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
+           if(this.pawnCanBePromoted(piecePosition , pieceColor)){
+               this.promotePawn(piece , pieceColor);
+               console.log('promot time' , piece);
+           }
+       })
+    },
+
+    checkPawnPromotion(){
+        this.checkPromotionForColor('black');
+        this.checkPromotionForColor('white');
+    }
+
 }

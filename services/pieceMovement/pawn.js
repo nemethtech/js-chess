@@ -91,28 +91,13 @@ export const pawnMovement = {
         return  pawnPiece.pieceColor === 'white' ? 1 : -1;
    },
 
-   promotePawn(pawnPiece , pieceColor){
-        const queenImgSrc = `pieces/${pieceColor}_queen.png`;
-        pawnPiece.setAttribute( 'src'  , queenImgSrc);
-        pawnPiece.setAttribute( 'piece-type'  , `${pieceColor}_queen`);
-   },
-
    
-
-   checkPawnsPromotion(){
-    $$(`[piece-type=${gameHandler.currentTurnFor()}_pawn`).forEach( piece => {
-        const piecePosition = piece.getAttribute( 'piece-square' );
-        const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
-            if(this.pawnCanBePromoted(piecePosition , pieceColor)){
-                this.promotePawn(piece , pieceColor);
-                console.log('promot time' , piece);
-            }
-        })
-   },
-
+   
+   
+   
    isTheFirstMove(pawnPiece){
     if(pawnPiece.pieceColor === 'white' &&
-       pawnPiece.piecePosition[1] === '2' ||
+    pawnPiece.piecePosition[1] === '2' ||
        pawnPiece.pieceColor === 'black' &&
        pawnPiece.piecePosition[1] === '7') 
         {
@@ -121,17 +106,9 @@ export const pawnMovement = {
             return false;
         }
     },
+    
+   
 
-pawnCanBePromoted(piecePosition , pieceColor){
-    if(pieceColor === 'white' &&
-        piecePosition[1] === '8' ||
-        pieceColor === 'black' &&
-        piecePosition[1] === '1') 
-        {
-            return true; } else 
-        {
-            return false;
-        }
-   },
+
 }
 

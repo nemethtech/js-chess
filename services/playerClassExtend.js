@@ -23,23 +23,18 @@ class Player extends BasePlayer {
   }
 
   setPieceCanBlockThreat(piece){   
-
     let pieceMoveDirections = [];
-    
+  
     if(this.checkThreat.length !== 1){
         return pieceMoveDirections;
     }
-
     let pieceColFreeMoves = piece.moveSquares;
 
-      if(Array.isArray(pieceColFreeMoves)){
+    if(Array.isArray(pieceColFreeMoves)){
+      pieceColFreeMoves.forEach( colFreeeMove => {
+        this.checkThreat[0].moveSquares.forEach( threatMoveSquare => {
 
-        pieceColFreeMoves.forEach( colFreeeMove => {
-
-          this.checkThreat[0].moveSquares.forEach( threatMoveSquare => {
-
-            if(colFreeeMove.colFreeMoveSquares.includes(threatMoveSquare)){
-
+          if(colFreeeMove.colFreeMoveSquares.includes(threatMoveSquare)){
             pieceMoveDirections.push(colFreeeMove.direction);
           }
         })
@@ -81,7 +76,6 @@ class Player extends BasePlayer {
   }
 
   filterPieceMoveIfPlayerUnderCheck(piece , pieceMove){
-
     const playerPiece = this.playerPieces.find( playerPiece => playerPiece.piecePosition === piece.piecePosition);
     let filteredMove = {};
 
@@ -102,7 +96,6 @@ class Player extends BasePlayer {
         }
       } 
     }
-
     return filteredMove;
   }
 
@@ -146,7 +139,6 @@ class Player extends BasePlayer {
   }
     
   pieceCanBlockCheck(piece){
-  //   console.log('this.playerPieces' , this.playerPieces);
     const playerPiece = this.playerPieces.find( playerPiece => playerPiece.piecePosition === piece.piecePosition);
     return playerPiece.canBlockCheck || playerPiece.canAttackThreat;
   }
@@ -159,11 +151,6 @@ class Player extends BasePlayer {
     this.setPieceIsBackedUp();
   }
   
-  resetPlayerPieces3(){
- //   this.setPlayerKingMoves();
- //   this.setPieceIsBackedUp();
-  }
-
   resetPieceMoves(){
     this.setIfPlayerCheckIsOn();
     this.setPlayerPiecesInCheck();
