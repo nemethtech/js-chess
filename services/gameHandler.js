@@ -107,8 +107,6 @@ export const gameHandler = {
                     this.moveWithBotIfCan();
                 }
             }
-            
-
         }
     },
 

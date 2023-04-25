@@ -1,5 +1,7 @@
 export const chessConfig = { 
-    useNormalGame : true , 
+
+    
+    useNormalGame : true ,
     chessPieceSelector: '.piece' ,
     whiteTurn : true ,
     currentTurn : 'white', 
@@ -7,7 +9,7 @@ export const chessConfig = {
     rows : [1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ] ,
     maxIdVal : 64 ,
     minIdVal : 1 ,
-    botColor : 'black' ,  
+   
     endResult : 'undecided' ,
     gameEnded : false
     
