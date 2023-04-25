@@ -48,19 +48,15 @@ class BasePlayer {
 
 
     setPieceCollisions(piece , pieceAllMoveSquare){
-
       let collisionArray = generalMovement.getPossibleCollisionquares2(pieceAllMoveSquare);
       
       if(collisionArray.length > 0){
-      
         piece.collisions = [];
 
         collisionArray.forEach(collision => {
-
         let collisionPiece = $(`[id^="${collision.square}"]`);
 
           if(!(collisionPiece.firstChild == null)){
-
             const collisionMoveSquares = pieceAllMoveSquare[collision.direction].collisionFreeSquares;
             const collisionType = collisionPiece.firstChild.getAttribute('piece-type').includes(this.enemyColor) ? 'enemy' : 'ally';
             const collisionPieceType = collisionPiece.firstChild.getAttribute('piece-type');
@@ -82,18 +78,13 @@ class BasePlayer {
 
 
     
-    setPieceColFreeMoves(piece , pieceAllMoveSquare ){
-      
+    setPieceColFreeMoves(piece , pieceAllMoveSquare ){    
       let colFreeMoves = generalMovement.getCollisionFreeSquares2(pieceAllMoveSquare);
-      
       if(colFreeMoves.length > 0){
-        
         piece.moveSquares = [];
 
         colFreeMoves.forEach( colFreeMove => {
-          
           if(colFreeMove.square.length > 0){
-            
             piece.moveSquares.push({
               direction : colFreeMove.direction ,
               colFreeMoveSquares :  colFreeMove.square,

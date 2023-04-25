@@ -41,22 +41,20 @@ export const movePieceHandler = {
         piece.setAttribute('piece-square', newSquareValue);
         gameHandler.endTurn();
     }, 
-
-    movePieceForEnemy(pieceSettings, squareToMove){
-
+    
+    movePieceForBot(pieceSettings, squareToMove){
+        console.log('pieceSettings',pieceSettings);
         const piece = pieceSettings.piece;
-        let newSqaureValue ;
         const targetDiv = pieceHandle.getPieceSquareById(squareToMove);
-
-        if(this.checkPossibleEnemyForEnemy(squareToMove)){
+        let newSqaureValue = targetDiv.getAttribute('id');;
+        
+        if(targetDiv.firstChild){
             targetDiv.removeChild(targetDiv.firstChild);
-            targetDiv.append(piece);
-            newSqaureValue = targetDiv.getAttribute('id');
-        }else{
-            newSqaureValue = targetDiv.getAttribute('id');
-            targetDiv.append(piece);
         }
-        pieceSettings.piece.setAttribute('new-piece-square', newSqaureValue);
+        targetDiv.append(piece);
+        piecesRender.removeEventListeners();
+        piece.setAttribute('piece-square', newSqaureValue);
+        gameHandler.endTurn();
     }, 
     
     checkAndMarkPossibleEnemy(square){
