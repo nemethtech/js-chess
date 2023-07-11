@@ -1,6 +1,8 @@
 import { $ , $$ } from "../../utils/utils.js";
 import { gameHandler } from "./gameHandler.js";
+import { bishopMovement } from "./pieceMovement/bishop.js";
 import { generalMovement } from "./pieceMovement/general.js";
+import { rookMovement } from "./pieceMovement/rook.js";
 
 class BasePlayer {
     constructor(color) {
@@ -76,6 +78,18 @@ class BasePlayer {
       
     }
 
+    checkPinnedPieces(){
+      const pieceTypesThatCanPin = ['queen' , 'rook' , 'bishop'];
+      this.playerPieces.forEach( piece => {
+        if(piece.pieceType === 'bishop'){ 
+       //   console.log('Bishop : ' , bishopMovement.getAllAvailableSquares(piece));
+        }
+        if(piece.pieceType === 'rook'){ 
+          console.log('ez az' , piece,piece.piecePosition[0], piece.piecePosition[1]);
+          console.log('Rook : ' , rookMovement.checkAllPossibleSquaresTest(piece.piecePosition[0], piece.piecePosition[1]));
+        }
+      });
+    }
 
     
     setPieceColFreeMoves(piece , pieceAllMoveSquare ){    
@@ -98,7 +112,6 @@ class BasePlayer {
     setPlayerPiecesMoves(){
       this.playerPieces.forEach( piece => {
         if(piece.pieceType !== 'king'){ 
-
           let pieceAllMoveSquare = generalMovement.getPieceMove(piece);
           this.setPieceColFreeMoves(piece , pieceAllMoveSquare);
           this.setPieceCollisions(piece , pieceAllMoveSquare);
@@ -167,6 +180,8 @@ BasePlayer.resetPlayerPieces = () => {
   BasePlayer.instanceByColor(gameHandler.currentTurnFor()).setPlayerKingMoves();
   BasePlayer.instanceByColor(gameHandler.currentTurnFor()).resetPieceMoves();
   BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).resetPieceMoves();
+  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).checkPinnedPieces();
+  BasePlayer.instanceByColor(gameHandler.currentTurnFor()).checkPinnedPieces();
 }
 
 export { BasePlayer };

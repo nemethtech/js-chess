@@ -21,6 +21,8 @@ export const gameHandler = {
         Player.resetPlayerPieces();
         piecesRender.setEventListeners();
         this.checkGameStance();
+        console.log('palyer 1',Player.getPlayer());
+        console.log('palyer 2',Player.getEnemyPlayer());
      //   this.makeBotMove(); 
     },
 

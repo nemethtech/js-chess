@@ -149,6 +149,8 @@ class Player extends BasePlayer {
     this.getPlayerPieces();
     this.setPlayerPiecesMoves();
     this.setPieceIsBackedUp();
+
+    //setPinnedPieces
   }
   
   resetPieceMoves(){
