@@ -17,8 +17,8 @@ export const rookMovement = {
         return ['forwardRows', 'backwardRows', 'leftColumns', 'rightColumns'].reduce((acc, prop) => {
             const squares = allPossibleSquares[prop];
             acc[prop] = {
-            collisionFreeSquares: movePieceHandler.checkCollision(squares).collisionFreeSquares,
-            possibleCollision: movePieceHandler.checkCollision(squares).possibleCollision
+            collisionFreeSquares: movePieceHandler.checkCollision2(squares).collisionFreeSquares,
+            possibleCollision: movePieceHandler.checkCollision2(squares).possibleCollision
             };
             return acc;
         }, {});

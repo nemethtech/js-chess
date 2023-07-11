@@ -140,10 +140,44 @@ export const generalMovement = {
         return simplifiedArray;
       },
 
-    promotePawn(pawnPiece , pieceColor){
-        const queenImgSrc = `pieces/${pieceColor}_queen.png`;
-        pawnPiece.setAttribute( 'src'  , queenImgSrc);
-        pawnPiece.setAttribute( 'piece-type'  , `${pieceColor}_queen`);
+    fillModal(pawnPiece){
+        this.clearModal();
+        const pawnColor = pawnPiece.getAttribute( 'piece-type' ).split('_')[0];
+        console.log('pawnColor1 : ', pawnColor);
+        chessConfig.promotePieces.forEach( pieceName => {
+            let imgPiece = document.createElement( 'img' );
+            imgPiece.classList.add( 'promote-piece' );
+            imgPiece.setAttribute('src', `pieces/${pawnColor}_${pieceName}.png`);
+            pawnPiece.setAttribute( 'piece-type'  , `${pawnColor}_${pieceName}`);
+            imgPiece.addEventListener('click' , this.changePiece.bind(this , pieceName , pawnPiece)  )
+            $(chessConfig.modalSelector).append(imgPiece);
+        }) 
+
+    },
+
+    clearModal(){
+        while ($(chessConfig.modalSelector).firstChild){
+            $(chessConfig.modalSelector).removeChild($(chessConfig.modalSelector).firstChild);
+        }
+    },
+
+    promotePawn(pawnPiece){
+        console.log('pawnPiece',pawnPiece);
+        this.fillModal(pawnPiece);
+        const modal = document.querySelector(".modal");
+        modal.showModal();
+    },
+
+    changePiece(promotPiece , pawnPiece){
+        const pawnColor = pawnPiece.getAttribute( 'piece-type' ).split('_')[0];
+        console.log('promotPiece : ', promotPiece);
+        console.log('pawnPiece : ', pawnPiece);
+        console.log('pawnColor : ', pawnColor);
+        console.log('lol : ');
+        const modal = document.querySelector(".modal");
+        pawnPiece.setAttribute( 'src'  ,  `pieces/${pawnColor}_${promotPiece}.png`);
+        pawnPiece.setAttribute( 'piece-type'  , `${pawnColor}_${promotPiece}`);
+        modal.close();
     },
 
 
@@ -173,6 +207,8 @@ export const generalMovement = {
     checkPawnPromotion(){
         this.checkPromotionForColor('black');
         this.checkPromotionForColor('white');
-    }
+    },
+
+    
 
 }

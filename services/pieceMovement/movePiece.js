@@ -121,6 +121,32 @@ export const movePieceHandler = {
         }  
     },
 
+    checkCollision2(arr){         
+        let arr2  = [];
+        arr.forEach(e => {
+            if($(`[id^="${e}"]`).hasChildNodes()){
+                arr2.push({
+                    square : e,
+                    piece : $(`[id^="${e}"]`).childNodes
+                })
+            }else{
+                arr2.push({
+                    square : e,
+                    piece : false
+                })
+            }
+        })
+
+        let collisionArray = arr.filter( e => $(`[id^="${e}"]`).hasChildNodes());
+        let possibleCollision = collisionArray.length === 0 ? undefined  : collisionArray[0];
+        let collisionFreeSquares = possibleCollision === undefined ? arr : arr.slice(0,(arr.indexOf(possibleCollision)));
+
+        return {
+            collisionFreeSquares , 
+            possibleCollision
+        }  
+    },
+
     filterNonExistentSquares(squareArray){
 
         return squareArray.filter(e => e.length === 2).filter( e => chessConfig.rows.indexOf(parseInt(e[1])) !== -1);

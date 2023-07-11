@@ -60,6 +60,7 @@ export const piecesRender = {
         })
     },
     
+
     removeEventListeners() {
 
         $$( chessConfig.chessPieceSelector).forEach( piece => {

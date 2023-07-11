@@ -48,6 +48,10 @@ body{
     width: 100%;
 }
 
+.promote-piece{
+    width: 25%;
+}
+
 .yellow{
     background-color: rgb(231, 231, 41);
 
@@ -71,6 +75,22 @@ body{
 .potential-square{
     background-color: rgb(35, 186, 224);
 
+}
+
+.modal{
+    background-color: rgb(233, 201, 164);
+    border-radius: 4.5vh;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+    margin: 33vh;
+    height: 14vh;
+    width: 53vh;
+    max-width: 80vh;
+    margin-top: 40vh;
+    margin-left: 70vh;
+}
+
+.modal::backdrop {
+background: rgb(0 0 0 / 0.4);
 }
 
 

@@ -6,6 +6,8 @@ import { movePieceHandler } from './pieceMovement/movePiece.js'
 
 export const gameHandler = {
 
+
+
     startGame(){
         piecesRender.createPieces();
         Player.resetPlayerPieces();
@@ -19,7 +21,7 @@ export const gameHandler = {
         Player.resetPlayerPieces();
         piecesRender.setEventListeners();
         this.checkGameStance();
-        this.makeBotMove(); 
+     //   this.makeBotMove(); 
     },
 
     endTurn2(){

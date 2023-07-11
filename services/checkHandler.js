@@ -23,7 +23,7 @@ export const checkHandler = {
         console.log('checkIfCheckIsOn');
     //    this.getPieces();
         $$(`[piece-type^="${chessConfig.currentTurn}"]`).forEach(piece => {
-              const piecePosition = piece.getAttribute( 'piece-square' );;
+              const piecePosition = piece.getAttribute( 'piece-square' );
               const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
               const pieceType = piece.getAttribute( 'piece-type' ).split('_')[1];
               
