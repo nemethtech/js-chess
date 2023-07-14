@@ -9,10 +9,15 @@ export const pieceHandle = {
 
 
     handlePieceClick(pieceSettings){
+     //   console.log('Player.pieceSettings()',pieceSettings);
+     //   this.pieceiIsPinned(pieceSettings)   ;
         if(chessConfig.gameEnded){
             return;
         }
         if(!gameHandler.pieceTurn(pieceSettings.pieceColor)){
+            return this;
+        }  
+        if(this.pieceiIsPinned(pieceSettings)){
             return this;
         }
         else if(Player.getPlayer().isPlayerInCheck){
@@ -105,6 +110,10 @@ export const pieceHandle = {
         else if(this.ownPieceSelected(pieceSettings)){
             this.removeSelectPieceAndSquares(pieceSettings.piece);
         }
+    },
+
+    pieceiIsPinned(pieceSettings){
+        return Player.getPlayer().playerPieces.find( piece => piece.piecePosition === pieceSettings.piecePosition).isPinned;
     }
     
     

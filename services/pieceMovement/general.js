@@ -209,6 +209,8 @@ export const generalMovement = {
         this.checkPromotionForColor('white');
     },
 
-    
+    checkForPinnedPiece(squareArr){
+        
+    },
 
 }

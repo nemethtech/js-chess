@@ -17,13 +17,14 @@ export const gameHandler = {
     endTurn(){
         generalMovement.clearPotentialSquares();
         generalMovement.checkPawnPromotion();
-        this.changeTurnSettings();
         Player.resetPlayerPieces();
         piecesRender.setEventListeners();
         this.checkGameStance();
+        Player.getPlayer().checkPinnedPieces();
         console.log('palyer 1',Player.getPlayer());
         console.log('palyer 2',Player.getEnemyPlayer());
-     //   this.makeBotMove(); 
+        this.changeTurnSettings();
+        //   this.makeBotMove(); 
     },
 
     endTurn2(){

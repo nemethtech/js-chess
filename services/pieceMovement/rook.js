@@ -6,7 +6,7 @@ export const rookMovement = {
     
 
     returnAvailableSquares(rookPiece ){
-        console.log('rookPiece',rookPiece);
+      //  console.log('rookPiece',rookPiece);
         return this.getAvaliableSquares(rookPiece);
     },
 
@@ -39,54 +39,6 @@ export const rookMovement = {
         }
    },
    
-
-   checkAllPossibleSquaresTest(col, row){
-
-       console.log('row',row);
-       console.log('col',col);
-    let colIdx = chessConfig.columns.indexOf(col);
-    let forwardRows    ;
-    try {
-        var items = Array(8 - Number(row) ).fill().map((_,idx) => Number(row)+1 + idx).map( e => col + e);
-    
-        console.log(`Length is: ${items.length}`);
-    
-    } catch (e) {
-    
-        if (e instanceof RangeError) {
-    
-            if (e.message.toLowerCase().indexOf('invalid array') !== -1) {
-    
-                this.printError(e, true);
-    
-            } else {
-    
-                this.printError(e, false);
-    
-            }
-    
-        } else {
-    
-            forwardRows = Array(8 - Number(row) ).fill().map((_,idx) => Number(row)+1 + idx).map( e => col + e);
-    
-        }
-    
-    }
-    return {
-        forwardRows ,
-        backwardRows : Array( Number(row-1)  ).fill().map((_,idx) => Number(row)-1 - idx).map( e => col + e),
-        leftColumns  : chessConfig.columns.slice(0, colIdx).map( e => e + row).reverse(), 
-        rightColumns : chessConfig.columns.slice(colIdx + 1, 8).map( e => e + row)
-    }
-},
-
-
-    printError(error, explicit) {
-
-    console.log(`[${explicit ? 'EXPLICIT' : 'INEXPLICIT'}] ${error.name}: ${error.message}`);
-
-},
-
 
 
 }

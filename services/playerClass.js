@@ -3,6 +3,7 @@ import { gameHandler } from "./gameHandler.js";
 import { bishopMovement } from "./pieceMovement/bishop.js";
 import { generalMovement } from "./pieceMovement/general.js";
 import { rookMovement } from "./pieceMovement/rook.js";
+import { Player } from "./playerClassExtend.js";
 
 class BasePlayer {
     constructor(color) {
@@ -85,13 +86,70 @@ class BasePlayer {
        //   console.log('Bishop : ' , bishopMovement.getAllAvailableSquares(piece));
         }
         if(piece.pieceType === 'rook'){ 
-          console.log('ez az' , piece,piece.piecePosition[0], piece.piecePosition[1]);
-          console.log('Rook : ' , rookMovement.checkAllPossibleSquaresTest(piece.piecePosition[0], piece.piecePosition[1]));
-        }
+
+          console.log('pieceColor'  , piece.pieceColor);
+          let rookMoveObj = rookMovement.checkAllPossibleSquares(piece.piecePosition[0], piece.piecePosition[1]);
+
+          let  arr2  = [];
+          for (const key in rookMoveObj) {
+            if(rookMoveObj[key].length > 0){
+              let childNodeArr = rookMoveObj[key].filter( e => $(`[id^="${e}"]`).hasChildNodes());
+              console.log('rookMoveObj[key]',rookMoveObj[key]);
+              this.checkRookSquaresHasPinnedPiece(rookMoveObj[key]);
+//('childNodeArr'  , childNodeArr);
+             /* console.log('Arr 2 ',arr2);
+              if(arr2.length >= 2){
+
+                if(arr2[1].pieceType === 'king' && arr2[1].pieceColor !== piece.pieceColor ){
+                  if( arr2[0].pieceColor !== piece.pieceColor){
+                    const pinned =  this.getEnemyPlayer().playerPieces.find( piece => piece.piecePosition ===  arr2[0].piecePosition);
+                    console.log('this.getEnemyPlayer()!!' ,this.getEnemyPlayer() );
+                    console.log('tarr2[0]' ,arr2[0] );
+                    console.log('Ezzel Nem Szabad Mozogni !!' ,pinned );
+                  }
+                }
+              }
+              arr2  = [];
+            */}
+          }
+        }  
       });
     }
 
+    checkRookSquaresHasPinnedPiece(rookSquares){
+      let hasPinnedPiece = false;
+      let pinnedPiece = null;
+      console.log('color ', this.playerColor);
+      let squaresWithPieces = rookSquares.filter( e => $(`[id^="${e}"]`).hasChildNodes()).map( e => {
+      return  {
+          pieceColor : $(`[id^="${e}"]`).firstChild.getAttribute('piece-type').split('_')[0] ,
+          pieceType : $(`[id^="${e}"]`).firstChild.getAttribute('piece-type').split('_')[1] ,
+          piecePosition : $(`[id^="${e}"]`).firstChild.getAttribute( 'piece-square' ),
+
+         }
+      })
+    //  console.log('squaresWithPieces',squaresWithPieces);
     
+    //  console.log('Player.getPlayer()',Player.getPlayer());
+    //  console.log('Player.getEnemyPlayer()',Player.getEnemyPlayer());
+      if(squaresWithPieces.length > 1){
+        if(squaresWithPieces[1].pieceType === 'king' && squaresWithPieces[1].pieceColor !== this.playerColor ){
+          if( squaresWithPieces[0].pieceColor !== this.playerColor){
+            const pinned =  this.getEnemyPlayer().playerPieces.find( piece => piece.piecePosition ===  squaresWithPieces[0].piecePosition);
+            pinned.isPinned = true;
+            console.log('pinned');
+          }
+        }
+      }
+    }
+  
+    clearOWnPinns(){
+      this.playerPieces.forEach( playerPiece => {
+        delete playerPieces.isPinned;
+      })
+    }
+
+
     setPieceColFreeMoves(piece , pieceAllMoveSquare ){    
       let colFreeMoves = generalMovement.getCollisionFreeSquares2(pieceAllMoveSquare);
       if(colFreeMoves.length > 0){
@@ -180,8 +238,8 @@ BasePlayer.resetPlayerPieces = () => {
   BasePlayer.instanceByColor(gameHandler.currentTurnFor()).setPlayerKingMoves();
   BasePlayer.instanceByColor(gameHandler.currentTurnFor()).resetPieceMoves();
   BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).resetPieceMoves();
-  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).checkPinnedPieces();
-  BasePlayer.instanceByColor(gameHandler.currentTurnFor()).checkPinnedPieces();
+  //BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).checkPinnedPieces();
+ // BasePlayer.instanceByColor(gameHandler.currentTurnFor()).checkPinnedPieces();
 }
 
 export { BasePlayer };
