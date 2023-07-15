@@ -17,9 +17,9 @@ export const pieceHandle = {
         if(!gameHandler.pieceTurn(pieceSettings.pieceColor)){
             return this;
         }  
-        if(this.pieceiIsPinned(pieceSettings)){
-            return this;
-        }
+       // if(this.pieceiIsPinned(pieceSettings)){
+      //      return this;
+        //}
         else if(Player.getPlayer().isPlayerInCheck){
             console.log('0');
             if(pieceSettings.pieceType === 'king'){

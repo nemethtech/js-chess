@@ -34,9 +34,19 @@ export const generalMovement = {
       },
     
     markPotentialSquares(piece){
+        const pieceS = Player.getPlayer().playerPieces.find( playerPiece => playerPiece.piecePosition === piece.piecePosition); 
         let pieceMove = this.getPieceMove(piece);
         //filterPieceMoveIfPlayerUnderCheck
-   
+        for (const key in pieceMove) {
+            if(pieceS.isPinned){
+                pieceMove[key].collisionFreeSquares = pieceMove[key].collisionFreeSquares.filter( e => (pieceS.pinnedInfo.pinnedSquares.includes(e)));
+                if(pieceMove[key].possibleCollision !== pieceS.pinnedInfo.pinnerSquare){
+                    pieceMove[key].possibleCollision = undefined;
+                }
+            }
+
+        }
+
         if(Player.getPlayer().isPlayerInCheck && piece.pieceType !== 'king'){
             pieceMove =  Player.getPlayer().filterPieceMoveIfPlayerUnderCheck(piece , pieceMove);
         }
@@ -162,7 +172,6 @@ export const generalMovement = {
     },
 
     promotePawn(pawnPiece){
-        console.log('pawnPiece',pawnPiece);
         this.fillModal(pawnPiece);
         const modal = document.querySelector(".modal");
         modal.showModal();
@@ -170,10 +179,6 @@ export const generalMovement = {
 
     changePiece(promotPiece , pawnPiece){
         const pawnColor = pawnPiece.getAttribute( 'piece-type' ).split('_')[0];
-        console.log('promotPiece : ', promotPiece);
-        console.log('pawnPiece : ', pawnPiece);
-        console.log('pawnColor : ', pawnColor);
-        console.log('lol : ');
         const modal = document.querySelector(".modal");
         pawnPiece.setAttribute( 'src'  ,  `pieces/${pawnColor}_${promotPiece}.png`);
         pawnPiece.setAttribute( 'piece-type'  , `${pawnColor}_${promotPiece}`);

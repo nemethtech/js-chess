@@ -86,16 +86,14 @@ class BasePlayer {
        //   console.log('Bishop : ' , bishopMovement.getAllAvailableSquares(piece));
         }
         if(piece.pieceType === 'rook'){ 
-
-          console.log('pieceColor'  , piece.pieceColor);
+          
+          
           let rookMoveObj = rookMovement.checkAllPossibleSquares(piece.piecePosition[0], piece.piecePosition[1]);
 
           let  arr2  = [];
           for (const key in rookMoveObj) {
             if(rookMoveObj[key].length > 0){
-              let childNodeArr = rookMoveObj[key].filter( e => $(`[id^="${e}"]`).hasChildNodes());
-              console.log('rookMoveObj[key]',rookMoveObj[key]);
-              this.checkRookSquaresHasPinnedPiece(rookMoveObj[key]);
+              this.checkRookSquaresHasPinnedPiece(rookMoveObj[key] , piece.piecePosition[0], piece.piecePosition[1]) ;
 //('childNodeArr'  , childNodeArr);
              /* console.log('Arr 2 ',arr2);
               if(arr2.length >= 2){
@@ -116,39 +114,31 @@ class BasePlayer {
       });
     }
 
-    checkRookSquaresHasPinnedPiece(rookSquares){
-      let hasPinnedPiece = false;
-      let pinnedPiece = null;
-      console.log('color ', this.playerColor);
+    checkRookSquaresHasPinnedPiece(rookSquares , pinerCol , pinerRow){
       let squaresWithPieces = rookSquares.filter( e => $(`[id^="${e}"]`).hasChildNodes()).map( e => {
       return  {
           pieceColor : $(`[id^="${e}"]`).firstChild.getAttribute('piece-type').split('_')[0] ,
           pieceType : $(`[id^="${e}"]`).firstChild.getAttribute('piece-type').split('_')[1] ,
           piecePosition : $(`[id^="${e}"]`).firstChild.getAttribute( 'piece-square' ),
-
+          rookSquaresIdx : rookSquares.indexOf(e)
          }
       })
-    //  console.log('squaresWithPieces',squaresWithPieces);
-    
-    //  console.log('Player.getPlayer()',Player.getPlayer());
-    //  console.log('Player.getEnemyPlayer()',Player.getEnemyPlayer());
       if(squaresWithPieces.length > 1){
         if(squaresWithPieces[1].pieceType === 'king' && squaresWithPieces[1].pieceColor !== this.playerColor ){
           if( squaresWithPieces[0].pieceColor !== this.playerColor){
             const pinned =  this.getEnemyPlayer().playerPieces.find( piece => piece.piecePosition ===  squaresWithPieces[0].piecePosition);
             pinned.isPinned = true;
-            console.log('pinned');
+            pinned.pinnedInfo = {
+              pinnedSquares : rookSquares.toSpliced(squaresWithPieces[0].rookSquaresIdx , rookSquares.length),
+              pinnerSquare  :  pinerCol + pinerRow
+            }
+            pinned.pinnedSquares = 
+            pinned.pinner = pinerCol + pinerRow;
+            console.log('pinned' , squaresWithPieces[0]);
           }
         }
       }
     }
-  
-    clearOWnPinns(){
-      this.playerPieces.forEach( playerPiece => {
-        delete playerPieces.isPinned;
-      })
-    }
-
 
     setPieceColFreeMoves(piece , pieceAllMoveSquare ){    
       let colFreeMoves = generalMovement.getCollisionFreeSquares2(pieceAllMoveSquare);
