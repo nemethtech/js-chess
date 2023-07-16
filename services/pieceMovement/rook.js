@@ -12,7 +12,6 @@ export const rookMovement = {
 
   
     getAvaliableSquares(rookPiece) {
-
         const allPossibleSquares = this.checkAllPossibleSquares(rookPiece.piecePosition[0], rookPiece.piecePosition[1]);
 
         return ['forwardRows', 'backwardRows', 'leftColumns', 'rightColumns'].reduce((acc, prop) => {

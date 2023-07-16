@@ -144,7 +144,7 @@ class Player extends BasePlayer {
   }
 
 
-  resetPlayerPieces(){
+  resetPlayerPiecesV1(){
     this.setPlayerValuesToDefault();
     this.getPlayerPieces();
     this.setPlayerPiecesMoves();
@@ -153,7 +153,7 @@ class Player extends BasePlayer {
     //setPinnedPieces
   }
   
-  resetPieceMoves(){
+  checkIfPlayIsUnderCheck(){
     this.setIfPlayerCheckIsOn();
     this.setPlayerPiecesInCheck();
   }

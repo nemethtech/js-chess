@@ -8,7 +8,7 @@ import { piecesRender } from '../pieceRender.js';
 
 export const movePieceHandler = {
 
-    clearPotentialSquares(){ű
+    clearPotentialSquares(){
         
         $$('.potential-square , .potential-enemy').forEach(pieceBox => {
             pieceBox.classList.remove( 'potential-enemy' );
@@ -25,21 +25,36 @@ export const movePieceHandler = {
     },
 
     movePiece : function(event) {
-
+        console.log('event.',event);
+        console.log('event.target',event.target);
+        console.log('event.target.parentNode',event.target.parentNode);
+        console.log('event.tagName',event.target.tagName);
         const piece = pieceHandle.pieceSelected();
-        const isTargetEnemyPiece = pieceHandle.isTargetEnemyPiece(event.target);
-        const targetDiv = isTargetEnemyPiece ? event.target.parentNode  :  event.target;
+        const pieceType = piece.getAttribute( 'piece-type' ).split('_')[1];
+        const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
+        
+        const targetDiv = event.target.tagName === 'DIV' ? event.target : event.target.parentNode ;
+        console.log('targetDiv',targetDiv);
         const newSquareValue = targetDiv.getAttribute('id');
         
-        if (isTargetEnemyPiece) {
-            targetDiv.removeChild(event.target);
-        }
+       // if (isTargetEnemyPiece) {
+        targetDiv.removeChild(targetDiv.firstChild);
+       // }
         
         targetDiv.append(piece);
         pieceHandle.removeSelected();
         piecesRender.removeEventListeners();
         piece.setAttribute('piece-square', newSquareValue);
-        gameHandler.endTurn();
+        if(pieceType === 'pawn'){
+            if(generalMovement.pawnCanBePromoted(newSquareValue , pieceColor)){
+                generalMovement.promotePawn(piece , pieceColor);
+            }else {
+                gameHandler.endTurn();
+            }
+        }else {
+            gameHandler.endTurn();
+        }
+
     }, 
     
     movePieceForBot(pieceSettings, squareToMove){
@@ -49,11 +64,12 @@ export const movePieceHandler = {
         let newSqaureValue = targetDiv.getAttribute('id');;
         
         if(targetDiv.firstChild){
-            targetDiv.removeChild(targetDiv.firstChild);
+            targetDiv.removeChild(targetDiv.firstChild);s
         }
         targetDiv.append(piece);
         piecesRender.removeEventListeners();
         piece.setAttribute('piece-square', newSqaureValue);
+
         gameHandler.endTurn();
     }, 
     

@@ -7,7 +7,7 @@ import { movePieceHandler } from './movePiece.js';
 import { $ , $$ } from '../../utils/utils.js';
 import { Player } from '../playerClassExtend.js';
 import { chessConfig } from '../../config/chessConfig.config.js';
-
+import { gameHandler } from '../gameHandler.js';
 
 export const generalMovement = {
 
@@ -116,6 +116,9 @@ export const generalMovement = {
             if(!this.valueNullOrUndefined(val.collisionFreeSquares)){
                 val.collisionFreeSquares.forEach(freeSquareId => {
                     $(`[id^="${freeSquareId}"]`).classList.add( 'potential-square');
+                    let span = document.createElement( 'a' );
+                    span.classList.add( 'dot' );
+                    $(`[id^="${freeSquareId}"]`).append(span);
                 })                   
             }
             if(!this.valueNullOrUndefined(val.possibleCollision)){
@@ -125,6 +128,10 @@ export const generalMovement = {
     },
 
     clearPotentialSquares(){
+        $$('.dot').forEach(spanElem => {
+        //    console.log('spanElem',spanElem);
+            spanElem.remove();
+        });
         $$('.potential-square , .potential-enemy').forEach(pieceBox => {
             pieceBox.classList.remove( 'potential-enemy' );
             pieceBox.classList.remove( 'potential-square' );
@@ -158,7 +165,7 @@ export const generalMovement = {
             let imgPiece = document.createElement( 'img' );
             imgPiece.classList.add( 'promote-piece' );
             imgPiece.setAttribute('src', `pieces/${pawnColor}_${pieceName}.png`);
-            pawnPiece.setAttribute( 'piece-type'  , `${pawnColor}_${pieceName}`);
+            imgPiece.setAttribute( 'piece-type'  , `${pieceName}`);
             imgPiece.addEventListener('click' , this.changePiece.bind(this , pieceName , pawnPiece)  )
             $(chessConfig.modalSelector).append(imgPiece);
         }) 
@@ -174,6 +181,7 @@ export const generalMovement = {
     promotePawn(pawnPiece){
         this.fillModal(pawnPiece);
         const modal = document.querySelector(".modal");
+        
         modal.showModal();
     },
 
@@ -182,6 +190,8 @@ export const generalMovement = {
         const modal = document.querySelector(".modal");
         pawnPiece.setAttribute( 'src'  ,  `pieces/${pawnColor}_${promotPiece}.png`);
         pawnPiece.setAttribute( 'piece-type'  , `${pawnColor}_${promotPiece}`);
+        //gameHandler.endTurn3();
+        gameHandler.endTurn();
         modal.close();
     },
 

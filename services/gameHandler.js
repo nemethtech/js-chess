@@ -15,21 +15,40 @@ export const gameHandler = {
     },
     
     endTurn(){
+     //   generalMovement.checkPromotionForColor(Player.getPlayer().playerColor);
         generalMovement.clearPotentialSquares();
-        generalMovement.checkPawnPromotion();
         Player.resetPlayerPieces();
-        piecesRender.setEventListeners();
+        this.changeTurnSettings();
         this.checkGameStance();
+     //   Player.resetPlayerPieces();
+        piecesRender.setEventListeners();
+        Player.getEnemyPlayer().checkPinnedPieces();
         Player.getPlayer().checkPinnedPieces();
+
         console.log('palyer 1',Player.getPlayer());
         console.log('palyer 2',Player.getEnemyPlayer());
-        this.changeTurnSettings();
         //   this.makeBotMove(); 
     },
+
 
     endTurn2(){
         this.changeTurnSettings();
         piecesRender.resetRound();
+
+    },
+
+    endTurn3(){
+        generalMovement.clearPotentialSquares();
+        Player.resetPlayerPieces();
+        this.changeTurnSettings();
+        this.checkGameStance();
+     //   Player.resetPlayerPieces();
+        piecesRender.setEventListeners();
+        Player.getEnemyPlayer().checkPinnedPieces();
+        Player.getPlayer().checkPinnedPieces();
+
+        console.log('palyer 3',Player.getPlayer());
+        console.log('palyer 4',Player.getEnemyPlayer());
 
     },
 

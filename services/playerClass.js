@@ -222,12 +222,12 @@ BasePlayer.getEnemyPlayer = ()  => {
 
 
 BasePlayer.resetPlayerPieces = () => {
-  BasePlayer.instanceByColor(gameHandler.currentTurnFor()).resetPlayerPieces();
-  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).resetPlayerPieces();
-  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).setPlayerKingMoves();
+  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).resetPlayerPiecesV1();
+  BasePlayer.instanceByColor(gameHandler.currentTurnFor()).resetPlayerPiecesV1();
+  BasePlayer.instanceByColor(gameHandler.currentTurnFor()).checkIfPlayIsUnderCheck();
+  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).checkIfPlayIsUnderCheck();
   BasePlayer.instanceByColor(gameHandler.currentTurnFor()).setPlayerKingMoves();
-  BasePlayer.instanceByColor(gameHandler.currentTurnFor()).resetPieceMoves();
-  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).resetPieceMoves();
+  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).setPlayerKingMoves();
   //BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).checkPinnedPieces();
  // BasePlayer.instanceByColor(gameHandler.currentTurnFor()).checkPinnedPieces();
 }

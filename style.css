@@ -52,6 +52,16 @@ body{
     width: 25%;
 }
 
+.dot {
+    height: 3.5vh;
+    width: 3.5vh;
+    background-color: #676565;
+    border-radius: 50%;
+    display: block;
+    margin: 3vh;
+    opacity: 0.5;
+  }
+
 .yellow{
     background-color: rgb(231, 231, 41);
 
@@ -72,10 +82,6 @@ body{
 
 }
 
-.potential-square{
-    background-color: rgb(35, 186, 224);
-
-}
 
 .modal{
     background-color: rgb(233, 201, 164);
