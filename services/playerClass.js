@@ -79,42 +79,30 @@ class BasePlayer {
       
     }
 
-    checkPinnedPieces(){
-      const pieceTypesThatCanPin = ['queen' , 'rook' , 'bishop'];
-      this.playerPieces.forEach( piece => {
-        if(piece.pieceType === 'bishop'){ 
-       //   console.log('Bishop : ' , bishopMovement.getAllAvailableSquares(piece));
+    checkPieceMovesForPin(piece, moveObj) {
+      for (const key in moveObj) {
+        if (moveObj[key].length > 0) {
+          this.checkSquaresHasPinnedPiece(moveObj[key], piece.piecePosition[0], piece.piecePosition[1]);
         }
-        if(piece.pieceType === 'rook'){ 
-          
-          
-          let rookMoveObj = rookMovement.checkAllPossibleSquares(piece.piecePosition[0], piece.piecePosition[1]);
-
-          let  arr2  = [];
-          for (const key in rookMoveObj) {
-            if(rookMoveObj[key].length > 0){
-              this.checkRookSquaresHasPinnedPiece(rookMoveObj[key] , piece.piecePosition[0], piece.piecePosition[1]) ;
-//('childNodeArr'  , childNodeArr);
-             /* console.log('Arr 2 ',arr2);
-              if(arr2.length >= 2){
-
-                if(arr2[1].pieceType === 'king' && arr2[1].pieceColor !== piece.pieceColor ){
-                  if( arr2[0].pieceColor !== piece.pieceColor){
-                    const pinned =  this.getEnemyPlayer().playerPieces.find( piece => piece.piecePosition ===  arr2[0].piecePosition);
-                    console.log('this.getEnemyPlayer()!!' ,this.getEnemyPlayer() );
-                    console.log('tarr2[0]' ,arr2[0] );
-                    console.log('Ezzel Nem Szabad Mozogni !!' ,pinned );
-                  }
-                }
-              }
-              arr2  = [];
-            */}
-          }
-        }  
-      });
+      }
     }
 
-    checkRookSquaresHasPinnedPiece(rookSquares , pinerCol , pinerRow){
+    
+    checkPinnedPieces(){
+
+        this.playerPieces.forEach(piece => {
+          if (piece.pieceType === 'bishop') {
+            this.checkPieceMovesForPin(piece, bishopMovement.getAllAvailableSquares(piece));
+          } else if (piece.pieceType === 'rook') {
+            this.checkPieceMovesForPin(piece, rookMovement.checkAllPossibleSquares(piece.piecePosition[0], piece.piecePosition[1]));
+        } else if (piece.pieceType === 'queen') {
+          this.checkPieceMovesForPin(piece, bishopMovement.getAllAvailableSquares(piece));
+          this.checkPieceMovesForPin(piece, rookMovement.checkAllPossibleSquares(piece.piecePosition[0], piece.piecePosition[1]));
+        }
+      });
+    }
+    
+    checkSquaresHasPinnedPiece(rookSquares , pinerCol , pinerRow){
       let squaresWithPieces = rookSquares.filter( e => $(`[id^="${e}"]`).hasChildNodes()).map( e => {
       return  {
           pieceColor : $(`[id^="${e}"]`).firstChild.getAttribute('piece-type').split('_')[0] ,
@@ -123,6 +111,7 @@ class BasePlayer {
           rookSquaresIdx : rookSquares.indexOf(e)
          }
       })
+      console.log('squaresWithPieces',squaresWithPieces);
       if(squaresWithPieces.length > 1){
         if(squaresWithPieces[1].pieceType === 'king' && squaresWithPieces[1].pieceColor !== this.playerColor ){
           if( squaresWithPieces[0].pieceColor !== this.playerColor){
@@ -132,7 +121,6 @@ class BasePlayer {
               pinnedSquares : rookSquares.toSpliced(squaresWithPieces[0].rookSquaresIdx , rookSquares.length),
               pinnerSquare  :  pinerCol + pinerRow
             }
-            pinned.pinnedSquares = 
             pinned.pinner = pinerCol + pinerRow;
             console.log('pinned' , squaresWithPieces[0]);
           }

@@ -55,9 +55,9 @@ export const editedGame = {
 
   */
 
-  //  pinned pieces Test
+  //  pinned pieces Test Rook
 
-  
+   /*
     'a2': 'white_rook',
     'g2': 'black_king',
     'e8': 'white_king',
@@ -67,6 +67,24 @@ export const editedGame = {
     'a5': 'black_queen',
    // 'c2': 'black_pawn',
     'a7': 'white_pawn',
+   // 'b7': 'white_pawn',
+    'c7': 'white_pawn',
+    'h2': 'black_pawn',
+
+  */
+
+      //  pinned pieces Test Bishop
+
+   
+
+    'g2': 'black_king',
+    'e8': 'white_king',
+    'f3': 'black_rook',
+    'c8': 'white_queen',
+    'b1': 'black_bishop',
+    'a5': 'black_queen',
+   // 'c2': 'black_pawn',
+    'f7': 'white_pawn',
    // 'b7': 'white_pawn',
     'c7': 'white_pawn',
     'h2': 'black_pawn',

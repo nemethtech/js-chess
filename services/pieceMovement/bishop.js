@@ -45,7 +45,7 @@ export const bishopMovement = {
         }
    },
 
-   getAllAvailableSquares(){
+   getAllAvailableSquares(bishopPiece){
 
     const columArrayOne = chessConfig.columns.slice(chessConfig.columns.indexOf(bishopPiece.piecePosition[0])+1, 8 );
     const columArrayTwo = chessConfig.columns.slice(0, chessConfig.columns.indexOf(bishopPiece.piecePosition[0])).reverse();

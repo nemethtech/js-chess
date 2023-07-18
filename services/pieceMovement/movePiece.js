@@ -25,22 +25,13 @@ export const movePieceHandler = {
     },
 
     movePiece : function(event) {
-        console.log('event.',event);
-        console.log('event.target',event.target);
-        console.log('event.target.parentNode',event.target.parentNode);
-        console.log('event.tagName',event.target.tagName);
         const piece = pieceHandle.pieceSelected();
         const pieceType = piece.getAttribute( 'piece-type' ).split('_')[1];
         const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
-        
         const targetDiv = event.target.tagName === 'DIV' ? event.target : event.target.parentNode ;
-        console.log('targetDiv',targetDiv);
         const newSquareValue = targetDiv.getAttribute('id');
         
-       // if (isTargetEnemyPiece) {
         targetDiv.removeChild(targetDiv.firstChild);
-       // }
-        
         targetDiv.append(piece);
         pieceHandle.removeSelected();
         piecesRender.removeEventListeners();
