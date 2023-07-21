@@ -9,10 +9,13 @@ class Player extends BasePlayer {
       if(enemyPiece.collisions){
         enemyPiece.collisions.forEach( enemeyCollision => {
           if(enemeyCollision.colPieceType.includes('king') && enemeyCollision.colType === 'enemy'){
+            let a = enemeyCollision.direction;
             let checkThreat = {
               moveSquares : enemeyCollision.colMoveSquares,
               piecePosition : enemyPiece.piecePosition,
               pieceType : enemyPiece.pieceType,
+              colDirection : enemeyCollision.direction,
+              plusOneSquare : this.getAllAvailableSquaresForPiece(enemyPiece)[a][this.getAllAvailableSquaresForPiece(enemyPiece)[a].indexOf(enemeyCollision.colPiecePosition)+1]
             }
             this.checkThreat.push(checkThreat)
             this.isPlayerInCheck = true;
@@ -21,6 +24,9 @@ class Player extends BasePlayer {
       }
     })
   }
+
+
+ 
 
   setPieceCanBlockThreat(piece){   
     let pieceMoveDirections = [];
