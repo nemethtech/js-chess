@@ -87,7 +87,7 @@ class BasePlayer {
       }
     }
 
-    
+
     checkPinnedPieces(){
 
         this.playerPieces.forEach(piece => {
@@ -102,6 +102,26 @@ class BasePlayer {
       });
     }
     
+    getAllAvailableSquaresForPiece(piece){
+
+        if (piece.pieceType === 'bishop') {
+
+          return  bishopMovement.getAllAvailableSquares(piece);
+
+        } else if (piece.pieceType === 'rook') {
+
+          return rookMovement.checkAllPossibleSquares(piece.piecePosition[0], piece.piecePosition[1]);
+
+        } else if (piece.pieceType === 'queen') {
+          console.log('iece.piecePosition[0], piece.piecePosition[1]',piece.piecePosition[0], piece.piecePosition[1]);
+          return {
+            ...bishopMovement.getAllAvailableSquares(piece),
+            ...rookMovement.checkAllPossibleSquares(piece.piecePosition[0], piece.piecePosition[1])
+          }
+        }
+   
+  }
+
     checkSquaresHasPinnedPiece(rookSquares , pinerCol , pinerRow){
       let squaresWithPieces = rookSquares.filter( e => $(`[id^="${e}"]`).hasChildNodes()).map( e => {
       return  {
@@ -111,7 +131,7 @@ class BasePlayer {
           rookSquaresIdx : rookSquares.indexOf(e)
          }
       })
-      console.log('squaresWithPieces',squaresWithPieces);
+     
       if(squaresWithPieces.length > 1){
         if(squaresWithPieces[1].pieceType === 'king' && squaresWithPieces[1].pieceColor !== this.playerColor ){
           if( squaresWithPieces[0].pieceColor !== this.playerColor){
@@ -121,7 +141,6 @@ class BasePlayer {
               pinnedSquares : rookSquares.toSpliced(squaresWithPieces[0].rookSquaresIdx , rookSquares.length),
               pinnerSquare  :  pinerCol + pinerRow
             }
-            pinned.pinner = pinerCol + pinerRow;
             console.log('pinned' , squaresWithPieces[0]);
           }
         }
@@ -159,8 +178,27 @@ class BasePlayer {
 
       const kingPiece = this.playerPieces.find( piece => piece.pieceType === 'king');
       let pieceAllMoveSquare = generalMovement.getPieceMove(kingPiece);
+    //  console.log('pieceAllMoveSquare',pieceAllMoveSquare);  
       this.setPieceColFreeMoves(kingPiece , pieceAllMoveSquare);
       this.setPieceCollisions(kingPiece , pieceAllMoveSquare);
+      if(this.isPlayerInCheck){
+     //   console.log('kingPiece',kingPiece);
+    //    console.log("threat",this.checkThreat);
+        //let filtered = kingPiece.moveSquares.colFreeMoveSquares.filter( e => e !== this.checkThreat.plusOneSquare)
+        let alma = kingPiece.moveSquares;
+        
+        alma.forEach( e => {
+          //console.log('ez',e.colFreeMoveSquares[0]);
+          if(e.colFreeMoveSquares[0] === this.checkThreat[0].plusOneSquare){
+            e.colFreeMoveSquares = undefined;
+          //  console.log('itt van',e);
+            
+          }
+        })
+   //     console.log('alma',alma);
+        kingPiece.moveSquares = alma;
+        //console.log('kingPiece',kingPiece);
+      }
     }
     
     setPieceIsBackedUp(){

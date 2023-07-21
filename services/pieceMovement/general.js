@@ -50,7 +50,17 @@ export const generalMovement = {
         if(Player.getPlayer().isPlayerInCheck && piece.pieceType !== 'king'){
             pieceMove =  Player.getPlayer().filterPieceMoveIfPlayerUnderCheck(piece , pieceMove);
         }
-        this.setSquares(pieceMove);
+        if(Player.getPlayer().isPlayerInCheck && piece.pieceType === 'king'){
+            pieceMove =  this.getPieceMove(piece);
+            let alma = pieceMove.filter(e => e.collisionFreeSquares[0] !== Player.getPlayer().checkThreat[0].plusOneSquare)
+            console.log('KING mOVE' , pieceMove);
+            console.log('Player.getPlayer().checkThreat plusOneSquare' , Player.getPlayer().checkThreat[0].plusOneSquare);
+            console.log('alma' , alma);
+            this.setSquares(alma);
+        }else{
+            this.setSquares(pieceMove);
+            
+        }
         this.setEventsOnPotentialSquares();
     },
 

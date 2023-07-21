@@ -104,6 +104,9 @@ export const pieceHandle = {
     },
 
     managePiece(pieceSettings){
+        let alma = Player.getPlayer().playerPieces.find( piece => piece.piecePosition === pieceSettings.piecePosition);
+       // console.log('pieceSettings',pieceSettings);
+       // console.log('alma',alma);
         if(!this.isThereASelectedPiece()){
             this.selectPieceAndSquares(pieceSettings);
         }
