@@ -1,14 +1,11 @@
-import { $$ } from '../../utils/utils.js'
 import { chessConfig } from '../../config/chessConfig.config.js';
 import { generalMovement } from './general.js';
 import { movePieceHandler } from './movePiece.js';
-import { gameHandler } from '../gameHandler.js';
-import { piecesRender } from '../pieceRender.js';
+
 
 export const pawnMovement = {
     
     returnAvailableSquares(pawnPiece){
-       // console.log('this.getAvailableSquares(pawnPiece)',this.getAvailableSquares(pawnPiece));
         return this.getAvailableSquares(pawnPiece);
     },
   
@@ -38,8 +35,7 @@ export const pawnMovement = {
     },
 
     buildPawnMove(forwardSquares , sideSquares){
-
-       
+  
         return{
             forwardRows : {
                 collisionFreeSquares : movePieceHandler.checkCollision(forwardSquares).collisionFreeSquares, 
@@ -48,7 +44,6 @@ export const pawnMovement = {
                 
                 possibleCollision    : movePieceHandler.checkIfPieceOnSquare(sideSquares.rightSideToAttack),
             },
-            // [movePieceHandler.checkCollision([sideSquares.rightSideToAttack]).possibleCollision],
             leftColumn : {
                 possibleCollision    : movePieceHandler.checkIfPieceOnSquare(sideSquares.leftSideToAttack),
                
@@ -91,9 +86,6 @@ export const pawnMovement = {
         return  pawnPiece.pieceColor === 'white' ? 1 : -1;
    },
 
-   
-   
-   
    
    isTheFirstMove(pawnPiece){
     if(pawnPiece.pieceColor === 'white' &&

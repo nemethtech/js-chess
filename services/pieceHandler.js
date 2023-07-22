@@ -40,6 +40,40 @@ export const pieceHandle = {
         }
     },
 
+
+    handlePieceClick(pieceSettings){
+        //   console.log('Player.pieceSettings()',pieceSettings);
+        //   this.pieceiIsPinned(pieceSettings)   ;
+           if(chessConfig.gameEnded){
+               return;
+           }
+           if(!gameHandler.pieceTurn(pieceSettings.pieceColor)){
+               return this;
+           }  
+          // if(this.pieceiIsPinned(pieceSettings)){
+         //      return this;
+           //}
+           else if(Player.getPlayer().isPlayerInCheck){
+               console.log('0');
+               if(pieceSettings.pieceType === 'king'){
+                   
+                   if(Player.getPlayer().canPlayerKingMove()){
+                       console.log('1');
+                       this.managePiece(pieceSettings)
+                   }
+               }else if(Player.getPlayer().pieceCanBlockCheck(pieceSettings)){
+                   console.log('2');
+                   this.managePiece(pieceSettings)
+               }else{
+                   return;
+               }
+           } 
+           else { 
+               this.managePiece(pieceSettings)
+           }
+       },
+   
+
     handlePieceMouseleave(handleParams){
         if(chessConfig.gameEnded){
             return;
@@ -93,7 +127,8 @@ export const pieceHandle = {
 
     selectPieceAndSquares(pieceSettings){
         this.setSelected(pieceSettings.piece);
-        generalMovement.markPotentialSquares(pieceSettings);
+        console.log('pieceSettings',pieceSettings);
+        generalMovement.markPotentialSquares2(pieceSettings);
         return this;
     },
 
@@ -104,9 +139,6 @@ export const pieceHandle = {
     },
 
     managePiece(pieceSettings){
-        let alma = Player.getPlayer().playerPieces.find( piece => piece.piecePosition === pieceSettings.piecePosition);
-       // console.log('pieceSettings',pieceSettings);
-       // console.log('alma',alma);
         if(!this.isThereASelectedPiece()){
             this.selectPieceAndSquares(pieceSettings);
         }

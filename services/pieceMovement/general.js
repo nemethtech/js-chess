@@ -11,8 +11,6 @@ import { gameHandler } from '../gameHandler.js';
 
 export const generalMovement = {
 
-
-
     getPieceMove(piece) {
         switch (piece.pieceType) {
           case 'rook':
@@ -34,6 +32,7 @@ export const generalMovement = {
       },
     
     markPotentialSquares(piece){
+
         const pieceS = Player.getPlayer().playerPieces.find( playerPiece => playerPiece.piecePosition === piece.piecePosition); 
         let pieceMove = this.getPieceMove(piece);
         //filterPieceMoveIfPlayerUnderCheck
@@ -52,11 +51,16 @@ export const generalMovement = {
         }
         if(Player.getPlayer().isPlayerInCheck && piece.pieceType === 'king'){
             pieceMove =  this.getPieceMove(piece);
-            let alma = pieceMove.filter(e => e.collisionFreeSquares[0] !== Player.getPlayer().checkThreat[0].plusOneSquare)
-            console.log('KING mOVE' , pieceMove);
-            console.log('Player.getPlayer().checkThreat plusOneSquare' , Player.getPlayer().checkThreat[0].plusOneSquare);
-            console.log('alma' , alma);
-            this.setSquares(alma);
+            let alma = pieceMove.filter(e => (e.collisionFreeSquares[0] !== Player.getPlayer().checkThreat[0].plusOneSquare) );
+            let körte = alma.filter(e => ( e.possibleCollision!== Player.getPlayer().checkThreat[0].plusOneSquare) );
+            if(Player.getPlayer().checkThreat[0].plusOneSquare !== undefined){
+                this.setSquares(körte);
+
+            }else{
+
+                this.setSquares(pieceMove);
+            }
+
         }else{
             this.setSquares(pieceMove);
             
@@ -137,9 +141,39 @@ export const generalMovement = {
         });        
     },
 
+    markPotentialSquares2(pieceSettings){
+        console.log('++++',pieceSettings);
+        let alma = Player.getPlayer().playerPieces.find( piece => piece.piecePosition === pieceSettings.piecePosition);
+        console.log('++++',alma);
+
+        this.setSquares2(alma);
+        //    this.setSquares2(playerPiece);
+        
+        this.setEventsOnPotentialSquares();
+    },
+    setSquares2(piece){
+        if(piece.pieceType !== 'king'){
+            piece.moveSquares.forEach( pieceMoveSquares => {
+                pieceMoveSquares.colFreeMoveSquares.forEach( square => {
+                    $(`[id^="${square}"]`).classList.add( 'potential-square');
+                    let span = document.createElement( 'a' );
+                    span.classList.add( 'dot' );
+                    $(`[id^="${square}"]`).append(span);
+                })
+            })
+            piece.collisions.forEach( pieceCollision => {
+                if(pieceCollision.colType === 'enemy'){
+                    
+                    $(`[id^="${pieceCollision.colPiecePosition}"]`).classList.add('potential-enemy'); 
+                }
+            })
+
+        }
+
+    },
+
     clearPotentialSquares(){
         $$('.dot').forEach(spanElem => {
-        //    console.log('spanElem',spanElem);
             spanElem.remove();
         });
         $$('.potential-square , .potential-enemy').forEach(pieceBox => {
@@ -200,7 +234,6 @@ export const generalMovement = {
         const modal = document.querySelector(".modal");
         pawnPiece.setAttribute( 'src'  ,  `pieces/${pawnColor}_${promotPiece}.png`);
         pawnPiece.setAttribute( 'piece-type'  , `${pawnColor}_${promotPiece}`);
-        //gameHandler.endTurn3();
         gameHandler.endTurn();
         modal.close();
     },
@@ -232,10 +265,6 @@ export const generalMovement = {
     checkPawnPromotion(){
         this.checkPromotionForColor('black');
         this.checkPromotionForColor('white');
-    },
-
-    checkForPinnedPiece(squareArr){
-        
     },
 
 }

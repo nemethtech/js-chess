@@ -3,8 +3,7 @@ import { normalGame }  from '../config/normalGameInit.config.js'
 import { chessConfig }  from '../config/chessConfig.config.js'
 import { pieceHandle } from '../services/pieceHandler.js'
 import { editedGame } from '../config/editedGameInit.config.js'
-import { gameHandler } from './gameHandler.js'
-
+import { Player } from './playerClassExtend.js'
 
 export const piecesRender = {
 
@@ -60,6 +59,37 @@ export const piecesRender = {
         })
     },
     
+
+    setEventListeners2(){
+
+        Player.getPlayer().playerPieces.forEach(piece => {
+            console.log('piece',piece);
+            const handleParams = {
+                piece : piece.piece , 
+                pieceType :  piece.pieceType , 
+                piecePosition :  piece.piecePosition ,
+                pieceColor :    piece.pieceColor , 
+            }
+
+            this.piecesEventListeners[ piece.piecePosition ] = {
+               
+                'mouseenter': _ => {
+                    pieceHandle.handlePieceMouseenter( handleParams )
+                },
+                'mouseleave': _ => {
+                    pieceHandle.handlePieceMouseleave( handleParams )
+                },
+                'click': _ => {
+                    pieceHandle.handlePieceClick( handleParams )
+                }
+            }
+            
+            piece.piece.addEventListener( 'mouseenter', this.piecesEventListeners[ piece.piecePosition ][ 'mouseenter' ]);
+            piece.piece.addEventListener( 'mouseleave', this.piecesEventListeners[ piece.piecePosition ][ 'mouseleave' ]);
+            piece.piece.addEventListener( 'click', this.piecesEventListeners[ piece.piecePosition ][ 'click' ]);
+
+        })
+    },
 
     removeEventListeners() {
 

@@ -25,9 +25,6 @@ class Player extends BasePlayer {
     })
   }
 
-
- 
-
   setPieceCanBlockThreat(piece){   
     let pieceMoveDirections = [];
   
@@ -50,6 +47,46 @@ class Player extends BasePlayer {
     return pieceMoveDirections;
   }
 
+ setPieceCanBlockThreat2(piece){   
+
+    if(this.checkThreat.length !== 1){
+        piece.moveSquares = [];
+        return ;
+    }
+    let filteredPieceMoveSquares = [];
+
+    piece.moveSquares.forEach( colFreeeMove => {
+        this.checkThreat[0].moveSquares.forEach( threatMoveSquare => {
+          if(colFreeeMove.colFreeMoveSquares.includes(threatMoveSquare)){
+            piece.canBlockCheck = true;
+            filteredPieceMoveSquares.push({
+              direction : colFreeeMove.direction , 
+              moveSquares : [threatMoveSquare]
+            })
+          }
+        })
+      })
+    
+    piece.moveSquares = filteredPieceMoveSquares;
+    return ;
+  }
+  
+  setPieceCanAttackThreat2(piece){
+
+    if(this.checkThreat.length !== 1){
+        return piece.collisions = [];;
+    }
+    if(piece.collisions){
+      piece.collisions = piece.collisions.filter( e => e.colPiecePosition === this.checkThreat[0].piecePosition);
+      if(piece.collisions.length > 0){
+        piece.canAttackThreat = true;
+      }
+    }
+
+    return;
+  }
+
+
   setPieceCanAttackThreat(piece){
     let pieceCanAttackThreat = false;
     
@@ -66,6 +103,7 @@ class Player extends BasePlayer {
     return pieceCanAttackThreat;
   }
 
+
   setPlayerPiecesInCheck(){
     if(this.isPlayerInCheck){
       this.playerPieces.forEach( playerPiece => {
@@ -77,6 +115,18 @@ class Player extends BasePlayer {
           playerPiece.canAttackThreat = true;
         
         }
+      })
+    }
+  }
+
+  setPlayerPiecesInCheck2(){
+    if(this.isPlayerInCheck){
+      this.playerPieces.forEach( playerPiece => {
+        if(playerPiece.pieceType != 'king'){
+          this.setPieceCanBlockThreat2(playerPiece);
+        }
+        this.setPieceCanAttackThreat2(playerPiece);
+         // playerPiece.canAttackThreat = true;
       })
     }
   }
@@ -163,7 +213,12 @@ class Player extends BasePlayer {
     this.setIfPlayerCheckIsOn();
     this.setPlayerPiecesInCheck();
   }
-  
+
+  checkIfPlayIsUnderCheck2(){
+    this.setIfPlayerCheckIsOn();
+    this.setPlayerPiecesInCheck2();
+
+  }
 }
 
 const playerTwo = new Player('black');

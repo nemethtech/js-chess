@@ -3,7 +3,6 @@ import { gameHandler } from "./gameHandler.js";
 import { bishopMovement } from "./pieceMovement/bishop.js";
 import { generalMovement } from "./pieceMovement/general.js";
 import { rookMovement } from "./pieceMovement/rook.js";
-import { Player } from "./playerClassExtend.js";
 
 class BasePlayer {
     constructor(color) {
@@ -174,30 +173,45 @@ class BasePlayer {
       })
     }
     
+    checkPlayerPinnedPieceMoves(){
+      this.playerPieces.forEach( piece => {
+        if(piece.isPinned){
+          this.filterMovesIfPieceIsPinned(piece);
+        }
+      })
+    }
+
+    filterMovesIfPieceIsPinned(pinnedPiece){
+
+      pinnedPiece.moveSquares.forEach( pinnedPieceMoveSquares => {
+          pinnedPieceMoveSquares.colFreeMoveSquares = 
+          pinnedPieceMoveSquares.colFreeMoveSquares.filter(element => pinnedPiece.pinnedInfo.pinnedSquares.includes(element));
+
+      })
+      let newColls = pinnedPiece.collisions.filter(collision => collision.colPiecePosition === pinnedPiece.pinnedInfo.pinnerSquare);
+      pinnedPiece.collisions =  newColls;
+      return ;
+    }
+
+
     setPlayerKingMoves(){
 
       const kingPiece = this.playerPieces.find( piece => piece.pieceType === 'king');
       let pieceAllMoveSquare = generalMovement.getPieceMove(kingPiece);
-    //  console.log('pieceAllMoveSquare',pieceAllMoveSquare);  
+
       this.setPieceColFreeMoves(kingPiece , pieceAllMoveSquare);
       this.setPieceCollisions(kingPiece , pieceAllMoveSquare);
       if(this.isPlayerInCheck){
-     //   console.log('kingPiece',kingPiece);
-    //    console.log("threat",this.checkThreat);
-        //let filtered = kingPiece.moveSquares.colFreeMoveSquares.filter( e => e !== this.checkThreat.plusOneSquare)
+
         let alma = kingPiece.moveSquares;
         
         alma.forEach( e => {
-          //console.log('ez',e.colFreeMoveSquares[0]);
           if(e.colFreeMoveSquares[0] === this.checkThreat[0].plusOneSquare){
             e.colFreeMoveSquares = undefined;
-          //  console.log('itt van',e);
-            
+  
           }
         })
-   //     console.log('alma',alma);
         kingPiece.moveSquares = alma;
-        //console.log('kingPiece',kingPiece);
       }
     }
     
@@ -254,8 +268,7 @@ BasePlayer.resetPlayerPieces = () => {
   BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).checkIfPlayIsUnderCheck();
   BasePlayer.instanceByColor(gameHandler.currentTurnFor()).setPlayerKingMoves();
   BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).setPlayerKingMoves();
-  //BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).checkPinnedPieces();
- // BasePlayer.instanceByColor(gameHandler.currentTurnFor()).checkPinnedPieces();
+
 }
 
 export { BasePlayer };

@@ -14,43 +14,49 @@ export const gameHandler = {
         piecesRender.setEventListeners();
     },
     
+    startGameUltimate(){
+        piecesRender.createPieces();
+
+        Player.getPlayer().setPlayerValuesToDefault();
+        Player.getEnemyPlayer().setPlayerValuesToDefault();
+
+
+        Player.getPlayer().getPlayerPieces();
+        Player.getEnemyPlayer().getPlayerPieces();
+
+        Player.getEnemyPlayer().setPlayerPiecesMoves();
+        Player.getEnemyPlayer().setPieceIsBackedUp();
+        Player.getEnemyPlayer().checkPinnedPieces();
+
+
+        Player.getPlayer().setPlayerPiecesMoves();
+        Player.getPlayer().checkIfPlayIsUnderCheck2();
+        Player.getPlayer().checkPlayerPinnedPieceMoves();
+
+        piecesRender.setEventListeners2();
+
+        console.log('palyer 2',Player.getEnemyPlayer());
+        console.log('palyer 1',Player.getPlayer());
+    },
+
+
+
+
     endTurn(){
-     //   generalMovement.checkPromotionForColor(Player.getPlayer().playerColor);
+
         generalMovement.clearPotentialSquares();
         Player.resetPlayerPieces();
         this.changeTurnSettings();
         this.checkGameStance();
-     //   Player.resetPlayerPieces();
+
         piecesRender.setEventListeners();
         Player.getEnemyPlayer().checkPinnedPieces();
         Player.getPlayer().checkPinnedPieces();
 
-        console.log('palyer 1',Player.getPlayer());
-        console.log('palyer 2',Player.getEnemyPlayer());
+    
         //   this.makeBotMove(); 
     },
 
-
-    endTurn2(){
-        this.changeTurnSettings();
-        piecesRender.resetRound();
-
-    },
-
-    endTurn3(){
-        generalMovement.clearPotentialSquares();
-        Player.resetPlayerPieces();
-        this.changeTurnSettings();
-        this.checkGameStance();
-     //   Player.resetPlayerPieces();
-        piecesRender.setEventListeners();
-        Player.getEnemyPlayer().checkPinnedPieces();
-        Player.getPlayer().checkPinnedPieces();
-
-        console.log('palyer 3',Player.getPlayer());
-        console.log('palyer 4',Player.getEnemyPlayer());
-
-    },
 
     pieceTurn(color){
         return chessConfig.currentTurn === color ? true : false;

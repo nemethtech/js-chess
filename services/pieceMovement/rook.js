@@ -6,7 +6,6 @@ export const rookMovement = {
     
 
     returnAvailableSquares(rookPiece ){
-      //  console.log('rookPiece',rookPiece);
         return this.getAvaliableSquares(rookPiece);
     },
 

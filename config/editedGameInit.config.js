@@ -58,20 +58,22 @@ export const editedGame = {
   //  pinned pieces Test Rook
 
    /*
-    'a2': 'white_rook',
+   // 'b2': 'white_rook',
+    'c1': 'white_rook',
+    'a1': 'white_rook',
     'g2': 'black_king',
-    'e8': 'white_king',
-    'f2': 'black_rook',
-    'e5': 'white_bishop',
+    'd8': 'white_king',
+    'd2': 'white_bishop',
+    'd4': 'white_bishop',
     'e6': 'black_bishop',
     'a5': 'black_queen',
    // 'c2': 'black_pawn',
     'a7': 'white_pawn',
    // 'b7': 'white_pawn',
-    'c7': 'white_pawn',
+  //  'c7': 'white_pawn',
     'h2': 'black_pawn',
 
-  */
+    */
 
       //  pinned pieces Test Bishop
 
@@ -79,16 +81,17 @@ export const editedGame = {
 
     'g2': 'black_king',
     'e8': 'white_king',
-    'f3': 'black_rook',
-    'c8': 'white_queen',
+    'e3': 'black_rook',
+    'c6': 'white_queen',
     'b1': 'black_bishop',
-    'a5': 'black_queen',
+    'a4': 'black_queen',
    // 'c2': 'black_pawn',
     'f7': 'white_pawn',
    // 'b7': 'white_pawn',
-    'c7': 'white_pawn',
+    'e7': 'white_rook',
     'h2': 'black_pawn',
 
+  
   
     
   //  staleMate Test
@@ -100,5 +103,19 @@ export const editedGame = {
     'h7': 'black_rook',
     
     'h5': 'black_king',
-*/
+
+
+   
+  //  staleMate Test
+  
+    'b5': 'white_king',
+    'a7': 'white_pawn',
+    'f6': 'black_rook',
+    'a6': 'black_knight',
+   // 'c1': 'black_rook',
+    'h7': 'black_rook',
+    
+    'h5': 'black_king',
+
+ */
 };
