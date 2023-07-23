@@ -31,6 +31,7 @@ class BasePlayer {
           }
           this.playerPieces.push(handleParams);
       }); 
+      return this;
     }
 
     getPlayerPiecesMoveSquares(){
@@ -50,10 +51,11 @@ class BasePlayer {
 
 
     setPieceCollisions(piece , pieceAllMoveSquare){
+
+      piece.collisions = [];
       let collisionArray = generalMovement.getPossibleCollisionquares2(pieceAllMoveSquare);
-      
+
       if(collisionArray.length > 0){
-        piece.collisions = [];
 
         collisionArray.forEach(collision => {
         let collisionPiece = $(`[id^="${collision.square}"]`);
@@ -99,6 +101,7 @@ class BasePlayer {
           this.checkPieceMovesForPin(piece, rookMovement.checkAllPossibleSquares(piece.piecePosition[0], piece.piecePosition[1]));
         }
       });
+      return this;
     }
     
     getAllAvailableSquaresForPiece(piece){
@@ -112,7 +115,7 @@ class BasePlayer {
           return rookMovement.checkAllPossibleSquares(piece.piecePosition[0], piece.piecePosition[1]);
 
         } else if (piece.pieceType === 'queen') {
-          console.log('iece.piecePosition[0], piece.piecePosition[1]',piece.piecePosition[0], piece.piecePosition[1]);
+
           return {
             ...bishopMovement.getAllAvailableSquares(piece),
             ...rookMovement.checkAllPossibleSquares(piece.piecePosition[0], piece.piecePosition[1])
@@ -167,10 +170,12 @@ class BasePlayer {
       this.playerPieces.forEach( piece => {
         if(piece.pieceType !== 'king'){ 
           let pieceAllMoveSquare = generalMovement.getPieceMove(piece);
+          console.log('itt' , piece);
           this.setPieceColFreeMoves(piece , pieceAllMoveSquare);
           this.setPieceCollisions(piece , pieceAllMoveSquare);
         }
       })
+      return this;
     }
     
     checkPlayerPinnedPieceMoves(){
@@ -182,7 +187,7 @@ class BasePlayer {
     }
 
     filterMovesIfPieceIsPinned(pinnedPiece){
-
+      if(this.isPlayerInCheck) return;
       pinnedPiece.moveSquares.forEach( pinnedPieceMoveSquares => {
           pinnedPieceMoveSquares.colFreeMoveSquares = 
           pinnedPieceMoveSquares.colFreeMoveSquares.filter(element => pinnedPiece.pinnedInfo.pinnedSquares.includes(element));
@@ -207,7 +212,7 @@ class BasePlayer {
         
         alma.forEach( e => {
           if(e.colFreeMoveSquares[0] === this.checkThreat[0].plusOneSquare){
-            e.colFreeMoveSquares = undefined;
+            e.colFreeMoveSquares = [];
   
           }
         })
@@ -216,12 +221,14 @@ class BasePlayer {
     }
     
     setPieceIsBackedUp(){
+
       this.playerPieces.forEach( playerPiece => {
         if(playerPiece.collisions){
           playerPiece.collisions.forEach( pieceCollision => {
             if(pieceCollision.colType === 'ally'){
-              const playerPiece = this.playerPieces.find( playerPiece => playerPiece.piecePosition === pieceCollision.colPiecePosition);
-              playerPiece.isBackedUp = true;
+
+              const otherPiece = this.playerPieces.find( playerPiece => playerPiece.piecePosition === pieceCollision.colPiecePosition);
+              otherPiece.isBackedUp = true;
             }
           })
         }
@@ -231,6 +238,7 @@ class BasePlayer {
         playerPiece.isBackedUp = false;
       }
      })
+     return this;
     }
 
     getEnemyPlayer(){
@@ -262,12 +270,49 @@ BasePlayer.getEnemyPlayer = ()  => {
 
 
 BasePlayer.resetPlayerPieces = () => {
-  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).resetPlayerPiecesV1();
-  BasePlayer.instanceByColor(gameHandler.currentTurnFor()).resetPlayerPiecesV1();
-  BasePlayer.instanceByColor(gameHandler.currentTurnFor()).checkIfPlayIsUnderCheck();
-  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).checkIfPlayIsUnderCheck();
-  BasePlayer.instanceByColor(gameHandler.currentTurnFor()).setPlayerKingMoves();
-  BasePlayer.instanceByColor(gameHandler.notCurrentTurnFor()).setPlayerKingMoves();
+  BasePlayer.getEnemyPlayer().setPlayerValuesToDefault();
+  BasePlayer.getPlayer().setPlayerValuesToDefault();
+
+
+  BasePlayer.getPlayer().getPlayerPieces();
+  BasePlayer.getEnemyPlayer().getPlayerPieces();
+
+  BasePlayer.getEnemyPlayer().setPlayerPiecesMoves();
+  BasePlayer.getEnemyPlayer().setPieceIsBackedUp();
+  BasePlayer.getEnemyPlayer().checkPinnedPieces();
+
+
+  BasePlayer.getPlayer().setPlayerPiecesMoves();
+  BasePlayer.getPlayer().checkIfPlayIsUnderCheck2();
+  BasePlayer.getPlayer().checkPlayerPinnedPieceMoves();
+  BasePlayer.getPlayer().setPlayerKingMoves();
+
+
+}
+
+
+BasePlayer.resetPlayerPieces22 = () => {
+
+  BasePlayer.getEnemyPlayer().setPlayerValuesToDefault();
+  BasePlayer.getPlayer().setPlayerValuesToDefault();
+
+
+  BasePlayer.getPlayer().getPlayerPieces();
+  BasePlayer.getEnemyPlayer()
+            .getPlayerPieces()
+            .setPlayerPiecesMoves()
+            .setPieceIsBackedUp()
+            .checkPinnedPieces()
+
+
+
+  BasePlayer.getPlayer()
+                .setPlayerPiecesMoves()
+                .checkIfPlayIsUnderCheck2()
+                .checkPlayerPinnedPieceMoves()
+                .setPlayerKingMoves();
+
+
 
 }
 

@@ -41,51 +41,43 @@ export const pieceHandle = {
     },
 
 
-    handlePieceClick(pieceSettings){
-        //   console.log('Player.pieceSettings()',pieceSettings);
-        //   this.pieceiIsPinned(pieceSettings)   ;
-           if(chessConfig.gameEnded){
-               return;
-           }
-           if(!gameHandler.pieceTurn(pieceSettings.pieceColor)){
-               return this;
-           }  
-          // if(this.pieceiIsPinned(pieceSettings)){
-         //      return this;
-           //}
-           else if(Player.getPlayer().isPlayerInCheck){
-               console.log('0');
-               if(pieceSettings.pieceType === 'king'){
-                   
-                   if(Player.getPlayer().canPlayerKingMove()){
-                       console.log('1');
-                       this.managePiece(pieceSettings)
-                   }
-               }else if(Player.getPlayer().pieceCanBlockCheck(pieceSettings)){
-                   console.log('2');
-                   this.managePiece(pieceSettings)
-               }else{
-                   return;
-               }
-           } 
-           else { 
-               this.managePiece(pieceSettings)
-           }
-       },
+    handlePieceClick2(piece){
+
+        if(chessConfig.gameEnded){
+            return;
+        }
+        if(Player.getPlayer().isPlayerInCheck){
+            console.log('0');
+            if(piece.isPinned){
+                return;
+            }
+            if(piece.pieceType === 'king' && Player.getPlayer().canPlayerKingMove()){
+                console.log('1');
+                this.managePiece2(piece)
+
+            }else if(piece.canBlockCheck || piece.canAttackThreat){
+                console.log('2');
+                this.managePiece2(piece)
+            }
+        } else { 
+            console.log('3');
+            this.managePiece2(piece)
+        }
+    },
    
 
-    handlePieceMouseleave(handleParams){
+    handlePieceMouseleave(pieceSettings){
         if(chessConfig.gameEnded){
             return;
         }
-        if(gameHandler.pieceTurn(handleParams.pieceColor))this.setHoverOnExit(handleParams.piece);
+        if(gameHandler.pieceTurn(pieceSettings.pieceColor))this.setHoverOnExit(pieceSettings.piece);
     },
 
-    handlePieceMouseenter(handleParams){
+    handlePieceMouseenter(pieceSettings){
         if(chessConfig.gameEnded){
             return;
         }
-        if(gameHandler.pieceTurn(handleParams.pieceColor))this.setHoverOnEnter(handleParams.piece);
+        if(gameHandler.pieceTurn(pieceSettings.pieceColor))this.setHoverOnEnter(pieceSettings.piece);
     },
 
     isThereASelectedPiece(){
@@ -94,6 +86,11 @@ export const pieceHandle = {
 
     pieceSelected(){
         return $('.piece-selected > .piece');
+    },
+
+    getPlayerPieceSelected(){
+        const selectedPieceSquare = $('.piece-selected > .piece').getAttribute( 'piece-square' );
+        return Player.getPlayer().playerPieces.find( piece => piece.piecePosition === selectedPieceSquare);
     },
 
     setSelected(piece){ 
@@ -127,14 +124,13 @@ export const pieceHandle = {
 
     selectPieceAndSquares(pieceSettings){
         this.setSelected(pieceSettings.piece);
-        console.log('pieceSettings',pieceSettings);
         generalMovement.markPotentialSquares2(pieceSettings);
         return this;
     },
 
     removeSelectPieceAndSquares(){
         this.removeSelected();
-        generalMovement.clearPotentialSquares();
+        generalMovement.clearPotentialSquares2();
         return this;
     },
 
@@ -146,6 +142,17 @@ export const pieceHandle = {
             this.removeSelectPieceAndSquares(pieceSettings.piece);
         }
     },
+
+
+    managePiece2(pieceSettings){
+        if(!this.isThereASelectedPiece()){
+            this.selectPieceAndSquares(pieceSettings);
+        }
+        else if(this.ownPieceSelected(pieceSettings)){
+            this.removeSelectPieceAndSquares(pieceSettings.piece);
+        }
+    },
+
 
     pieceiIsPinned(pieceSettings){
         return Player.getPlayer().playerPieces.find( piece => piece.piecePosition === pieceSettings.piecePosition).isPinned;

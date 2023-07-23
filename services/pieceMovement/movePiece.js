@@ -17,14 +17,8 @@ export const movePieceHandler = {
         });
     },
     
-    setEventsOnPotentialSquares(){
 
-        $$('.potential-square , .potential-enemy').forEach(pieceBox => {
-            pieceBox.addEventListener( 'click', this.movePiece )
-        });
-    },
-
-    movePiece : function(event) {
+    movePiece : (event) =>  {
         const piece = pieceHandle.pieceSelected();
         const pieceType = piece.getAttribute( 'piece-type' ).split('_')[1];
         const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
@@ -34,6 +28,7 @@ export const movePieceHandler = {
         targetDiv.removeChild(targetDiv.firstChild);
         targetDiv.append(piece);
         pieceHandle.removeSelected();
+        piecesRender.removeEventListeners();
         piecesRender.removeEventListeners();
         piece.setAttribute('piece-square', newSquareValue);
         if(pieceType === 'pawn'){
@@ -48,6 +43,31 @@ export const movePieceHandler = {
 
     }, 
     
+    movePiece2(event){
+
+        console.log('getPlayerPieceSelected',pieceHandle.getPlayerPieceSelected());
+        console.log('event',event);
+        const targetDiv = event.target.tagName === 'DIV' ? event.target : event.target.parentNode ;
+        console.log('targetDiv',targetDiv);
+        let playerPiece = pieceHandle.getPlayerPieceSelected();
+      //  piecesRender.removeEventListeners3(piece);
+        piecesRender.removeEventListeners2();
+        piecesRender.removeEventsOnPotentialSquares();
+
+        playerPiece.piecePosition = targetDiv.getAttribute('id');
+        playerPiece.piece.setAttribute('piece-square', targetDiv.getAttribute('id'));
+        
+        
+        targetDiv.firstChild.remove();
+        targetDiv.append(playerPiece.piece);
+
+        pieceHandle.removeSelected();
+
+        
+        gameHandler.endTurnUltimate();
+
+    },
+
     movePieceForBot(pieceSettings, squareToMove){
         console.log('pieceSettings',pieceSettings);
         const piece = pieceSettings.piece;

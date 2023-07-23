@@ -17,6 +17,20 @@ export const gameHandler = {
     startGameUltimate(){
         piecesRender.createPieces();
 
+        Player.resetPlayerPieces22();
+        piecesRender.setEventListeners2();
+
+        console.log('palyer 2',Player.getEnemyPlayer());
+        console.log('palyer 1',Player.getPlayer());
+    },
+
+
+
+        endTurnUltimate(){
+
+        generalMovement.clearPotentialSquares2();
+        
+        this.changeTurnSettings();
         Player.getPlayer().setPlayerValuesToDefault();
         Player.getEnemyPlayer().setPlayerValuesToDefault();
 
@@ -32,21 +46,21 @@ export const gameHandler = {
         Player.getPlayer().setPlayerPiecesMoves();
         Player.getPlayer().checkIfPlayIsUnderCheck2();
         Player.getPlayer().checkPlayerPinnedPieceMoves();
+        Player.getPlayer().setPlayerKingMoves();
 
         piecesRender.setEventListeners2();
 
         console.log('palyer 2',Player.getEnemyPlayer());
         console.log('palyer 1',Player.getPlayer());
+
+    
+        //   this.makeBotMove(); 
     },
-
-
-
 
     endTurn(){
 
         generalMovement.clearPotentialSquares();
         Player.resetPlayerPieces();
-        this.changeTurnSettings();
         this.checkGameStance();
 
         piecesRender.setEventListeners();

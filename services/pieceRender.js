@@ -4,10 +4,12 @@ import { chessConfig }  from '../config/chessConfig.config.js'
 import { pieceHandle } from '../services/pieceHandler.js'
 import { editedGame } from '../config/editedGameInit.config.js'
 import { Player } from './playerClassExtend.js'
+import { movePieceHandler } from './pieceMovement/movePiece.js'
 
 export const piecesRender = {
 
     piecesEventListeners : {},
+    moveSquareEventListeners : {},
 
     createPieces(){
 
@@ -62,25 +64,22 @@ export const piecesRender = {
 
     setEventListeners2(){
 
+        this.piecesEventListeners = {};
+        
+
         Player.getPlayer().playerPieces.forEach(piece => {
-            console.log('piece',piece);
-            const handleParams = {
-                piece : piece.piece , 
-                pieceType :  piece.pieceType , 
-                piecePosition :  piece.piecePosition ,
-                pieceColor :    piece.pieceColor , 
-            }
+            
 
             this.piecesEventListeners[ piece.piecePosition ] = {
                
                 'mouseenter': _ => {
-                    pieceHandle.handlePieceMouseenter( handleParams )
+                    pieceHandle.handlePieceMouseenter( piece )
                 },
                 'mouseleave': _ => {
-                    pieceHandle.handlePieceMouseleave( handleParams )
+                    pieceHandle.handlePieceMouseleave( piece )
                 },
                 'click': _ => {
-                    pieceHandle.handlePieceClick( handleParams )
+                    pieceHandle.handlePieceClick2( piece )
                 }
             }
             
@@ -104,6 +103,42 @@ export const piecesRender = {
         })
     },
 
+    removeEventListeners2() {
+
+        Player.getPlayer().playerPieces.forEach( piece => {
+
+          piece.piece.removeEventListener( 'mouseenter', this.piecesEventListeners[ piece.piecePosition ][ 'mouseenter' ]);
+          piece.piece.removeEventListener( 'mouseleave', this.piecesEventListeners[ piece.piecePosition ][ 'mouseleave' ]);
+          piece.piece.removeEventListener( 'click'     , this.piecesEventListeners[ piece.piecePosition ][ 'click' ]);
+            
+        })
+    },
+
+    removeEventListeners3(piece) {
+        piece.piece.removeEventListener( 'mouseenter', this.piecesEventListeners[ piece.piecePosition ][ 'mouseenter' ]);
+        piece.piece.removeEventListener( 'mouseleave', this.piecesEventListeners[ piece.piecePosition ][ 'mouseleave' ]);
+        piece.piece.removeEventListener( 'click'     , this.piecesEventListeners[ piece.piecePosition ][ 'click' ]);
+    },
+
+    setEventsOnPotentialSquares2(pieceSettings){
+
+        
+        $$('.potential-square , .potential-enemy').forEach(pieceBox => {
+            console.log('pieceBox',pieceBox);
+            pieceBox.addEventListener( 'click', movePieceHandler.movePiece2);
+            
+        });
+    },
+    
+    removeEventsOnPotentialSquares(){
+        
+        $$('.potential-square , .potential-enemy').forEach(pieceBox => {
+            console.log('pieceBox',pieceBox);
+            pieceBox.removeEventListener( 'click', movePieceHandler.movePiece2);
+        });
+
+     
+    },
 
     resetEventListeners(){
         

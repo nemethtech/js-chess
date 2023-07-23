@@ -61,7 +61,7 @@ class Player extends BasePlayer {
             piece.canBlockCheck = true;
             filteredPieceMoveSquares.push({
               direction : colFreeeMove.direction , 
-              moveSquares : [threatMoveSquare]
+              colFreeMoveSquares : [threatMoveSquare]
             })
           }
         })

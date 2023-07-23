@@ -8,8 +8,12 @@ import { $ , $$ } from '../../utils/utils.js';
 import { Player } from '../playerClassExtend.js';
 import { chessConfig } from '../../config/chessConfig.config.js';
 import { gameHandler } from '../gameHandler.js';
+import { pieceHandle } from '../pieceHandler.js';
+import { piecesRender } from '../pieceRender.js';
 
 export const generalMovement = {
+
+    eventListener : {},
 
     getPieceMove(piece) {
         switch (piece.pieceType) {
@@ -142,23 +146,18 @@ export const generalMovement = {
     },
 
     markPotentialSquares2(pieceSettings){
-        console.log('++++',pieceSettings);
-        let alma = Player.getPlayer().playerPieces.find( piece => piece.piecePosition === pieceSettings.piecePosition);
-        console.log('++++',alma);
 
-        this.setSquares2(alma);
-        //    this.setSquares2(playerPiece);
-        
-        this.setEventsOnPotentialSquares();
+        this.setSquares2(pieceSettings);
+        piecesRender.setEventsOnPotentialSquares2(pieceSettings);
     },
+
     setSquares2(piece){
-        if(piece.pieceType !== 'king'){
+        console.log('piece',piece);
+        console.log('piece moveSquares',piece.moveSquares);
             piece.moveSquares.forEach( pieceMoveSquares => {
                 pieceMoveSquares.colFreeMoveSquares.forEach( square => {
                     $(`[id^="${square}"]`).classList.add( 'potential-square');
-                    let span = document.createElement( 'a' );
-                    span.classList.add( 'dot' );
-                    $(`[id^="${square}"]`).append(span);
+                    this.createDotElementOnSquare(square);
                 })
             })
             piece.collisions.forEach( pieceCollision => {
@@ -167,9 +166,12 @@ export const generalMovement = {
                     $(`[id^="${pieceCollision.colPiecePosition}"]`).classList.add('potential-enemy'); 
                 }
             })
+    },
 
-        }
-
+    createDotElementOnSquare(square){
+        let span = document.createElement( 'a' );
+        span.classList.add( 'dot' );
+        $(`[id^="${square}"]`).append(span);
     },
 
     clearPotentialSquares(){
@@ -179,15 +181,29 @@ export const generalMovement = {
         $$('.potential-square , .potential-enemy').forEach(pieceBox => {
             pieceBox.classList.remove( 'potential-enemy' );
             pieceBox.classList.remove( 'potential-square' );
-            pieceBox.removeEventListener( 'click', movePieceHandler.movePiece);
+        //    pieceBox.removeEventListener( 'click', movePieceHandler.movePiece2);
         });
     },
     
+    clearPotentialSquares2(){
+        $$('.dot').forEach(spanElem => {
+            spanElem.remove();
+        });
+        $$('.potential-square , .potential-enemy').forEach(pieceBox => {
+            pieceBox.classList.remove( 'potential-enemy' );
+            pieceBox.classList.remove( 'potential-square' );
+            pieceBox.removeEventListener( 'click', movePieceHandler.movePiece2);
+        });
+    },
+    
+
     setEventsOnPotentialSquares(){
         $$('.potential-square , .potential-enemy').forEach(pieceBox => {
+            console.log('pieceBox',pieceBox);
             pieceBox.addEventListener( 'click', movePieceHandler.movePiece);
         });
     },
+
 
     valueNullOrUndefined(value){
         return value == null ? true : false;
