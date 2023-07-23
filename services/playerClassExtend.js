@@ -23,36 +23,16 @@ class Player extends BasePlayer {
         })
       }
     })
+    return this;
   }
 
-  setPieceCanBlockThreat(piece){   
-    let pieceMoveDirections = [];
-  
-    if(this.checkThreat.length !== 1){
-        return pieceMoveDirections;
-    }
-    let pieceColFreeMoves = piece.moveSquares;
-
-    if(Array.isArray(pieceColFreeMoves)){
-      pieceColFreeMoves.forEach( colFreeeMove => {
-        this.checkThreat[0].moveSquares.forEach( threatMoveSquare => {
-
-          if(colFreeeMove.colFreeMoveSquares.includes(threatMoveSquare)){
-            pieceMoveDirections.push(colFreeeMove.direction);
-          }
-        })
-      })
-    }
-
-    return pieceMoveDirections;
-  }
-
- setPieceCanBlockThreat2(piece){   
+ setPieceCanBlockThreat(piece){   
 
     if(this.checkThreat.length !== 1){
         piece.moveSquares = [];
         return ;
     }
+
     let filteredPieceMoveSquares = [];
 
     piece.moveSquares.forEach( colFreeeMove => {
@@ -71,7 +51,7 @@ class Player extends BasePlayer {
     return ;
   }
   
-  setPieceCanAttackThreat2(piece){
+  setPieceCanAttackThreat(piece){
 
     if(this.checkThreat.length !== 1){
         return piece.collisions = [];;
@@ -86,49 +66,16 @@ class Player extends BasePlayer {
     return;
   }
 
-
-  setPieceCanAttackThreat(piece){
-    let pieceCanAttackThreat = false;
-    
-    if(this.checkThreat.length !== 1){
-        return pieceCanAttackThreat;
-    }
-    if(piece.collisions){
-      piece.collisions.forEach( pieceCollison => {
-        if(pieceCollison.colPiecePosition === this.checkThreat[0].piecePosition){
-          pieceCanAttackThreat =  true;
-        }
-      })
-    }
-    return pieceCanAttackThreat;
-  }
-
-
   setPlayerPiecesInCheck(){
     if(this.isPlayerInCheck){
       this.playerPieces.forEach( playerPiece => {
-        if(this.setPieceCanBlockThreat(playerPiece).length !== 0){
-          playerPiece.canBlockCheck = true;
-          playerPiece.canBlockCheckDirections = this.setPieceCanBlockThreat(playerPiece);
+        if(playerPiece.pieceType !== 'king'){
+          this.setPieceCanBlockThreat(playerPiece);
         }
-        if(this.setPieceCanAttackThreat(playerPiece)){
-          playerPiece.canAttackThreat = true;
-        
-        }
+        this.setPieceCanAttackThreat(playerPiece);
       })
     }
-  }
-
-  setPlayerPiecesInCheck2(){
-    if(this.isPlayerInCheck){
-      this.playerPieces.forEach( playerPiece => {
-        if(playerPiece.pieceType != 'king'){
-          this.setPieceCanBlockThreat2(playerPiece);
-        }
-        this.setPieceCanAttackThreat2(playerPiece);
-         // playerPiece.canAttackThreat = true;
-      })
-    }
+    return this;
   }
 
   filterPieceMoveIfPlayerUnderCheck(piece , pieceMove){
@@ -199,25 +146,10 @@ class Player extends BasePlayer {
     return playerPiece.canBlockCheck || playerPiece.canAttackThreat;
   }
 
-
-  resetPlayerPiecesV1(){
-    this.setPlayerValuesToDefault();
-    this.getPlayerPieces();
-    this.setPlayerPiecesMoves();
-    this.setPieceIsBackedUp();
-
-    //setPinnedPieces
-  }
-  
   checkIfPlayIsUnderCheck(){
     this.setIfPlayerCheckIsOn();
     this.setPlayerPiecesInCheck();
-  }
-
-  checkIfPlayIsUnderCheck2(){
-    this.setIfPlayerCheckIsOn();
-    this.setPlayerPiecesInCheck2();
-
+    return this;
   }
 }
 

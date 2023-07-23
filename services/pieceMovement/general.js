@@ -3,12 +3,9 @@ import { knightMovement } from './knight.js';
 import { kingMovement } from './king.js';
 import { rookMovement } from './rook.js';
 import { pawnMovement } from './pawn.js';
-import { movePieceHandler } from './movePiece.js';
 import { $ , $$ } from '../../utils/utils.js';
-import { Player } from '../playerClassExtend.js';
 import { chessConfig } from '../../config/chessConfig.config.js';
 import { gameHandler } from '../gameHandler.js';
-import { pieceHandle } from '../pieceHandler.js';
 import { piecesRender } from '../pieceRender.js';
 
 export const generalMovement = {
@@ -34,43 +31,6 @@ export const generalMovement = {
             }
         }
       },
-    
-    markPotentialSquares(piece){
-
-        const pieceS = Player.getPlayer().playerPieces.find( playerPiece => playerPiece.piecePosition === piece.piecePosition); 
-        let pieceMove = this.getPieceMove(piece);
-        //filterPieceMoveIfPlayerUnderCheck
-        for (const key in pieceMove) {
-            if(pieceS.isPinned){
-                pieceMove[key].collisionFreeSquares = pieceMove[key].collisionFreeSquares.filter( e => (pieceS.pinnedInfo.pinnedSquares.includes(e)));
-                if(pieceMove[key].possibleCollision !== pieceS.pinnedInfo.pinnerSquare){
-                    pieceMove[key].possibleCollision = undefined;
-                }
-            }
-
-        }
-
-        if(Player.getPlayer().isPlayerInCheck && piece.pieceType !== 'king'){
-            pieceMove =  Player.getPlayer().filterPieceMoveIfPlayerUnderCheck(piece , pieceMove);
-        }
-        if(Player.getPlayer().isPlayerInCheck && piece.pieceType === 'king'){
-            pieceMove =  this.getPieceMove(piece);
-            let alma = pieceMove.filter(e => (e.collisionFreeSquares[0] !== Player.getPlayer().checkThreat[0].plusOneSquare) );
-            let körte = alma.filter(e => ( e.possibleCollision!== Player.getPlayer().checkThreat[0].plusOneSquare) );
-            if(Player.getPlayer().checkThreat[0].plusOneSquare !== undefined){
-                this.setSquares(körte);
-
-            }else{
-
-                this.setSquares(pieceMove);
-            }
-
-        }else{
-            this.setSquares(pieceMove);
-            
-        }
-        this.setEventsOnPotentialSquares();
-    },
 
     getCollisionFreeSquares(verifiedSquares){
         const collisionFreeSquares = [];
@@ -129,31 +89,14 @@ export const generalMovement = {
         return collisionFreeSquares;
     },
 
-    setSquares(verifiedSquares){
-        Object.values(verifiedSquares).forEach(val => {
-            if(!this.valueNullOrUndefined(val.collisionFreeSquares)){
-                val.collisionFreeSquares.forEach(freeSquareId => {
-                    $(`[id^="${freeSquareId}"]`).classList.add( 'potential-square');
-                    let span = document.createElement( 'a' );
-                    span.classList.add( 'dot' );
-                    $(`[id^="${freeSquareId}"]`).append(span);
-                })                   
-            }
-            if(!this.valueNullOrUndefined(val.possibleCollision)){
-                movePieceHandler.checkAndMarkPossibleEnemy(val.possibleCollision.toString());
-            }
-        });        
+
+    markPotentialSquares(pieceSettings){
+
+        this.setSquares(pieceSettings);
+        piecesRender.setEventsOnPotentialSquares(pieceSettings);
     },
 
-    markPotentialSquares2(pieceSettings){
-
-        this.setSquares2(pieceSettings);
-        piecesRender.setEventsOnPotentialSquares2(pieceSettings);
-    },
-
-    setSquares2(piece){
-        console.log('piece',piece);
-        console.log('piece moveSquares',piece.moveSquares);
+    setSquares(piece){
             piece.moveSquares.forEach( pieceMoveSquares => {
                 pieceMoveSquares.colFreeMoveSquares.forEach( square => {
                     $(`[id^="${square}"]`).classList.add( 'potential-square');
@@ -174,6 +117,7 @@ export const generalMovement = {
         $(`[id^="${square}"]`).append(span);
     },
 
+
     clearPotentialSquares(){
         $$('.dot').forEach(spanElem => {
             spanElem.remove();
@@ -181,30 +125,10 @@ export const generalMovement = {
         $$('.potential-square , .potential-enemy').forEach(pieceBox => {
             pieceBox.classList.remove( 'potential-enemy' );
             pieceBox.classList.remove( 'potential-square' );
-        //    pieceBox.removeEventListener( 'click', movePieceHandler.movePiece2);
         });
+        piecesRender.removeEventsOnPotentialSquares();
     },
     
-    clearPotentialSquares2(){
-        $$('.dot').forEach(spanElem => {
-            spanElem.remove();
-        });
-        $$('.potential-square , .potential-enemy').forEach(pieceBox => {
-            pieceBox.classList.remove( 'potential-enemy' );
-            pieceBox.classList.remove( 'potential-square' );
-            pieceBox.removeEventListener( 'click', movePieceHandler.movePiece2);
-        });
-    },
-    
-
-    setEventsOnPotentialSquares(){
-        $$('.potential-square , .potential-enemy').forEach(pieceBox => {
-            console.log('pieceBox',pieceBox);
-            pieceBox.addEventListener( 'click', movePieceHandler.movePiece);
-        });
-    },
-
-
     valueNullOrUndefined(value){
         return value == null ? true : false;
     },
@@ -220,7 +144,6 @@ export const generalMovement = {
     fillModal(pawnPiece){
         this.clearModal();
         const pawnColor = pawnPiece.getAttribute( 'piece-type' ).split('_')[0];
-        console.log('pawnColor1 : ', pawnColor);
         chessConfig.promotePieces.forEach( pieceName => {
             let imgPiece = document.createElement( 'img' );
             imgPiece.classList.add( 'promote-piece' );
@@ -273,7 +196,6 @@ export const generalMovement = {
        const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
            if(this.pawnCanBePromoted(piecePosition , pieceColor)){
                this.promotePawn(piece , pieceColor);
-               console.log('promot time' , piece);
            }
        })
     },

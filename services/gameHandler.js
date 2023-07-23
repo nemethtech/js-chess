@@ -6,71 +6,24 @@ import { movePieceHandler } from './pieceMovement/movePiece.js'
 
 export const gameHandler = {
 
-
-
     startGame(){
         piecesRender.createPieces();
         Player.resetPlayerPieces();
         piecesRender.setEventListeners();
-    },
-    
-    startGameUltimate(){
-        piecesRender.createPieces();
-
-        Player.resetPlayerPieces22();
-        piecesRender.setEventListeners2();
 
         console.log('palyer 2',Player.getEnemyPlayer());
         console.log('palyer 1',Player.getPlayer());
     },
 
-
-
-        endTurnUltimate(){
-
-        generalMovement.clearPotentialSquares2();
-        
-        this.changeTurnSettings();
-        Player.getPlayer().setPlayerValuesToDefault();
-        Player.getEnemyPlayer().setPlayerValuesToDefault();
-
-
-        Player.getPlayer().getPlayerPieces();
-        Player.getEnemyPlayer().getPlayerPieces();
-
-        Player.getEnemyPlayer().setPlayerPiecesMoves();
-        Player.getEnemyPlayer().setPieceIsBackedUp();
-        Player.getEnemyPlayer().checkPinnedPieces();
-
-
-        Player.getPlayer().setPlayerPiecesMoves();
-        Player.getPlayer().checkIfPlayIsUnderCheck2();
-        Player.getPlayer().checkPlayerPinnedPieceMoves();
-        Player.getPlayer().setPlayerKingMoves();
-
-        piecesRender.setEventListeners2();
-
-        console.log('palyer 2',Player.getEnemyPlayer());
-        console.log('palyer 1',Player.getPlayer());
-
-    
-        //   this.makeBotMove(); 
-    },
 
     endTurn(){
 
         generalMovement.clearPotentialSquares();
+        this.changeTurnSettings();
         Player.resetPlayerPieces();
-        this.checkGameStance();
-
         piecesRender.setEventListeners();
-        Player.getEnemyPlayer().checkPinnedPieces();
-        Player.getPlayer().checkPinnedPieces();
 
-    
-        //   this.makeBotMove(); 
     },
-
 
     pieceTurn(color){
         return chessConfig.currentTurn === color ? true : false;

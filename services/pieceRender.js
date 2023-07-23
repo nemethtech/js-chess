@@ -9,7 +9,6 @@ import { movePieceHandler } from './pieceMovement/movePiece.js'
 export const piecesRender = {
 
     piecesEventListeners : {},
-    moveSquareEventListeners : {},
 
     createPieces(){
 
@@ -19,57 +18,19 @@ export const piecesRender = {
 
             const imgPiece = document.createElement( 'img' );
             imgPiece.classList.add( 'piece' );
-            imgPiece.setAttribute( 'piece-type', gameStart[postion]);
-            imgPiece.setAttribute( 'piece-square', postion);
-            imgPiece.setAttribute('src', 'pieces/'+gameStart[postion]+'.png');
+            imgPiece.setAttribute( 'piece-type'     , gameStart[postion]);
+            imgPiece.setAttribute( 'piece-square'   , postion);
+            imgPiece.setAttribute( 'src'            , 'pieces/'+gameStart[postion]+'.png');
             $('#'+postion).append(imgPiece);
         }
     },
 
     setEventListeners(){
 
-        $$(chessConfig.chessPieceSelector).forEach(piece => {
-
-            const piecePosition = piece.getAttribute( 'piece-square' );
-            const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
-            const pieceType = piece.getAttribute( 'piece-type' ).split('_')[1];
-            
-            const handleParams = {
-                piece,
-                pieceType, 
-                piecePosition,
-                pieceColor,
-            }
-
-            this.piecesEventListeners[ piecePosition ] = {
-               
-                'mouseenter': _ => {
-                    pieceHandle.handlePieceMouseenter( handleParams )
-                },
-                'mouseleave': _ => {
-                    pieceHandle.handlePieceMouseleave( handleParams )
-                },
-                'click': _ => {
-                    pieceHandle.handlePieceClick( handleParams )
-                }
-            }
-            
-            piece.addEventListener( 'mouseenter', this.piecesEventListeners[ piecePosition ][ 'mouseenter' ]);
-            piece.addEventListener( 'mouseleave', this.piecesEventListeners[ piecePosition ][ 'mouseleave' ]);
-            piece.addEventListener( 'click', this.piecesEventListeners[ piecePosition ][ 'click' ]);
-
-        })
-    },
-    
-
-    setEventListeners2(){
-
         this.piecesEventListeners = {};
         
-
         Player.getPlayer().playerPieces.forEach(piece => {
             
-
             this.piecesEventListeners[ piece.piecePosition ] = {
                
                 'mouseenter': _ => {
@@ -79,7 +40,7 @@ export const piecesRender = {
                     pieceHandle.handlePieceMouseleave( piece )
                 },
                 'click': _ => {
-                    pieceHandle.handlePieceClick2( piece )
+                    pieceHandle.handlePieceClick( piece )
                 }
             }
             
@@ -92,19 +53,6 @@ export const piecesRender = {
 
     removeEventListeners() {
 
-        $$( chessConfig.chessPieceSelector).forEach( piece => {
-
-            const piecePosition = piece.getAttribute( 'piece-square' );
-
-            piece.removeEventListener( 'mouseenter', this.piecesEventListeners[ piecePosition ][ 'mouseenter' ]);
-            piece.removeEventListener( 'mouseleave', this.piecesEventListeners[ piecePosition ][ 'mouseleave' ]);
-            piece.removeEventListener( 'click', this.piecesEventListeners[ piecePosition ][ 'click' ]);
-            
-        })
-    },
-
-    removeEventListeners2() {
-
         Player.getPlayer().playerPieces.forEach( piece => {
 
           piece.piece.removeEventListener( 'mouseenter', this.piecesEventListeners[ piece.piecePosition ][ 'mouseenter' ]);
@@ -114,37 +62,20 @@ export const piecesRender = {
         })
     },
 
-    removeEventListeners3(piece) {
-        piece.piece.removeEventListener( 'mouseenter', this.piecesEventListeners[ piece.piecePosition ][ 'mouseenter' ]);
-        piece.piece.removeEventListener( 'mouseleave', this.piecesEventListeners[ piece.piecePosition ][ 'mouseleave' ]);
-        piece.piece.removeEventListener( 'click'     , this.piecesEventListeners[ piece.piecePosition ][ 'click' ]);
-    },
+    setEventsOnPotentialSquares(){
 
-    setEventsOnPotentialSquares2(pieceSettings){
-
-        
         $$('.potential-square , .potential-enemy').forEach(pieceBox => {
-            console.log('pieceBox',pieceBox);
-            pieceBox.addEventListener( 'click', movePieceHandler.movePiece2);
-            
+            pieceBox.addEventListener( 'click', movePieceHandler.movePiece);    
         });
     },
     
     removeEventsOnPotentialSquares(){
         
         $$('.potential-square , .potential-enemy').forEach(pieceBox => {
-            console.log('pieceBox',pieceBox);
-            pieceBox.removeEventListener( 'click', movePieceHandler.movePiece2);
+            pieceBox.removeEventListener( 'click', movePieceHandler.movePiece);
         });
 
      
     },
 
-    resetEventListeners(){
-        
-        this.removeEventListeners();
-        this.setEventListeners();
-        
-    }
- 
 }

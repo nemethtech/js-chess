@@ -121,7 +121,6 @@ class BasePlayer {
             ...rookMovement.checkAllPossibleSquares(piece.piecePosition[0], piece.piecePosition[1])
           }
         }
-   
   }
 
     checkSquaresHasPinnedPiece(rookSquares , pinerCol , pinerRow){
@@ -143,7 +142,6 @@ class BasePlayer {
               pinnedSquares : rookSquares.toSpliced(squaresWithPieces[0].rookSquaresIdx , rookSquares.length),
               pinnerSquare  :  pinerCol + pinerRow
             }
-            console.log('pinned' , squaresWithPieces[0]);
           }
         }
       }
@@ -170,7 +168,6 @@ class BasePlayer {
       this.playerPieces.forEach( piece => {
         if(piece.pieceType !== 'king'){ 
           let pieceAllMoveSquare = generalMovement.getPieceMove(piece);
-          console.log('itt' , piece);
           this.setPieceColFreeMoves(piece , pieceAllMoveSquare);
           this.setPieceCollisions(piece , pieceAllMoveSquare);
         }
@@ -184,6 +181,7 @@ class BasePlayer {
           this.filterMovesIfPieceIsPinned(piece);
         }
       })
+      return this;
     }
 
     filterMovesIfPieceIsPinned(pinnedPiece){
@@ -211,13 +209,15 @@ class BasePlayer {
         let alma = kingPiece.moveSquares;
         
         alma.forEach( e => {
-          if(e.colFreeMoveSquares[0] === this.checkThreat[0].plusOneSquare){
-            e.colFreeMoveSquares = [];
-  
-          }
+          this.checkThreat.forEach( checkThreat => {
+            if(e.colFreeMoveSquares[0] === checkThreat.plusOneSquare){
+              e.colFreeMoveSquares = [];
+            }
+          })
         })
         kingPiece.moveSquares = alma;
       }
+      return this;
     }
     
     setPieceIsBackedUp(){
@@ -249,6 +249,8 @@ class BasePlayer {
       this.playerPieces = [];
       this.checkThreat = [];
       this.isPlayerInCheck  = false;
+
+      return this;
     }
 
   }
@@ -270,49 +272,23 @@ BasePlayer.getEnemyPlayer = ()  => {
 
 
 BasePlayer.resetPlayerPieces = () => {
-  BasePlayer.getEnemyPlayer().setPlayerValuesToDefault();
-  BasePlayer.getPlayer().setPlayerValuesToDefault();
-
-
-  BasePlayer.getPlayer().getPlayerPieces();
-  BasePlayer.getEnemyPlayer().getPlayerPieces();
-
-  BasePlayer.getEnemyPlayer().setPlayerPiecesMoves();
-  BasePlayer.getEnemyPlayer().setPieceIsBackedUp();
-  BasePlayer.getEnemyPlayer().checkPinnedPieces();
-
-
-  BasePlayer.getPlayer().setPlayerPiecesMoves();
-  BasePlayer.getPlayer().checkIfPlayIsUnderCheck2();
-  BasePlayer.getPlayer().checkPlayerPinnedPieceMoves();
-  BasePlayer.getPlayer().setPlayerKingMoves();
-
-
-}
-
-
-BasePlayer.resetPlayerPieces22 = () => {
 
   BasePlayer.getEnemyPlayer().setPlayerValuesToDefault();
   BasePlayer.getPlayer().setPlayerValuesToDefault();
 
-
   BasePlayer.getPlayer().getPlayerPieces();
+
   BasePlayer.getEnemyPlayer()
-            .getPlayerPieces()
-            .setPlayerPiecesMoves()
-            .setPieceIsBackedUp()
-            .checkPinnedPieces()
-
-
+              .getPlayerPieces()
+              .setPlayerPiecesMoves()
+              .setPieceIsBackedUp()
+              .checkPinnedPieces()
 
   BasePlayer.getPlayer()
                 .setPlayerPiecesMoves()
-                .checkIfPlayIsUnderCheck2()
+                .checkIfPlayIsUnderCheck()
                 .checkPlayerPinnedPieceMoves()
                 .setPlayerKingMoves();
-
-
 
 }
 
