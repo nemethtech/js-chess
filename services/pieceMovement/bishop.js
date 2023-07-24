@@ -62,6 +62,24 @@ export const bishopMovement = {
 
    },
 
+
+   getAllPossibleSquares(bishopPiece){
+
+    const columArrayOne = chessConfig.columns.slice(chessConfig.columns.indexOf(bishopPiece.piecePosition[0])+1, 8 );
+    const columArrayTwo = chessConfig.columns.slice(0, chessConfig.columns.indexOf(bishopPiece.piecePosition[0])).reverse();
+    const rowPos = bishopPiece.piecePosition[1];
+
+    return {
+
+        lineOneWayOne : this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayOne , 
+        lineOneWayTwo : this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayTwo , 
+        lineTwoWayOne : this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayOne ,
+        lineTwoWayTwo : this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayTwo ,    
+        
+        }   
+
+   },
+
    zipArray(array1, array2){
 
     return array1.map(function(e, i) {

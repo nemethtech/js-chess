@@ -44,7 +44,7 @@ export const pawnMovement = {
     },
 
     buildPawnMove(pawnPiece){
-        let sideSquares = this.getSideSquares(pawnPiece);
+        const sideSquares = this.getSideSquares(pawnPiece);
         const rightSide =  sideSquares.rightSideSquare === undefined ? [] : [sideSquares.rightSideSquare]; 
         const leftSide  =  sideSquares.leftSideSquare === undefined ? [] : [sideSquares.leftSideSquare]; 
 
@@ -58,6 +58,20 @@ export const pawnMovement = {
             leftColumn : {
                 possibleCollision    : movePieceHandler.checkCollision(leftSide).possibleCollision, 
             },
+        }
+    },
+
+    getAllPossibleSquares(pawnPiece){
+        const forwardRows = this.getForwardSquares(pawnPiece);
+        const sideSquares = this.getSideSquares(pawnPiece);
+        const rightColumn =  sideSquares.rightSideSquare === undefined ? [] : [sideSquares.rightSideSquare]; 
+        const leftColumn  =  sideSquares.leftSideSquare === undefined ? [] : [sideSquares.leftSideSquare]; 
+
+        return{
+            
+            forwardRows , 
+            rightColumn ,
+            leftColumn  ,
         }
     },
 }

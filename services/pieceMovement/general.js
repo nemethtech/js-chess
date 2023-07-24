@@ -32,30 +32,7 @@ export const generalMovement = {
         }
       },
 
-    getCollisionFreeSquares(verifiedSquares){
-        const collisionFreeSquares = [];
-        Object.values(verifiedSquares).forEach(val => {
-            if(!generalMovement.valueNullOrUndefined(val.collisionFreeSquares)){
-                val.collisionFreeSquares.forEach(freeSquareId => {
-                    collisionFreeSquares.push(freeSquareId);
-                })                   
-            }
-        });      
-        return collisionFreeSquares;
-    },
-
-    getPossibleCollisionquares(verifiedSquares){
-
-        const collisionSquares = [];
-        Object.values(verifiedSquares).forEach(val => {
-            verifiedSquares
-            if(!this.valueNullOrUndefined(val.possibleCollision))collisionSquares.push(val.possibleCollision);             
-        });      
-
-        return collisionSquares;
-    },
-
-    getPossibleCollisionquares2(pieceMove){
+    getPossibleCollisionquares(pieceMove){
         
         let collisionSquares = [];
 
@@ -73,7 +50,7 @@ export const generalMovement = {
         return collisionSquares;
     },
     
-    getCollisionFreeSquares2(pieceMove){
+    getCollisionFreeSquares(pieceMove){
         const collisionFreeSquares = [];
         for (const direction in pieceMove) {
             if (Object.hasOwn(pieceMove,direction)) {
@@ -192,7 +169,7 @@ export const generalMovement = {
   
   checkPromotionForColor(color){
    $$(`[piece-type=${color}_pawn`).forEach( piece => {
-       const piecePosition = piece.getAttribute( 'piece-square' );
+       const piecePosition = piece.getAttribute( 'piecePosition' );
        const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
            if(this.pawnCanBePromoted(piecePosition , pieceColor)){
                this.promotePawn(piece , pieceColor);

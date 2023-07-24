@@ -1,6 +1,6 @@
 export const chessConfig = { 
    
-    useNormalGame : true ,
+    useNormalGame : false ,
     chessPieceSelector: '.piece' ,
     modalSelector : '.modal' , 
     whiteTurn : true ,

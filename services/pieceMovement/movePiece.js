@@ -16,7 +16,7 @@ export const movePieceHandler = {
         piecesRender.removeEventsOnPotentialSquares();
 
         playerPiece.piecePosition = targetDiv.getAttribute('id');
-        playerPiece.piece.setAttribute('piece-square', targetDiv.getAttribute('id'));
+        playerPiece.piece.setAttribute('piecePosition', targetDiv.getAttribute('id'));
         
         targetDiv.firstChild.remove();
         targetDiv.append(playerPiece.piece);
@@ -29,14 +29,14 @@ export const movePieceHandler = {
         console.log('pieceSettings',pieceSettings);
         const piece = pieceSettings.piece;
         const targetDiv = pieceHandle.getPieceSquareById(squareToMove);
-        let newSqaureValue = targetDiv.getAttribute('id');;
+        let newSquareValue = targetDiv.getAttribute('id');;
         
         if(targetDiv.firstChild){
             targetDiv.removeChild(targetDiv.firstChild);s
         }
         targetDiv.append(piece);
         piecesRender.removeEventListeners();
-        piece.setAttribute('piece-square', newSqaureValue);
+        piece.setAttribute('piecePosition', newSquareValue);
 
         gameHandler.endTurn();
     }, 

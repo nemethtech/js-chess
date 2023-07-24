@@ -19,7 +19,7 @@ export const piecesRender = {
             const imgPiece = document.createElement( 'img' );
             imgPiece.classList.add( 'piece' );
             imgPiece.setAttribute( 'piece-type'     , gameStart[postion]);
-            imgPiece.setAttribute( 'piece-square'   , postion);
+            imgPiece.setAttribute( 'piecePosition'   , postion);
             imgPiece.setAttribute( 'src'            , 'pieces/'+gameStart[postion]+'.png');
             $('#'+postion).append(imgPiece);
         }

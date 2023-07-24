@@ -54,7 +54,7 @@ export const pieceHandle = {
     },
 
     getPlayerPieceSelected(){
-        const selectedPieceSquare = $('.piece-selected > .piece').getAttribute( 'piece-square' );
+        const selectedPieceSquare = $('.piece-selected > .piece').getAttribute( 'piecePosition' );
         return Player.getPlayer().playerPieces.find( piece => piece.piecePosition === selectedPieceSquare);
     },
 

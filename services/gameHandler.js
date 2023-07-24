@@ -3,13 +3,15 @@ import { piecesRender } from '../services/pieceRender.js'
 import { generalMovement } from '../services/pieceMovement/general.js'
 import { Player } from './playerClassExtend.js'
 import { movePieceHandler } from './pieceMovement/movePiece.js'
+import { PlayerSetup } from './playerClassSetup.js'
 
 export const gameHandler = {
-
+    
     startGame(){
         piecesRender.createPieces();
-        Player.resetPlayerPieces();
-        piecesRender.setEventListeners();
+        PlayerSetup.getPlayer().getSetup();
+     //   Player.resetPlayerPieces();
+     //   piecesRender.setEventListeners();
 
         console.log('palyer 2',Player.getEnemyPlayer());
         console.log('palyer 1',Player.getPlayer());

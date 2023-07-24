@@ -13,13 +13,14 @@ class BasePlayer {
       this.hasTheKingMoved = false;
       this.isPlayerInCheck = false;
       this.checkThreat = [];
+      this.allEnemyMoveSquare = [];
       BasePlayer.instances[color] = this;
     }
     
     getPlayerPieces(){
 
       $$(`[piece-type^="${this.playerColor}"]`).forEach(piece => {
-          const piecePosition = piece.getAttribute( 'piece-square' );
+          const piecePosition = piece.getAttribute( 'piecePosition' );
           const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
           const pieceType = piece.getAttribute( 'piece-type' ).split('_')[1];
           
@@ -53,7 +54,7 @@ class BasePlayer {
     setPieceCollisions(piece , pieceAllMoveSquare){
 
       piece.collisions = [];
-      let collisionArray = generalMovement.getPossibleCollisionquares2(pieceAllMoveSquare);
+      let collisionArray = generalMovement.getPossibleCollisionquares(pieceAllMoveSquare);
 
       if(collisionArray.length > 0){
 
@@ -107,28 +108,23 @@ class BasePlayer {
     getAllAvailableSquaresForPiece(piece){
 
         if (piece.pieceType === 'bishop') {
-
           return  bishopMovement.getAllAvailableSquares(piece);
-
         } else if (piece.pieceType === 'rook') {
-
           return rookMovement.checkAllPossibleSquares(piece.piecePosition[0], piece.piecePosition[1]);
-
         } else if (piece.pieceType === 'queen') {
-
           return {
             ...bishopMovement.getAllAvailableSquares(piece),
             ...rookMovement.checkAllPossibleSquares(piece.piecePosition[0], piece.piecePosition[1])
           }
         }
-  }
+    }
 
     checkSquaresHasPinnedPiece(rookSquares , pinerCol , pinerRow){
       let squaresWithPieces = rookSquares.filter( e => $(`[id^="${e}"]`).hasChildNodes()).map( e => {
       return  {
           pieceColor : $(`[id^="${e}"]`).firstChild.getAttribute('piece-type').split('_')[0] ,
           pieceType : $(`[id^="${e}"]`).firstChild.getAttribute('piece-type').split('_')[1] ,
-          piecePosition : $(`[id^="${e}"]`).firstChild.getAttribute( 'piece-square' ),
+          piecePosition : $(`[id^="${e}"]`).firstChild.getAttribute( 'piecePosition' ),
           rookSquaresIdx : rookSquares.indexOf(e)
          }
       })
@@ -148,7 +144,7 @@ class BasePlayer {
     }
 
     setPieceColFreeMoves(piece , pieceAllMoveSquare ){    
-      let colFreeMoves = generalMovement.getCollisionFreeSquares2(pieceAllMoveSquare);
+      let colFreeMoves = generalMovement.getCollisionFreeSquares(pieceAllMoveSquare);
       if(colFreeMoves.length > 0){
         piece.moveSquares = [];
 
@@ -191,8 +187,8 @@ class BasePlayer {
           pinnedPieceMoveSquares.colFreeMoveSquares.filter(element => pinnedPiece.pinnedInfo.pinnedSquares.includes(element));
 
       })
-      let newColls = pinnedPiece.collisions.filter(collision => collision.colPiecePosition === pinnedPiece.pinnedInfo.pinnerSquare);
-      pinnedPiece.collisions =  newColls;
+      pinnedPiece.collisions = pinnedPiece.collisions.filter(collision => collision.colPiecePosition === pinnedPiece.pinnedInfo.pinnerSquare);
+      
       return ;
     }
 
@@ -226,7 +222,6 @@ class BasePlayer {
         if(playerPiece.collisions){
           playerPiece.collisions.forEach( pieceCollision => {
             if(pieceCollision.colType === 'ally'){
-
               const otherPiece = this.playerPieces.find( playerPiece => playerPiece.piecePosition === pieceCollision.colPiecePosition);
               otherPiece.isBackedUp = true;
             }
@@ -249,6 +244,7 @@ class BasePlayer {
       this.playerPieces = [];
       this.checkThreat = [];
       this.isPlayerInCheck  = false;
+      this.allPieceMoveSquare = [];
 
       return this;
     }
@@ -273,22 +269,22 @@ BasePlayer.getEnemyPlayer = ()  => {
 
 BasePlayer.resetPlayerPieces = () => {
 
-  BasePlayer.getEnemyPlayer().setPlayerValuesToDefault();
-  BasePlayer.getPlayer().setPlayerValuesToDefault();
-
-  BasePlayer.getPlayer().getPlayerPieces();
+  BasePlayer.getPlayer()
+              .setPlayerValuesToDefault()
+              .getPlayerPieces()
 
   BasePlayer.getEnemyPlayer()
+              .setPlayerValuesToDefault()
               .getPlayerPieces()
               .setPlayerPiecesMoves()
               .setPieceIsBackedUp()
               .checkPinnedPieces()
 
   BasePlayer.getPlayer()
-                .setPlayerPiecesMoves()
-                .checkIfPlayIsUnderCheck()
-                .checkPlayerPinnedPieceMoves()
-                .setPlayerKingMoves();
+              .setPlayerPiecesMoves()
+              .checkIfPlayIsUnderCheck()
+              .checkPlayerPinnedPieceMoves()
+              .setPlayerKingMoves();
 
 }
 

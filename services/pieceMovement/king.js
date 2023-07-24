@@ -9,7 +9,7 @@ export const kingMovement = {
       return this.getAvailableSquares(kingPiece);
   },
 
-  getAllAvaliableSquares(kingPiece){
+  getAllAvaliableSquares2(kingPiece){
 
       const columnPos = kingPiece.piecePosition[0];
       const rowPos    = parseInt(kingPiece.piecePosition[1]);
@@ -30,11 +30,35 @@ export const kingMovement = {
   },
 
 
+
+  getAllAvaliableSquares(kingPiece){
+
+    const columnPos = kingPiece.piecePosition[0];
+    const rowPos    = parseInt(kingPiece.piecePosition[1]);
+    const colIdx    = chessConfig.columns.indexOf(columnPos);
+    const possibleSquares = 
+            [chessConfig.columns[colIdx-1]+(parseInt(rowPos)+1),
+            chessConfig.columns[colIdx-1]+(parseInt(rowPos)-1),
+            chessConfig.columns[colIdx-1]+(parseInt(rowPos)),
+            chessConfig.columns[ colIdx ]+(parseInt(rowPos)+1),
+            chessConfig.columns[ colIdx ]+(parseInt(rowPos)-1),
+            chessConfig.columns[colIdx+1]+(parseInt(rowPos)),
+            chessConfig.columns[colIdx+1]+(parseInt(rowPos)+1),
+            chessConfig.columns[colIdx+1]+(parseInt(rowPos)-1)];
+
+    const availableSquares = movePieceHandler.filterNonExistentSquares(possibleSquares.filter(e => typeof(e) === 'string'));
+    const kingMove = {};
+    availableSquares.forEach((e,i) => {
+      kingMove[i] = [e] ; 
+    })
+    return kingMove;
+},
+
   getAvailableSquares(kingPiece){
 
       const enemyColor = kingPiece.pieceColor === 'black' ? 'white' : 'black';
       const enemySquares = Player.instanceByColor(enemyColor).getPlayerPiecesMoveSquares();
-      let kingSquares = this.getAllAvaliableSquares(kingPiece);
+      let kingSquares = this.getAllAvaliableSquares2(kingPiece);
       let avaliableSquares = kingSquares.filter( square => !enemySquares.includes(square));
       return this.checkKingMove(this.buildKingMove(avaliableSquares , enemySquares) , enemyColor);
   },

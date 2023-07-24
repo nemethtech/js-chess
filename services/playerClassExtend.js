@@ -9,7 +9,6 @@ class Player extends BasePlayer {
       if(enemyPiece.collisions){
         enemyPiece.collisions.forEach( enemeyCollision => {
           if(enemeyCollision.colPieceType.includes('king') && enemeyCollision.colType === 'enemy'){
-            let a = enemeyCollision.direction;
             let checkThreat = {
               moveSquares : enemeyCollision.colMoveSquares,
               piecePosition : enemyPiece.piecePosition,
@@ -118,32 +117,12 @@ class Player extends BasePlayer {
     return playerKingCanAttack;
   }
 
-  
-  playerKingCanAttackCheckThreat(kingPiece){
-    let playerKingCanAttackCheckThreat = false;
-    if(this.isPlayerInCheck){
-      const enemyPiece = Player.getEnemyPlayer().playerPieces.find( playerPiece => 
-        playerPiece.piecePosition === this.checkThreat[0].piecePosition);
-        if(!enemyPiece.isBackedUp && kingPiece.canAttackThreat){
-          playerKingCanAttackCheckThreat = true;
-        }
-      }
-      return playerKingCanAttackCheckThreat;
-  }
 
   canPlayerKingMove(){
     const kingPiece = this.playerPieces.find( piece => piece.pieceType === 'king');
     const kingHasMoveSquare = kingPiece.hasOwnProperty("moveSquares") && kingPiece.moveSquares.length > 0;
-    if(this.isPlayerInCheck){
-      return kingHasMoveSquare || this.playerKingCanAttackCheckThreat(kingPiece);
-    } else {
-      return kingHasMoveSquare || this.playerKingCanAttack(kingPiece);
-    }
-  }
-    
-  pieceCanBlockCheck(piece){
-    const playerPiece = this.playerPieces.find( playerPiece => playerPiece.piecePosition === piece.piecePosition);
-    return playerPiece.canBlockCheck || playerPiece.canAttackThreat;
+
+    return kingHasMoveSquare || this.playerKingCanAttack(kingPiece);
   }
 
   checkIfPlayIsUnderCheck(){
@@ -152,9 +131,6 @@ class Player extends BasePlayer {
     return this;
   }
 }
-
-const playerTwo = new Player('black');
-const playerOne = new Player('white');
 
 
 export { Player };
