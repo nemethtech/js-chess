@@ -12,7 +12,7 @@ class BasePlayer {
       this.playerPieces = [];
       this.hasTheKingMoved = false;
       this.isPlayerInCheck = false;
-      this.checkThreat = [];
+      this.checkingPieces = [];
       this.allEnemyMoveSquare = [];
       BasePlayer.instances[color] = this;
     }

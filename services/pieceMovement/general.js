@@ -32,6 +32,29 @@ export const generalMovement = {
         }
       },
 
+      getPieceMoveUnfiltered(piece){
+
+        // console.log('piece:' , piece);
+         switch (piece.pieceType) {
+             case 'rook':
+               return rookMovement.getAllPossibleSquares(piece);
+             case 'pawn':
+               return pawnMovement.getAllPossibleSquares(piece);
+             case 'bishop':
+               return bishopMovement.getAllPossibleSquares(piece);
+             case 'knight':
+               return knightMovement.getAllPossibleSquares(piece);
+             case 'king':
+               return kingMovement.getAllAvaliableSquares(piece);
+             case 'queen':
+               return {
+                 ...bishopMovement.getAllPossibleSquares(piece),
+                 ...rookMovement.getAllPossibleSquares(piece)
+               }
+           }
+     
+     },
+
     getPossibleCollisionquares(pieceMove){
         
         let collisionSquares = [];
@@ -81,10 +104,9 @@ export const generalMovement = {
                 })
             })
             piece.collisions.forEach( pieceCollision => {
-                if(pieceCollision.colType === 'enemy'){
-                    
+                 
                     $(`[id^="${pieceCollision.colPiecePosition}"]`).classList.add('potential-enemy'); 
-                }
+                
             })
     },
 
