@@ -7,126 +7,53 @@ import { $ , $$ } from '../../utils/utils.js';
 import { chessConfig } from '../../config/chessConfig.config.js';
 import { gameHandler } from '../gameHandler.js';
 import { piecesRender } from '../pieceRender.js';
+import { pieceHandle } from '../pieceHandler.js';
 
 export const generalMovement = {
 
-    eventListener : {},
 
-    getPieceMove(piece) {
+    getPieceMoveUnfiltered(piece){
+
         switch (piece.pieceType) {
-          case 'rook':
-            return rookMovement.returnAvailableSquares(piece);
-          case 'pawn':
-            return pawnMovement.returnAvailableSquares(piece);
-          case 'bishop':
-            return bishopMovement.returnAvailableSquares(piece);
-          case 'knight':
-            return knightMovement.returnAvailableSquares(piece);
-          case 'king':
-            return kingMovement.returnAvailableSquares(piece);
-          case 'queen':
+            case 'rook':
+            return rookMovement.getAllPossibleSquares(piece);
+            case 'pawn':
+            return pawnMovement.getAllPossibleSquares(piece);
+            case 'bishop':
+            return bishopMovement.getAllPossibleSquares(piece);
+            case 'knight':
+            return knightMovement.getAllPossibleSquares(piece);
+            case 'king':
+            return kingMovement.getAllAvaliableSquares(piece);
+            case 'queen':
             return {
-              ...rookMovement.returnAvailableSquares(piece),
-              ...bishopMovement.returnAvailableSquares(piece)
+                ...bishopMovement.getAllPossibleSquares(piece),
+                ...rookMovement.getAllPossibleSquares(piece)
             }
-        }
-      },
-
-      getPieceMoveUnfiltered(piece){
-
-        // console.log('piece:' , piece);
-         switch (piece.pieceType) {
-             case 'rook':
-               return rookMovement.getAllPossibleSquares(piece);
-             case 'pawn':
-               return pawnMovement.getAllPossibleSquares(piece);
-             case 'bishop':
-               return bishopMovement.getAllPossibleSquares(piece);
-             case 'knight':
-               return knightMovement.getAllPossibleSquares(piece);
-             case 'king':
-               return kingMovement.getAllAvaliableSquares(piece);
-             case 'queen':
-               return {
-                 ...bishopMovement.getAllPossibleSquares(piece),
-                 ...rookMovement.getAllPossibleSquares(piece)
-               }
-           }
-     
+        }   
      },
 
-    getPossibleCollisionquares(pieceMove){
-        
-        let collisionSquares = [];
-
-        for (const direction in pieceMove) {
-            if (Object.hasOwn(pieceMove,direction)) {
-                if(!this.valueNullOrUndefined(pieceMove[direction].possibleCollision)){
-                    collisionSquares.push({
-                        direction : direction ,
-                        square : pieceMove[direction].possibleCollision            
-                    })
-                }
-            }
-        }
-          
-        return collisionSquares;
-    },
-    
-    getCollisionFreeSquares(pieceMove){
-        const collisionFreeSquares = [];
-        for (const direction in pieceMove) {
-            if (Object.hasOwn(pieceMove,direction)) {
-                if(!this.valueNullOrUndefined(pieceMove[direction].collisionFreeSquares)){
-                    collisionFreeSquares.push({
-                        direction : direction ,
-                        square : pieceMove[direction].collisionFreeSquares            
-                    })
-                }
-            }
-        }  
-        
-        return collisionFreeSquares;
-    },
-
-
+   
     markPotentialSquares(pieceSettings){
-
         this.setSquares(pieceSettings);
         piecesRender.setEventsOnPotentialSquares(pieceSettings);
     },
 
     setSquares(piece){
-            piece.moveSquares.forEach( pieceMoveSquares => {
-                pieceMoveSquares.colFreeMoveSquares.forEach( square => {
-                    $(`[id^="${square}"]`).classList.add( 'potential-square');
-                    this.createDotElementOnSquare(square);
-                })
+        piece.moves.forEach( pieceMoveSquares => {
+            pieceMoveSquares.moveSquares.forEach( square => {
+                $(`[id^="${square}"]`).classList.add( 'potential-square');
+                pieceHandle.createDotElementOnSquare(square);
             })
-            piece.collisions.forEach( pieceCollision => {
-                 
-                    $(`[id^="${pieceCollision.colPiecePosition}"]`).classList.add('potential-enemy'); 
-                
-            })
+            if(pieceMoveSquares.collision.colPos !== 'none'){
+                if(pieceMoveSquares.collision.colType === 'enemy'){
+                    $(`[id^="${pieceMoveSquares.collision.colPos}"]`).classList.add('potential-enemy'); 
+                }
+            }  
+        })
     },
 
-    createDotElementOnSquare(square){
-        let span = document.createElement( 'a' );
-        span.classList.add( 'dot' );
-        $(`[id^="${square}"]`).append(span);
-    },
-
-
-    clearPotentialSquares(){
-        $$('.dot').forEach(spanElem => {
-            spanElem.remove();
-        });
-        $$('.potential-square , .potential-enemy').forEach(pieceBox => {
-            pieceBox.classList.remove( 'potential-enemy' );
-            pieceBox.classList.remove( 'potential-square' );
-        });
-        piecesRender.removeEventsOnPotentialSquares();
-    },
+   
     
     valueNullOrUndefined(value){
         return value == null ? true : false;
@@ -177,16 +104,8 @@ export const generalMovement = {
     },
 
 
-   pawnCanBePromoted(piecePosition , pieceColor){
-       if(pieceColor === 'white' &&
-       piecePosition[1] === '8' ||
-       pieceColor === 'black' &&
-       piecePosition[1] === '1') 
-       {
-           return true; } else 
-       {
-           return false;
-       }
+   pawnCanBePromoted(piecePos , pieceColor){
+    return pieceColor === 'white' && piecePos[1] === '8' ||  pieceColor === 'black' && piecePos[1] === '1' ? true : false;
     },
   
   checkPromotionForColor(color){

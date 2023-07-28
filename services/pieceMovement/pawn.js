@@ -1,13 +1,21 @@
 import { chessConfig } from '../../config/chessConfig.config.js';
-import { movePieceHandler } from './movePiece.js';
 
 
 export const pawnMovement = {
     
-    returnAvailableSquares(pawnPiece){
-        return this.buildPawnMove(pawnPiece);
+   getAllPossibleSquares(pawnPiece){
+        const forwardRows = this.getForwardSquares(pawnPiece);
+        const sideSquares = this.getSideSquares(pawnPiece);
+        const rightColumn =  sideSquares.rightSideSquare === undefined ? [] : [sideSquares.rightSideSquare]; 
+        const leftColumn  =  sideSquares.leftSideSquare === undefined ? [] : [sideSquares.leftSideSquare]; 
+
+        return{
+            forwardRows , 
+            rightColumn ,
+            leftColumn  ,
+        }
     },
-  
+
    getPawnMoveOrder(pawnPiece){
         return  pawnPiece.pieceColor === 'white' ? 1 : -1;
    },
@@ -43,36 +51,7 @@ export const pawnMovement = {
         }
     },
 
-    buildPawnMove(pawnPiece){
-        const sideSquares = this.getSideSquares(pawnPiece);
-        const rightSide =  sideSquares.rightSideSquare === undefined ? [] : [sideSquares.rightSideSquare]; 
-        const leftSide  =  sideSquares.leftSideSquare === undefined ? [] : [sideSquares.leftSideSquare]; 
 
-        return{
-            forwardRows : {
-                collisionFreeSquares : movePieceHandler.checkCollision(this.getForwardSquares(pawnPiece)).collisionFreeSquares,
-            },
-            rightColumn : {
-                possibleCollision    : movePieceHandler.checkCollision(rightSide).possibleCollision,
-            },
-            leftColumn : {
-                possibleCollision    : movePieceHandler.checkCollision(leftSide).possibleCollision, 
-            },
-        }
-    },
-
-    getAllPossibleSquares(pawnPiece){
-        const forwardRows = this.getForwardSquares(pawnPiece);
-        const sideSquares = this.getSideSquares(pawnPiece);
-        const rightColumn =  sideSquares.rightSideSquare === undefined ? [] : [sideSquares.rightSideSquare]; 
-        const leftColumn  =  sideSquares.leftSideSquare === undefined ? [] : [sideSquares.leftSideSquare]; 
-
-        return{
-            
-            forwardRows , 
-            rightColumn ,
-            leftColumn  ,
-        }
-    },
+   
 }
 

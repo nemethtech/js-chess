@@ -1,6 +1,5 @@
 import { chessConfig }  from '../config/chessConfig.config.js'
 import { piecesRender } from '../services/pieceRender.js'
-import { generalMovement } from '../services/pieceMovement/general.js'
 import { Player } from './playerClassExtend.js'
 import { movePieceHandler } from './pieceMovement/movePiece.js'
 import { PlayerSetup } from './playerClassSetup.js'
@@ -10,19 +9,15 @@ export const gameHandler = {
     startGame(){
         piecesRender.createPieces();
         PlayerSetup.getPlayer().getSetup();
-     //   Player.resetPlayerPieces();
-     //   piecesRender.setEventListeners();
-
-        console.log('palyer 2',Player.getEnemyPlayer());
-        console.log('palyer 1',Player.getPlayer());
+        piecesRender.setEventListeners();
+        console.log('player 2',Player.getEnemyPlayer());
+        console.log('player 1',Player.getPlayer());
     },
 
 
     endTurn(){
-
-        generalMovement.clearPotentialSquares();
         this.changeTurnSettings();
-        Player.resetPlayerPieces();
+        PlayerSetup.getPlayer().getSetup();
         piecesRender.setEventListeners();
 
     },
@@ -44,154 +39,5 @@ export const gameHandler = {
         return  chessConfig.whiteTurn === true ?  'black' : 'white';
     },
 
-    gotMated(Player){
-        if(Player.isPlayerInCheck){
-
-            let piecesCanSaveKing = false;
-            Player.playerPieces.forEach( piece => {
-                if(piece.canBlockCheck || piece.canAttackThreat){
-                    piecesCanSaveKing = true;
-                }
-            });
-            let kingCanMove = Player.canPlayerKingMove();
-            if(!piecesCanSaveKing && !kingCanMove){
-                this.endGame(`${Player.enemyColor} WON !!!`);
-            }
-        }
-    },
-
-    staleMate(Player){
-        if(Player.isPlayerInCheck){
-            return ;
-        }
-        let playerHasMoveablePiece = false;
-        let kingCanMove = Player.canPlayerKingMove();
-        Player.playerPieces.forEach( piece => {
-            if(piece.pieceType !== 'king'){
-            if((piece.hasOwnProperty("moveSquares") && piece.moveSquares.length > 0)  ||
-                (piece.hasOwnProperty("collisions") && piece.collisions.length > 0)) {
-                    playerHasMoveablePiece = true;
-                }
-            }
-        });
-
-        if(!playerHasMoveablePiece && !kingCanMove){
-            this.endGame('Stale Mate');
-        }
-    },
-
-    checkGameStance(){
-        [Player.getPlayer(),Player.getEnemyPlayer()].forEach( player => {
-            this.staleMate(player);
-            this.gotMated(player);
-        })  
-    },
-
-    endGame(endResult){
-        chessConfig.endResult = endResult;
-        chessConfig.gameEnded = true;
-    },
-
-
-    makeBotMove(){
-        console.log('makeRandomMoveForEnemy');
-        console.log('player : ',Player.getPlayer());
-        if(chessConfig.currentTurn === chessConfig.botColor){
-            if(Player.getPlayer().isPlayerInCheck){
-                this.makeBotMoveInCheck();
-            } else {
-                if(this.attackWithBotIfCan()) {
-                    return;
-                } else {
-                    this.moveWithBotIfCan();
-                }
-            }
-        }
-    },
-
-    makeBotMoveInCheck(){
-        let piecesAvailableInCheck = Player.getPlayer().playerPieces.filter( piece => piece.canBlockCheck || piece.canAttackThreat)
-
-        console.log('piecesAvailableInCheck',piecesAvailableInCheck);
-        let pieceSelected = piecesAvailableInCheck[Math.floor(Math.random() * piecesAvailableInCheck.length)];
-        if(pieceSelected){
-            if(pieceSelected.canAttackThreat){
-                let squareToMove = Player.getPlayer().checkThreat[0].piecePosition;
-                movePieceHandler.movePieceForBot(pieceSelected , squareToMove);
-            } else {
-                let squaresToMove = pieceSelected.moveSquares.find( moveSquares => moveSquares.direction === pieceSelected.canBlockCheckDirections[0]).colFreeMoveSquares;
-                let squaresToBlock = squaresToMove.filter( squares => Player.getPlayer().checkThreat[0].moveSquares.includes(squares))
-                movePieceHandler.movePieceForBot(pieceSelected , squaresToBlock);
-                console.log('squaresToMove',squaresToMove);
-                console.log('squaresToBlock',squaresToBlock);
-            }
-        } else if (Player.getPlayer().canPlayerKingMove()) {
-            let kingPiece = Player.getPlayer().playerPieces.find( piece => piece.pieceType === 'king');
-            console.log('kingPiece',kingPiece);
-            if(Player.getPlayer().playerKingCanAttack(kingPiece)){
-                let kingEnemeyCollisions = kingPiece.collisions.filter( col => col.colType === 'ally');
-                let squareToMove = kingEnemeyCollisions[Math.floor(Math.random() * kingEnemeyCollisions.length)].colPiecePosition;
-                movePieceHandler.movePieceForBot(kingPiece , squareToMove);
-
-            } else {
-
-                let kingSquaresToMove = kingPiece.moveSquares[Math.floor(Math.random() * kingPiece.moveSquares.length)].colFreeMoveSquares;
-                movePieceHandler.movePieceForBot(kingPiece , kingSquaresToMove);
-            }
-
-        }
-        
-        console.log('pieceSelected',pieceSelected);
-    },
-
-    attackWithBotIfCan(){
-        let bool = false;
-        let attackPieces = [];
-        Player.getPlayer().playerPieces.forEach( piece => {
-            if(piece.collisions){
-                piece.collisions.forEach( col => {
-                    if(col.colType === 'enemy'){
-                        attackPieces.push({
-                            piece ,
-                            squareToMove : col.colPiecePosition
-                        })
-                    }
-                })
-            }
-        })
-        if(attackPieces.length > 0){
-            let randomNum = Math.floor(Math.random() * attackPieces.length);
-            movePieceHandler.movePieceForBot(attackPieces[randomNum].piece , attackPieces[randomNum].squareToMove);
-            bool = true;
-        }
-
-        return bool;
-    },
-
-
-    moveWithBotIfCan(){
-        let bool = false;
-        let movePieces = [];
-        Player.getPlayer().playerPieces.forEach( piece => {
-            if(piece.moveSquares.length > 0 ){
-                piece.moveSquares.forEach( moveSquares => {
-                    if(moveSquares.colFreeMoveSquares.length > 0){
-                        movePieces.push({
-                            piece ,
-                            squareToMove : moveSquares.colFreeMoveSquares[Math.floor(Math.random() * moveSquares.colFreeMoveSquares.length)]
-                        })
-                    }
-                })
-            }
-        })
-        if(movePieces.length > 0){
-            let randomNum = Math.floor(Math.random() * movePieces.length);
-            movePieceHandler.movePieceForBot(movePieces[randomNum].piece , movePieces[randomNum].squareToMove);
-            bool = true;
-        }
-
-        return bool;
-    }
-    
 
 }

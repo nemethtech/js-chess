@@ -1,4 +1,3 @@
-import { $ } from '../../utils/utils.js'
 import { chessConfig } from '../../config/chessConfig.config.js'
 import { gameHandler } from '../gameHandler.js';
 import { pieceHandle } from './../pieceHandler.js'
@@ -10,17 +9,16 @@ export const movePieceHandler = {
     movePiece(event){
 
         const targetDiv = event.target.tagName === 'DIV' ? event.target : event.target.parentNode ;
-        let playerPiece = pieceHandle.getPlayerPieceSelected();
+        const playerPiece = pieceHandle.getPlayerPieceSelected();
 
         piecesRender.removeEventListeners();
-        piecesRender.removeEventsOnPotentialSquares();
-
         playerPiece.piecePosition = targetDiv.getAttribute('id');
         playerPiece.piece.setAttribute('piecePosition', targetDiv.getAttribute('id'));
         
         targetDiv.firstChild.remove();
+        pieceHandle.removeSelectPieceAndSquares()
         targetDiv.append(playerPiece.piece);
-        pieceHandle.removeSelected();
+
         gameHandler.endTurn();
 
     },
@@ -41,20 +39,7 @@ export const movePieceHandler = {
         gameHandler.endTurn();
     }, 
 
-
-    checkCollision(arr){         
-
-        let collisionArray = arr.filter( e => $(`[id^="${e}"]`).hasChildNodes());
-        let possibleCollision = collisionArray.length === 0 ? undefined  : collisionArray[0];
-        let collisionFreeSquares = possibleCollision === undefined ? arr : arr.slice(0,(arr.indexOf(possibleCollision)));
-        return {
-            collisionFreeSquares , 
-            possibleCollision
-        }  
-    },
-
     filterNonExistentSquares(squareArray){
-
         return squareArray.filter(e => e.length === 2).filter( e => chessConfig.rows.indexOf(parseInt(e[1])) !== -1);
     },
 }

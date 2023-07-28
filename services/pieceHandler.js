@@ -1,35 +1,21 @@
-import { $ } from '../utils/utils.js'
+import { $ , $$ } from '../utils/utils.js'
 import { generalMovement } from '../services/pieceMovement/general.js'
 import { gameHandler } from './gameHandler.js';
 import { Player } from './playerClassExtend.js';
 import { chessConfig } from '../config/chessConfig.config.js';
+import { piecesRender } from './pieceRender.js';
 
 export const pieceHandle = {
 
-    handlePieceClick(piece){
-        console.log('ba');
-        if(chessConfig.gameEnded){
-            return;
-        }
 
-        if(Player.getPlayer().isPlayerInCheck){
-            if(piece.isPinned){
-                return;
-            }
-            if(piece.pieceType === 'king'){
-                if(Player.getPlayer().canPlayerKingMove()){
-                    this.managePiece(piece);
-                }
-            } else if(piece.canBlockCheck || piece.canAttackThreat){
-                console.log('2');
-                this.managePiece(piece)
-            } 
-        } else { 
-                console.log('3');
-                this.managePiece(piece)
+    handlePieceClick(pieceSettings){
+        if(!this.isThereASelectedPiece()){
+            this.selectPieceAndSquares(pieceSettings);
+        }
+        else if(this.ownPieceSelected(pieceSettings)){
+            this.removeSelectPieceAndSquares();
         }
     },
-   
 
     handlePieceMouseleave(pieceSettings){
         if(chessConfig.gameEnded){
@@ -95,18 +81,26 @@ export const pieceHandle = {
 
     removeSelectPieceAndSquares(){
         this.removeSelected();
-        generalMovement.clearPotentialSquares();
+        piecesRender.removeEventsOnPotentialSquares();
+        this.clearPotentialSquares();
         return this;
     },
 
-    managePiece(pieceSettings){
-        if(!this.isThereASelectedPiece()){
-            this.selectPieceAndSquares(pieceSettings);
-        }
-        else if(this.ownPieceSelected(pieceSettings)){
-            this.removeSelectPieceAndSquares(pieceSettings.piece);
-        }
+    createDotElementOnSquare(square){
+        let span = document.createElement( 'a' );
+        span.classList.add( 'dot' );
+        $(`[id^="${square}"]`).append(span);
     },
+
+
+    clearPotentialSquares(){
+        $$('.dot').forEach(spanElem => { spanElem.remove();}); 
+        $$('.potential-square , .potential-enemy').forEach(pieceBox => {
+            pieceBox.classList.remove( 'potential-enemy' );
+            pieceBox.classList.remove( 'potential-square' );
+        });
+    },
+
 
 
 }

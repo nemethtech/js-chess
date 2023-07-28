@@ -1,5 +1,3 @@
-import { $ } from '../utils/utils.js';
-import { generalMovement } from './pieceMovement/general.js';
 import { Player } from './playerClassExtend.js'
 
 
@@ -10,41 +8,29 @@ class PlayerSetup extends Player {
     analyzeEnemyPieceMove(piece , pieceMove){
 
         for(const direction in pieceMove){
-
+            
             if(pieceMove[direction].length > 0 ){
 
                 const pieceSquares = this.getPieceSquareArray(pieceMove[direction]);
                 const moveSquares = this.getMoveSquares(pieceMove[direction] , pieceSquares);
                 this.collectMoveSquares(moveSquares);
 
-                if(piece.pieceType === 'pawn'){
-                    if(direction === 'rightColumn' || direction === 'leftColumn'){
-                        this.checkCollisionsForEnemy(pieceSquares , piece  , []);
-                    }
+                if(piece.pieceType === 'pawn' && (direction === 'rightColumn' || direction === 'leftColumn')){
+                    this.checkCollisionsForEnemy(pieceSquares , piece  , []);
                 }
                 else if( piece.pieceType === 'bishop' || piece.pieceType === 'rook' || piece.pieceType === 'queen'){
                     this.checkCollisionsForEnemy(pieceSquares , piece  , moveSquares);
                 }else if(piece.pieceType === 'knight' || piece.pieceType === 'king'  ){
                     this.checkCollisionsForEnemy(pieceSquares , piece  , []);
                 }
-            }
-            
+            }     
         }
-        
+        return this;     
     }
 
     isPinLive(firstCollision , secondCollision){
         return this.getPieceStatus(firstCollision) ===  'ally' && this.pieceIsPlayerKing(secondCollision);
         
-    }
-
-    handleSingleAttack(attackSquare , piece , attackerIsKing){
-        if($(`[id^="${attackSquare}"]`).hasChildNodes()){
-            this.handlePieceSquare(piece , attackSquare  ,  []);
-        } else {  
-            this.collectMoveSquares([attackSquare]);
-        }
-        return this;
     }
 
     checkCollisionsForEnemy(pieceSquares ,   piece  , moveSquares){
@@ -58,68 +44,64 @@ class PlayerSetup extends Player {
         }
     }
 
-    checkCollisionsForPlayer(pieceSquares){
-        if(pieceSquares.length > 0){
-            const collisionImg = this.getPieceImg(collisionImg);
-            if(this.getPieceStatus(collisionImg) === 'enemy'){
-                piece.collisions.push({
-                    colPiecePosition : collisionImg.getAttribute( 'piecePosition' ) , 
-                })
-            }
-        }
-        return this;
-    }
-
     setupPlayerPiece(piece , pieceMove){
-        piece.moveSquares = [];
+        piece.moves = [];
         for(const direction in pieceMove){
-            
-            let bigCollisions  = [];
-            let collision = 'none';
-            let collisionType = 'none';
-            let colDirection = 'none';
             if(pieceMove[direction].length > 0 ){
-
+                let collision = this.resetCollisionToDefault();
                 const pieceSquares = this.getPieceSquareArray(pieceMove[direction]);
                 let moveSquares = this.getMoveSquares(pieceMove[direction] , pieceSquares);
+
                 if(pieceSquares.length > 0){
                     const collisionImg = this.getPieceImg(pieceSquares[0]);
-                    collisionType = this.getPieceStatus(collisionImg);
-                    collision =  collisionImg.getAttribute( 'piecePosition' );   
-                    colDirection = direction;       
+                    collision.colType = this.getPieceStatus(collisionImg);  
+                    collision.colPos = collisionImg.getAttribute( 'piecePosition' );   
+                    collision.direction = direction;  
                 }
-                if(piece.pieceType === 'pawn'){
-                    if(direction === 'rightColumn' || direction === 'leftColumn'){
-                        moveSquares = [];
+                if(piece.pieceType !== 'king'){
+                    if(piece.pieceType === 'pawn'){
+                        if(direction === 'rightColumn' || direction === 'leftColumn'){
+                            moveSquares = [];
+                        }else{
+                            collision = this.resetCollisionToDefault();
+                        }
                     }
-                }
-                if(piece.isPined){
-                    if(collision !== piece.pinInfo[0].attackerPosition){
-                        collision = 'none';
-                    }
-                    moveSquares = moveSquares.filter( moveSquare => piece.pinInfo[0].attackerMoveSquares.indexOf(moveSquare) !== -1 );
-     
-                }
-                if(this.isPlayerInCheck){
                     if(piece.isPined){
-                        moveSquares = [];
-                        collision = 'none';
+                        if(collision.colPos !== piece.pinInfo[0].attackerPosition){
+                            collision = this.resetCollisionToDefault();
+                        }
+                        moveSquares = moveSquares.filter( moveSquare => piece.pinInfo[0].attackerMoveSquares.indexOf(moveSquare) !== -1 );
                     }
-                    if(this.checkingPieces.length === 1){
-                        moveSquares = moveSquares.filter( moveSquare => this.checkingPieces[0].attackerMoveSquares.indexOf(moveSquare) !== -1 );
-                        console.log('moveSquares sakkban',moveSquares );
+                    if(this.isPlayerInCheck){
+                        if(piece.isPined){
+                            moveSquares = [];
+                            collision = this.resetCollisionToDefault();
+                        }
+                        if(this.checkingPieces.length === 1){
+                            moveSquares = moveSquares.filter( moveSquare => this.checkingPieces[0].attackerMoveSquares.indexOf(moveSquare) !== -1 );
+                            if(collision.colPos !== this.checkingPieces[0].attackerPosition){
+                                collision = this.resetCollisionToDefault();
+                            }
+                        }else{
+                            moveSquares = [];
+                            collision = this.resetCollisionToDefault();
+                        }
                     }
-                    if(collision !== this.checkingPieces[0].attackerPosition){
-                        collision = 'none';
+                    if(collision.colPos === 'none' ||  collision.direction !== direction){
+                        collision = this.resetCollisionToDefault();
+                    }
+                }else{
+                    if(moveSquares.length > 0){
+                        moveSquares = moveSquares.filter( moveSquare => this.allEnemyMoveSquare.indexOf(moveSquare) === -1 ); 
+                    }
+                    if(collision.colType === 'enemy'){
+                        const enemy = this.getEnemyPlayer().playerPieces.find( piece => piece.piecePosition === collision.colPos);
+                        if(enemy.isBackedUp){
+                            collision = this.resetCollisionToDefault();
+                        }
                     }
                 }
-                if(collision !== 'none' && colDirection === direction){
-                    bigCollisions.push({
-                        colPos : collision ,
-                        collisionType ,
-                    });
-                }
-                piece.moveSquares.push({ direction, moveSquares  , bigCollisions  });
+                piece.moves.push({ direction, moveSquares  ,collision });
             }
         }
     }
@@ -158,6 +140,15 @@ class PlayerSetup extends Player {
             attackerPieceType    : piece.pieceType,
             attackerMoveSquares : moveSquares
         })
+        return this;
+    }
+
+    resetCollisionToDefault(){
+        return  {
+            colPos  : 'none' ,
+            colType : 'none' , 
+            direction : 'none' , 
+        }
     }
 
     checkAndSetPin(pieceSquares, piece , moveSquares){
@@ -167,56 +158,19 @@ class PlayerSetup extends Player {
             this.setPinedPiece(firstCollision , piece , moveSquares );
             console.log('PINNN');
         }
-    }
-
-    getPieceSquareArray(squareArr){
-        return squareArr.filter(square => $(`[id^="${square}"]`).hasChildNodes());
-    }
-
-    getPieceImg(square){
-        return $(`[id^="${square}"]`).firstChild;
-    }
-
-    getPieceStatus(pieceImg){
-        return this.playerColor === pieceImg.getAttribute( 'piece-type' ).split('_')[0] ? 'ally' : 'enemy';
-    }
-
-    setEnemyPieceBackedUp(pieceImg){
-        const playerPiece = Player.getEnemyPlayer().playerPieces.find( playerPiece => playerPiece.piecePosition === pieceImg.getAttribute( 'piecePosition' ));
-        playerPiece.isBackedUp = true;
         return this;
     }
-
-    pieceIsPlayerKing(pieceImg){
-        return pieceImg.getAttribute('piece-type').split('_')[1]  === 'king' && pieceImg.getAttribute('piece-type').split('_')[0] === this.playerColor;
-    }
-
-    collectMoveSquares(squareArray){
-        squareArray.forEach( square => { this.allEnemyMoveSquare.push(square); })
-        return this;
-    }
-
 
     getSetup(){
         
         this.setPlayerValuesToDefault()
-            .getPlayerPieces();
-
-        Player.getEnemyPlayer()
+            .getPlayerPieces()
+            .getEnemyPlayer()
             .setPlayerValuesToDefault()
-            .getPlayerPieces();
-        
-        Player.getEnemyPlayer().playerPieces.forEach( enemyPiece => {
-
-            let pieceMove = generalMovement.getPieceMoveUnfiltered(enemyPiece);
-            this.analyzeEnemyPieceMove(enemyPiece , pieceMove);
-            
-        });
-
-        this.playerPieces.forEach( playerPiece => {
-            let pieceMove = generalMovement.getPieceMoveUnfiltered(playerPiece);
-            this.setupPlayerPiece(playerPiece , pieceMove);
-        })
+            .getPlayerPieces()
+            .getEnemeyP()
+            .setEnemeyPieceMoves()
+            .setPlayerPieceMoves();
     }
 
 }

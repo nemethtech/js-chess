@@ -3,36 +3,22 @@ import { movePieceHandler } from './movePiece.js';
 
 export const bishopMovement = {
     
-    returnAvailableSquares(bishopPiece){
-        
-        return this.getAvaliableSquares(bishopPiece);
+   getAllPossibleSquares(bishopPiece){
+ 
+     const columArrayOne = chessConfig.columns.slice(chessConfig.columns.indexOf(bishopPiece.piecePosition[0])+1, 8 );
+     const columArrayTwo = chessConfig.columns.slice(0, chessConfig.columns.indexOf(bishopPiece.piecePosition[0])).reverse();
+     const rowPos = bishopPiece.piecePosition[1];
+ 
+     return {
+ 
+         lineOneWayOne : this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayOne , 
+         lineOneWayTwo : this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayTwo , 
+         lineTwoWayOne : this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayOne ,
+         lineTwoWayTwo : this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayTwo ,    
+         
+         }   
+ 
     },
-
-   getAvaliableSquares(bishopPiece){
-
-    const columArrayOne = chessConfig.columns.slice(chessConfig.columns.indexOf(bishopPiece.piecePosition[0])+1, 8 );
-    const columArrayTwo = chessConfig.columns.slice(0, chessConfig.columns.indexOf(bishopPiece.piecePosition[0])).reverse();
-    const rowPos = bishopPiece.piecePosition[1];
-
-    return {
-        lineOneWayOne : {
-            collisionFreeSquares : movePieceHandler.checkCollision(this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayOne).collisionFreeSquares, 
-            possibleCollision    : movePieceHandler.checkCollision(this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayOne).possibleCollision
-        },
-        lineOneWayTwo : {
-            collisionFreeSquares : movePieceHandler.checkCollision(this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayTwo).collisionFreeSquares, 
-            possibleCollision    : movePieceHandler.checkCollision(this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayTwo).possibleCollision
-        },
-        lineTwoWayOne  : {
-            collisionFreeSquares : movePieceHandler.checkCollision(this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayOne).collisionFreeSquares, 
-            possibleCollision    : movePieceHandler.checkCollision(this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayOne).possibleCollision
-        },
-        lineTwoWayTwo : {
-            collisionFreeSquares : movePieceHandler.checkCollision(this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayTwo).collisionFreeSquares, 
-            possibleCollision    : movePieceHandler.checkCollision(this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayTwo).possibleCollision
-        },
-    };
-   },
 
    getSquaresOnLine(columnArray , rowPos){
 
@@ -45,40 +31,6 @@ export const bishopMovement = {
         }
    },
 
-   getAllAvailableSquares(bishopPiece){
-
-    const columArrayOne = chessConfig.columns.slice(chessConfig.columns.indexOf(bishopPiece.piecePosition[0])+1, 8 );
-    const columArrayTwo = chessConfig.columns.slice(0, chessConfig.columns.indexOf(bishopPiece.piecePosition[0])).reverse();
-    const rowPos = bishopPiece.piecePosition[1];
-
-    return {
-
-        lineOneWayOne : this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayOne , 
-        lineOneWayTwo : this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayTwo , 
-        lineTwoWayOne : this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayOne ,
-        lineTwoWayTwo : this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayTwo ,    
-        
-        }   
-
-   },
-
-
-   getAllPossibleSquares(bishopPiece){
-
-    const columArrayOne = chessConfig.columns.slice(chessConfig.columns.indexOf(bishopPiece.piecePosition[0])+1, 8 );
-    const columArrayTwo = chessConfig.columns.slice(0, chessConfig.columns.indexOf(bishopPiece.piecePosition[0])).reverse();
-    const rowPos = bishopPiece.piecePosition[1];
-
-    return {
-
-        lineOneWayOne : this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayOne , 
-        lineOneWayTwo : this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayTwo , 
-        lineTwoWayOne : this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayOne ,
-        lineTwoWayTwo : this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayTwo ,    
-        
-        }   
-
-   },
 
    zipArray(array1, array2){
 
