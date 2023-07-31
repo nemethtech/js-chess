@@ -61,14 +61,14 @@ export const piecesRender = {
         })
     },
 
-    setEventsOnPotentialSquares(){
-        $$('.potential-square , .potential-enemy').forEach(pieceBox => {
+    setEventsOnMoveSquares(){
+        $$('.moveSquare , .enemySquare').forEach(pieceBox => {
             pieceBox.addEventListener( 'click', movePieceHandler.movePiece);    
         });
     },
     
-    removeEventsOnPotentialSquares(){
-        $$('.potential-square , .potential-enemy').forEach(pieceBox => {
+    removeEventsOnMoveSquares(){
+        $$('.moveSquare , .enemySquare').forEach(pieceBox => {
             pieceBox.removeEventListener( 'click', movePieceHandler.movePiece);
         });
     },

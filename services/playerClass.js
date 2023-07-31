@@ -1,8 +1,9 @@
-import { $ , $$ } from "../../utils/utils.js";
+import { $, $$ } from "../../utils/utils.js";
 import { gameHandler } from "./gameHandler.js";
-import { generalMovement } from "./pieceMovement/general.js";
+
 
 class BasePlayer {
+
     constructor(color) {
   //    this.playerName = name;
       this.playerColor = color;
@@ -43,59 +44,35 @@ class BasePlayer {
       return this;
     }
 
-    getPieceSquareArray(squareArr){
-      return squareArr.filter(square => $(`[id^="${square}"]`).hasChildNodes());
-    }
-
-    getPieceImg(square){
-      return $(`[id^="${square}"]`).firstChild;
-    }
-
-    getPieceStatus(pieceImg){
-      return this.playerColor === pieceImg.getAttribute( 'piece-type' ).split('_')[0] ? 'ally' : 'enemy';
-    }
-
-    setEnemyPieceBackedUp(pieceImg){
-      const playerPiece = this.getEnemyPlayer().playerPieces.find( playerPiece => playerPiece.piecePosition === pieceImg.getAttribute( 'piecePosition' ));
-      playerPiece.isBackedUp = true;
-      return this;
-    }
-
-    pieceIsPlayerKing(pieceImg){
-      return pieceImg.getAttribute('piece-type').split('_')[1]  === 'king' && pieceImg.getAttribute('piece-type').split('_')[0] === this.playerColor;
-    }
-
-    collectMoveSquares(squareArray){
-      squareArray.forEach( square => { this.allEnemyMoveSquare.push(square); })
-      return this;
-    } 
-
-    setEnemeyPieceMoves(){
-      console.log('ENEMY' , this.getEnemeyP());
-      this.getEnemeyP().playerPieces.forEach( enemyPiece => {
-
-          let pieceMove = generalMovement.getPieceMoveUnfiltered(enemyPiece);
-          this.analyzeEnemyPieceMove(enemyPiece , pieceMove);
-          
-        });
-      return this;
-    }
-
-    setPlayerPieceMoves(){
-      this.playerPieces.forEach( playerPiece => {
-          let pieceMove = generalMovement.getPieceMoveUnfiltered(playerPiece);
-          this.setupPlayerPiece(playerPiece , pieceMove);
+    getCollisionPieces(squareArr){
+      const colSquareArr =  squareArr.filter(square => $(`[id^="${square}"]`).hasChildNodes());
+      let colPieceArr = [];
+      if(colSquareArr.length > 0){
+        colSquareArr.forEach( e => {
+          const collisionPiece = $(`[id^="${e}"]`).firstChild;
+          if(collisionPiece.getAttribute( 'piece-type' ).split('_')[0] === this.playerColor){
+            colPieceArr.push({ 
+              colPos : collisionPiece.getAttribute( 'piecePosition' ) , 
+              status : collisionPiece.getAttribute( 'piece-type' ).split('_')[0] !== this.playerColor ?  'ally' : 'enemy' ,
+              type : collisionPiece.getAttribute( 'piece-type' ).split('_')[1]
+            }) 
+          }
         })
-      return this;
+      }
+      return colPieceArr;
     }
 
-    getEnemeyP(){
-      return BasePlayer.instances[this.enemyColor];
-    }
 
-    getP(){
-      console.log('getP',BasePlayer.instances[this.playerColor]);
-      return BasePlayer.instances[this.playerColor];
+    getSetup(){
+        
+      this.setPlayerValuesToDefault()
+          .getPlayerPieces()
+          .getEnemyPlayer()
+          .setPlayerValuesToDefault()
+          .getPlayerPieces()
+          .getEnemyPlayer()
+          .setEnemeyPieceMoves()
+          .setAllPlayerPieceMoves();
     }
   }
   

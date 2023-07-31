@@ -34,26 +34,50 @@ export const generalMovement = {
      },
 
    
-    markPotentialSquares(pieceSettings){
+    markMoveSquares(pieceSettings){
         this.setSquares(pieceSettings);
-        piecesRender.setEventsOnPotentialSquares(pieceSettings);
+        piecesRender.setEventsOnMoveSquares(pieceSettings);
     },
 
     setSquares(piece){
-        piece.moves.forEach( pieceMoveSquares => {
-            pieceMoveSquares.moveSquares.forEach( square => {
-                $(`[id^="${square}"]`).classList.add( 'potential-square');
+        piece.moves.forEach( playerPieceMove => {
+            playerPieceMove.moveSquares.forEach( square => {
+                $(`[id^="${square}"]`).classList.add( 'moveSquare');
                 pieceHandle.createDotElementOnSquare(square);
             })
-            if(pieceMoveSquares.collision.colPos !== 'none'){
-                if(pieceMoveSquares.collision.colType === 'enemy'){
-                    $(`[id^="${pieceMoveSquares.collision.colPos}"]`).classList.add('potential-enemy'); 
-                }
-            }  
+            if(JSON.stringify(playerPieceMove.collision) !== '{}'){
+                $(`[id^="${playerPieceMove.collision.colPos}"]`).classList.add('enemySquare'); 
+            }
+             
         })
     },
 
-   
+    getPieceSquareArray(squareArr){
+        return squareArr.filter(square => $(`[id^="${square}"]`).hasChildNodes());
+      },
+  
+    getPieceImg(square){
+        return $(`[id^="${square}"]`).firstChild;
+      },
+  
+    getPieceStatus(pieceImg , color){
+        return color === pieceImg.getAttribute( 'piece-type' ).split('_')[0] ? 'ally' : 'enemy';
+      },
+
+    isPinLive(firstCollision , secondCollision , color){
+        return this.getPieceStatus(firstCollision , color) ===  'ally' && generalMovement.pieceIsPlayerKing(secondCollision);
+    },
+
+    getMoveSquares(squareArr , pieceSquaresArr ){
+        const freeSquaresIndex = pieceSquaresArr.length === 0 ? squareArr.length  : squareArr.indexOf(pieceSquaresArr[0]);
+        const freeMoveSquares = squareArr.slice(0,freeSquaresIndex);
+        return freeMoveSquares;
+    },
+
+    
+    pieceIsPlayerKing(pieceImg){
+        return pieceImg.getAttribute('piece-type').split('_')[1]  === 'king' && pieceImg.getAttribute('piece-type').split('_')[0] === gameHandler.currentTurnFor();
+      },
     
     valueNullOrUndefined(value){
         return value == null ? true : false;
@@ -89,9 +113,9 @@ export const generalMovement = {
 
     promotePawn(pawnPiece){
         this.fillModal(pawnPiece);
-        const modal = document.querySelector(".modal");
+        document.querySelector(".modal").showModal();
         
-        modal.showModal();
+       
     },
 
     changePiece(promotPiece , pawnPiece){

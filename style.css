@@ -62,13 +62,13 @@ body{
     opacity: 0.5;
   }
 
-.yellow{
-    background-color: rgb(231, 231, 41);
+.piece-hovered{
+    background-color: rgb(134, 179, 134);
 
 }
 
-.potential-enemy{
-    background-color: rgb(204, 8, 34);
+.enemySquare{
+    background-color: rgba(240, 85, 106, 0.6);
 
 }
 
@@ -78,7 +78,7 @@ body{
 }
 
 .piece-selected{
-    background-color: rgb(2, 219, 2);
+    background-color: rgb(87, 174, 87);
 
 }
 

@@ -1,11 +1,12 @@
 import { chessConfig }  from '../config/chessConfig.config.js'
 import { piecesRender } from '../services/pieceRender.js'
 import { Player } from './playerClassExtend.js'
-import { movePieceHandler } from './pieceMovement/movePiece.js'
 import { PlayerSetup } from './playerClassSetup.js'
 
 export const gameHandler = {
     
+ 
+
     startGame(){
         piecesRender.createPieces();
         PlayerSetup.getPlayer().getSetup();
@@ -19,7 +20,8 @@ export const gameHandler = {
         this.changeTurnSettings();
         PlayerSetup.getPlayer().getSetup();
         piecesRender.setEventListeners();
-
+        console.log('player 2',Player.getEnemyPlayer());
+        console.log('player 1',Player.getPlayer());
     },
 
     pieceTurn(color){

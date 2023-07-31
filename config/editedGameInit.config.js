@@ -1,5 +1,6 @@
 export const editedGame = {
 
+  /*
     'a6': 'black_rook',
     'b6': 'black_knight',
     'c6': 'black_bishop',
@@ -17,6 +18,7 @@ export const editedGame = {
     'g7': 'black_pawn',
     'h7': 'black_pawn',*/
     
+    /*  
     'a1': 'white_rook',
     'b1': 'white_knight',
     'c1': 'white_bishop',
@@ -25,16 +27,16 @@ export const editedGame = {
     'f1': 'white_bishop',
     'g1': 'white_knight',
     'f3': 'white_rook',
-  /*  'a2': 'white_pawn',
+  'a2': 'white_pawn',
     'b2': 'white_pawn',
     'c2': 'white_pawn',
     'd2': 'white_pawn',
     'g2': 'white_king',
     'f4': 'white_pawn',
-    'g5': 'white_pawn',*/
+    'g5': 'white_pawn',
     'h2': 'white_pawn',
   
-
+*/
     
   //  mate Test
 
@@ -73,12 +75,12 @@ export const editedGame = {
   //  'c7': 'white_pawn',
     'h2': 'black_pawn',
 
- 
+ */
 
       //  pinned pieces Test Bishop
 
    
- /*
+ 
     'g2': 'black_king',
     'e8': 'white_king',
     'e3': 'black_rook',
@@ -93,7 +95,7 @@ export const editedGame = {
     'h7': 'black_pawn',
     'h5': 'black_knight',
 
-     */
+     
   
     
   //  staleMate Test
