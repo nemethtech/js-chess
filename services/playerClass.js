@@ -16,10 +16,10 @@ class BasePlayer {
     }
     
     getPlayerPieces(){
-      $$(`[piece-type^="${this.playerColor}"]`).forEach(piece => {
+      $$(`[pieceColor^="${this.playerColor}"]`).forEach(piece => {
           const piecePosition = piece.getAttribute( 'piecePosition' );
-          const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
-          const pieceType = piece.getAttribute( 'piece-type' ).split('_')[1];
+          const pieceColor = piece.getAttribute( 'pieceColor' );
+          const pieceType = piece.getAttribute( 'pieceType' );
           
           const handleParams = {
               piece,
@@ -45,21 +45,19 @@ class BasePlayer {
     }
 
     getCollisionPieces(squareArr){
-      const colSquareArr =  squareArr.filter(square => $(`[id^="${square}"]`).hasChildNodes());
-      let colPieceArr = [];
-      if(colSquareArr.length > 0){
-        colSquareArr.forEach( e => {
-          const collisionPiece = $(`[id^="${e}"]`).firstChild;
-          if(collisionPiece.getAttribute( 'piece-type' ).split('_')[0] === this.playerColor){
-            colPieceArr.push({ 
-              colPos : collisionPiece.getAttribute( 'piecePosition' ) , 
-              status : collisionPiece.getAttribute( 'piece-type' ).split('_')[0] !== this.playerColor ?  'ally' : 'enemy' ,
-              type : collisionPiece.getAttribute( 'piece-type' ).split('_')[1]
-            }) 
+      const pieceSquareArr =  squareArr.filter(square => $(`[piecePosition="${square}"]`));
+      const firstCollision  = pieceSquareArr?.[0] ;
+      const secondCollision  = pieceSquareArr?.[1] ;
+      let collisionPieces = [firstCollision,secondCollision].map( collision => {
+        if(collision){
+          return {
+            colPos : $(`[pieceposition="${collision}"]`).getAttribute( 'piecePosition' ) , 
+            status : $(`[pieceposition="${collision}"]`).getAttribute( 'pieceColor' ) === this.playerColor ?  'ally' : 'enemy' ,
+            type   : $(`[pieceposition="${collision}"]`).getAttribute( 'pieceType' ) ,
           }
-        })
-      }
-      return colPieceArr;
+        }
+      });
+      return collisionPieces.filter( collision => collision !== undefined);
     }
 
 

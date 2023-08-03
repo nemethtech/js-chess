@@ -11,9 +11,9 @@ class PlayerSetup extends Player {
         for(const direction in pieceMove){
 
             if(pieceMove[direction].length > 0 ){
-                
-                const pieceSquares = generalMovement.getPieceSquareArray(pieceMove[direction]);
-                let moveSquares = generalMovement.getMoveSquares(pieceMove[direction] , pieceSquares);
+
+                const collsion = this.getCollisionPieces(pieceMove[direction])?.[0];
+                let moveSquares = generalMovement.getMoveSquares(pieceMove[direction] , collsion);
 
                 let playerPieceMove = {
                     moveSquares: moveSquares,
@@ -22,16 +22,16 @@ class PlayerSetup extends Player {
                 };
 
 
-                if(pieceSquares.length > 0){
-                    const collisionImg = generalMovement.getPieceImg(pieceSquares[0]);
-                    if(generalMovement.getPieceStatus(collisionImg , this.playerColor) === 'enemy'){
-                        playerPieceMove.collision.colPos = collisionImg.getAttribute( 'piecePosition' );   
+                if(collsion){
+                    if(collsion.status === 'enemy'){
+                        playerPieceMove.collision.colPos = collsion.colPos;   
                         playerPieceMove.collision.direction = direction;  
 
                     }
                 }
 
                 if(piece.pieceType !== 'king'){
+
                     if(piece.pieceType === 'pawn'){
                         if(playerPieceMove.direction === 'rightColumn' || playerPieceMove.direction === 'leftColumn'){
                             playerPieceMove.moveSquares = [];
@@ -40,12 +40,14 @@ class PlayerSetup extends Player {
                         }
                     }
                     if(piece.isPined){
+
                         if(playerPieceMove.collision.colPos !== piece.pinInfo[0].attackerPosition){
                             playerPieceMove.collision =  {};
                         }
                         playerPieceMove.moveSquares = playerPieceMove.moveSquares.filter( moveSquare => piece.pinInfo[0].attackerMoveSquares.indexOf(moveSquare) !== -1 );
                     }
                     if(this.isPlayerInCheck){
+
                         if(piece.isPined || this.checkingPieces.length !== 1){
                             playerPieceMove.moveSquares = [];
                             playerPieceMove.collision =  {};
@@ -57,10 +59,13 @@ class PlayerSetup extends Player {
                             }
                         }
                     }
+
                 }else{
+
                     if(playerPieceMove.moveSquares.length > 0){
                         playerPieceMove.moveSquares = playerPieceMove.moveSquares.filter( moveSquare => this.allEnemyMoveSquare.indexOf(moveSquare) === -1 ); 
                     }
+
                     if(JSON.stringify(playerPieceMove.collision) !== '{}'){
                         const enemy = this.getEnemyPlayer().playerPieces.find( piece => piece.piecePosition === playerPieceMove.collision.colPos);
                         if(enemy.isBackedUp){
@@ -68,12 +73,12 @@ class PlayerSetup extends Player {
                         }
                     }
                 }
+
                 if(JSON.stringify(playerPieceMove.collision) !== '{}' || !!playerPieceMove.moveSquares.length){
                     piece.moves.push(playerPieceMove);
                 }
             }
         }
-    //    return this;
     }
 
     

@@ -93,6 +93,7 @@ export const editedGame = {
    // 'b7': 'white_pawn',
     'e7': 'white_rook',
     'h7': 'black_pawn',
+    'a3': 'black_pawn',
     'h5': 'black_knight',
 
      

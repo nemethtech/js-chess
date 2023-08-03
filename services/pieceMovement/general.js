@@ -52,33 +52,10 @@ export const generalMovement = {
         })
     },
 
-    getPieceSquareArray(squareArr){
-        return squareArr.filter(square => $(`[id^="${square}"]`).hasChildNodes());
-      },
-  
-    getPieceImg(square){
-        return $(`[id^="${square}"]`).firstChild;
-      },
-  
-    getPieceStatus(pieceImg , color){
-        return color === pieceImg.getAttribute( 'piece-type' ).split('_')[0] ? 'ally' : 'enemy';
-      },
-
-    isPinLive(firstCollision , secondCollision , color){
-        return this.getPieceStatus(firstCollision , color) ===  'ally' && generalMovement.pieceIsPlayerKing(secondCollision);
+    getMoveSquares(moveSquareArr , collsion ){
+        return collsion !== undefined ? moveSquareArr.slice(0 , moveSquareArr.indexOf(collsion.colPos)) : moveSquareArr ;
     },
-
-    getMoveSquares(squareArr , pieceSquaresArr ){
-        const freeSquaresIndex = pieceSquaresArr.length === 0 ? squareArr.length  : squareArr.indexOf(pieceSquaresArr[0]);
-        const freeMoveSquares = squareArr.slice(0,freeSquaresIndex);
-        return freeMoveSquares;
-    },
-
-    
-    pieceIsPlayerKing(pieceImg){
-        return pieceImg.getAttribute('piece-type').split('_')[1]  === 'king' && pieceImg.getAttribute('piece-type').split('_')[0] === gameHandler.currentTurnFor();
-      },
-    
+        
     valueNullOrUndefined(value){
         return value == null ? true : false;
     },
@@ -89,16 +66,17 @@ export const generalMovement = {
             return mergedSquares.indexOf(element) === index;
         });
         return simplifiedArray;
-      },
+    },
 
     fillModal(pawnPiece){
         this.clearModal();
-        const pawnColor = pawnPiece.getAttribute( 'piece-type' ).split('_')[0];
+        const pawnColor = pawnPiece.getAttribute( 'pieceColor' );
         chessConfig.promotePieces.forEach( pieceName => {
             let imgPiece = document.createElement( 'img' );
             imgPiece.classList.add( 'promote-piece' );
             imgPiece.setAttribute('src', `pieces/${pawnColor}_${pieceName}.png`);
-            imgPiece.setAttribute( 'piece-type'  , `${pieceName}`);
+            imgPiece.setAttribute( 'pieceType'  , `${pieceName}`);
+            imgPiece.setAttribute( 'pieceColor'  , `${pawnColor}`);
             imgPiece.addEventListener('click' , this.changePiece.bind(this , pieceName , pawnPiece)  )
             $(chessConfig.modalSelector).append(imgPiece);
         }) 
@@ -119,10 +97,11 @@ export const generalMovement = {
     },
 
     changePiece(promotPiece , pawnPiece){
-        const pawnColor = pawnPiece.getAttribute( 'piece-type' ).split('_')[0];
+        const pawnColor = pawnPiece.getAttribute( 'pieceColor' );
         const modal = document.querySelector(".modal");
         pawnPiece.setAttribute( 'src'  ,  `pieces/${pawnColor}_${promotPiece}.png`);
-        pawnPiece.setAttribute( 'piece-type'  , `${pawnColor}_${promotPiece}`);
+        pawnPiece.setAttribute( 'pieceType'  , `${pieceName}`);
+        pawnPiece.setAttribute( 'pieceColor'  , `${pawnColor}`);
         gameHandler.endTurn();
         modal.close();
     },
@@ -133,9 +112,9 @@ export const generalMovement = {
     },
   
   checkPromotionForColor(color){
-   $$(`[piece-type=${color}_pawn`).forEach( piece => {
+   $$(`[pieceColor=${color}`).forEach( piece => {
        const piecePosition = piece.getAttribute( 'piecePosition' );
-       const pieceColor = piece.getAttribute( 'piece-type' ).split('_')[0];
+       const pieceColor = piece.getAttribute( 'pieceColor' );
            if(this.pawnCanBePromoted(piecePosition , pieceColor)){
                this.promotePawn(piece , pieceColor);
            }

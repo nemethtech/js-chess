@@ -18,7 +18,8 @@ export const piecesRender = {
 
             const imgPiece = document.createElement( 'img' );
             imgPiece.classList.add( 'piece' );
-            imgPiece.setAttribute( 'piece-type'   , gameStart[postion]);
+            imgPiece.setAttribute( 'pieceType'   , gameStart[postion].split('_')[1]);
+            imgPiece.setAttribute( 'pieceColor'   , gameStart[postion].split('_')[0]);
             imgPiece.setAttribute( 'piecePosition', postion);
             imgPiece.setAttribute( 'src'          , 'pieces/'+gameStart[postion]+'.png');
             $('#'+postion).append(imgPiece);
