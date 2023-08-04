@@ -1,6 +1,5 @@
 import { $ , $$ } from '../utils/utils.js'
-import { generalMovement } from '../services/pieceMovement/general.js'
-import { piecesRender } from './pieceRender.js';
+import { eventHandler } from './eventHandler.js';
 
 export const pieceHandle = {
 
@@ -44,12 +43,12 @@ export const pieceHandle = {
 
     selectPieceAndSquares(pieceSettings){
         this.setSelected(pieceSettings.piece);
-        generalMovement.markMoveSquares(pieceSettings);
+        this.markMoveSquares(pieceSettings);
     },
 
     removeSelectPieceAndSquares(){
         this.removeSelected();
-        piecesRender.removeEventsOnMoveSquares();
+        eventHandler.removeEventsOnMoveSquares();
         this.clearPieceMoves();
     },
 
@@ -66,5 +65,24 @@ export const pieceHandle = {
             pieceBox.classList.remove( 'moveSquare' );
         });
     },
+
+    markMoveSquares(pieceSettings){
+        this.setSquares(pieceSettings);
+        eventHandler.setEventsOnMoveSquares(pieceSettings);
+    },
+
+    setSquares(piece){
+        piece.moves.forEach( playerPieceMove => {
+            playerPieceMove.moveSquares.forEach( square => {
+                $(`[id^="${square}"]`).classList.add( 'moveSquare');
+                pieceHandle.createDotElementOnSquare(square);
+            })
+            if(JSON.stringify(playerPieceMove.collision) !== '{}'){
+                $(`[id^="${playerPieceMove.collision.colPos}"]`).classList.add('enemySquare'); 
+            }
+             
+        })
+    },
+
     
 }

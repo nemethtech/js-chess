@@ -15,6 +15,19 @@ class BasePlayer {
       BasePlayer.instances[color] = this;
     }
     
+    getEnemyPlayer(){
+      return BasePlayer.instanceByColor(this.enemyColor);
+    }
+    
+    setPlayerValuesToDefault(){
+      this.playerPieces = [];
+      this.isPlayerInCheck  = false;
+      this.allEnemyMoveSquare = [];
+      this.checkingPieces = [];
+      return this;
+    }
+
+
     getPlayerPieces(){
       $$(`[pieceColor^="${this.playerColor}"]`).forEach(piece => {
           const piecePosition = piece.getAttribute( 'piecePosition' );
@@ -29,18 +42,6 @@ class BasePlayer {
           }
           this.playerPieces.push(handleParams);
       }); 
-      return this;
-    }
-
-    getEnemyPlayer(){
-      return BasePlayer.instanceByColor(this.enemyColor);
-    }
-    
-    setPlayerValuesToDefault(){
-      this.playerPieces = [];
-      this.isPlayerInCheck  = false;
-      this.allEnemyMoveSquare = [];
-      this.checkingPieces = [];
       return this;
     }
 
@@ -60,6 +61,10 @@ class BasePlayer {
       return collisionPieces.filter( collision => collision !== undefined);
     }
 
+    getMoveSquares(moveSquareArr , collsion ){
+      return collsion !== undefined ? moveSquareArr.slice(0 , moveSquareArr.indexOf(collsion.colPos)) : moveSquareArr ;
+    }
+      
 
     getSetup(){
         
@@ -72,6 +77,8 @@ class BasePlayer {
           .setEnemeyPieceMoves()
           .setAllPlayerPieceMoves();
     }
+
+
   }
   
 BasePlayer.instances = {};

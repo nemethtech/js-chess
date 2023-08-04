@@ -13,7 +13,7 @@ class PlayerSetup extends Player {
             if(pieceMove[direction].length > 0 ){
 
                 const collsion = this.getCollisionPieces(pieceMove[direction])?.[0];
-                let moveSquares = generalMovement.getMoveSquares(pieceMove[direction] , collsion);
+                let moveSquares = this.getMoveSquares(pieceMove[direction] , collsion);
 
                 let playerPieceMove = {
                     moveSquares: moveSquares,

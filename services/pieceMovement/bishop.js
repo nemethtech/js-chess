@@ -1,5 +1,5 @@
 import { chessConfig }  from '../../config/chessConfig.config.js'
-import { movePieceHandler } from './movePiece.js';
+import { generalMovement } from './general.js';
 
 export const bishopMovement = {
     
@@ -26,8 +26,8 @@ export const bishopMovement = {
     const rowPosWayTwo = columnArray.map((_,idx) => Number(rowPos -1 ) - idx);
 
         return {
-            squaresOnWayOne : movePieceHandler.filterNonExistentSquares(this.zipArray(columnArray, rowPosWayOne)) , 
-            squaresOnWayTwo : movePieceHandler.filterNonExistentSquares(this.zipArray(columnArray, rowPosWayTwo)) ,
+            squaresOnWayOne : generalMovement.filterNonExistentSquares(this.zipArray(columnArray, rowPosWayOne)) , 
+            squaresOnWayTwo : generalMovement.filterNonExistentSquares(this.zipArray(columnArray, rowPosWayTwo)) ,
         }
    },
 

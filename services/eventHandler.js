@@ -1,30 +1,11 @@
-import { $, $$ } from '../utils/utils.js'
-import { normalGame }  from '../config/normalGameInit.config.js'
-import { chessConfig }  from '../config/chessConfig.config.js'
-import { pieceHandle } from '../services/pieceHandler.js'
-import { editedGame } from '../config/editedGameInit.config.js'
+import { $$ } from '../utils/utils.js'
+import { pieceHandle } from './pieceHandler.js'
 import { Player } from './playerClassExtend.js'
-import { movePieceHandler } from './pieceMovement/movePiece.js'
+import { gameHandler } from './gameHandler.js'
 
-export const piecesRender = {
+export const eventHandler = {
 
     piecesEventListeners : {},
-
-    createPieces(){
-
-        const gameStart = chessConfig.useNormalGame ? normalGame : editedGame;
-
-        for(let postion in gameStart){
-
-            const imgPiece = document.createElement( 'img' );
-            imgPiece.classList.add( 'piece' );
-            imgPiece.setAttribute( 'pieceType'   , gameStart[postion].split('_')[1]);
-            imgPiece.setAttribute( 'pieceColor'   , gameStart[postion].split('_')[0]);
-            imgPiece.setAttribute( 'piecePosition', postion);
-            imgPiece.setAttribute( 'src'          , 'pieces/'+gameStart[postion]+'.png');
-            $('#'+postion).append(imgPiece);
-        }
-    },
 
     setEventListeners(){
 
@@ -64,14 +45,42 @@ export const piecesRender = {
 
     setEventsOnMoveSquares(){
         $$('.moveSquare , .enemySquare').forEach(pieceBox => {
-            pieceBox.addEventListener( 'click', movePieceHandler.movePiece);    
+            pieceBox.addEventListener( 'click', this.movePiece);    
         });
     },
     
     removeEventsOnMoveSquares(){
         $$('.moveSquare , .enemySquare').forEach(pieceBox => {
-            pieceBox.removeEventListener( 'click', movePieceHandler.movePiece);
+            pieceBox.removeEventListener( 'click', this.movePiece);
         });
+    },
+
+
+    movePiece(event){
+        const targetDiv = event.target.tagName === 'DIV' ? event.target : event.target.parentNode ;
+        const playerPiece = pieceHandle.getPieceSelected();
+        console.log('playerPiece',playerPiece);
+        //general pawncanbepromoted
+        eventHandler.removeEventListeners();
+        playerPiece.setAttribute('piecePosition', targetDiv.getAttribute('id'));
+        
+        targetDiv.firstChild.remove();
+        pieceHandle.removeSelectPieceAndSquares()
+        targetDiv.append(playerPiece);
+
+        gameHandler.endTurn();
+
+    },
+
+
+    changePiece(promotPiece , pawnPiece){
+        const pawnColor = pawnPiece.getAttribute( 'pieceColor' );
+
+        pawnPiece.setAttribute( 'src'  ,  `pieces/${pawnColor}_${promotPiece}.png`);
+        pawnPiece.setAttribute( 'pieceType'  , `${pieceName}`);
+        pawnPiece.setAttribute( 'pieceColor'  , `${pawnColor}`);
+        $(".modal").close();
+        gameHandler.endTurn();
     },
 
 }

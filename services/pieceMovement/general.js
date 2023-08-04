@@ -5,9 +5,6 @@ import { rookMovement } from './rook.js';
 import { pawnMovement } from './pawn.js';
 import { $ , $$ } from '../../utils/utils.js';
 import { chessConfig } from '../../config/chessConfig.config.js';
-import { gameHandler } from '../gameHandler.js';
-import { piecesRender } from '../pieceRender.js';
-import { pieceHandle } from '../pieceHandler.js';
 
 export const generalMovement = {
 
@@ -33,33 +30,11 @@ export const generalMovement = {
         }   
      },
 
+     filterNonExistentSquares(squareArray){
+        const validRows = Array.from({length: 8}, (_, i) => i + 1);
+        return squareArray.filter(e => e.length === 2).filter( e => validRows.indexOf(parseInt(e[1])) !== -1);
+    },
    
-    markMoveSquares(pieceSettings){
-        this.setSquares(pieceSettings);
-        piecesRender.setEventsOnMoveSquares(pieceSettings);
-    },
-
-    setSquares(piece){
-        piece.moves.forEach( playerPieceMove => {
-            playerPieceMove.moveSquares.forEach( square => {
-                $(`[id^="${square}"]`).classList.add( 'moveSquare');
-                pieceHandle.createDotElementOnSquare(square);
-            })
-            if(JSON.stringify(playerPieceMove.collision) !== '{}'){
-                $(`[id^="${playerPieceMove.collision.colPos}"]`).classList.add('enemySquare'); 
-            }
-             
-        })
-    },
-
-    getMoveSquares(moveSquareArr , collsion ){
-        return collsion !== undefined ? moveSquareArr.slice(0 , moveSquareArr.indexOf(collsion.colPos)) : moveSquareArr ;
-    },
-        
-    valueNullOrUndefined(value){
-        return value == null ? true : false;
-    },
-
     simplifyArray(array){
         const mergedSquares = array.flat(1);
         const simplifiedArray =  mergedSquares.filter((element, index) => {
@@ -96,15 +71,7 @@ export const generalMovement = {
        
     },
 
-    changePiece(promotPiece , pawnPiece){
-        const pawnColor = pawnPiece.getAttribute( 'pieceColor' );
-        const modal = document.querySelector(".modal");
-        pawnPiece.setAttribute( 'src'  ,  `pieces/${pawnColor}_${promotPiece}.png`);
-        pawnPiece.setAttribute( 'pieceType'  , `${pieceName}`);
-        pawnPiece.setAttribute( 'pieceColor'  , `${pawnColor}`);
-        gameHandler.endTurn();
-        modal.close();
-    },
+
 
 
    pawnCanBePromoted(piecePos , pieceColor){

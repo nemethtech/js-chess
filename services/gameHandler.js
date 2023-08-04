@@ -1,16 +1,35 @@
 import { chessConfig }  from '../config/chessConfig.config.js'
-import { piecesRender } from '../services/pieceRender.js'
+import { normalGame } from '../config/normalGameInit.config.js'
+import { editedGame } from '../config/editedGameInit.config.js'
+import { eventHandler } from './eventHandler.js'
 import { Player } from './playerClassExtend.js'
 import { PlayerSetup } from './playerClassSetup.js'
+import { $ } from '../utils/utils.js'
+
+
 
 export const gameHandler = {
     
- 
+    createPieces(){
+
+       const gameStart = chessConfig.useNormalGame ? normalGame : editedGame;
+
+        for(let postion in gameStart){
+
+            const imgPiece = document.createElement( 'img' );
+            imgPiece.classList.add( 'piece' );
+            imgPiece.setAttribute( 'pieceType'   , gameStart[postion].split('_')[1]);
+            imgPiece.setAttribute( 'pieceColor'   , gameStart[postion].split('_')[0]);
+            imgPiece.setAttribute( 'piecePosition', postion);
+            imgPiece.setAttribute( 'src'          , 'pieces/'+gameStart[postion]+'.png');
+            $('#'+postion).append(imgPiece);
+        }
+    },
 
     startGame(){
-        piecesRender.createPieces();
+        this.createPieces();
         PlayerSetup.getPlayer().getSetup();
-        piecesRender.setEventListeners();
+        eventHandler.setEventListeners();
         console.log('player 2',Player.getEnemyPlayer());
         console.log('player 1',Player.getPlayer());
     },
@@ -19,7 +38,7 @@ export const gameHandler = {
     endTurn(){
         this.changeTurnSettings();
         PlayerSetup.getPlayer().getSetup();
-        piecesRender.setEventListeners();
+        eventHandler.setEventListeners();
         console.log('player 2',Player.getEnemyPlayer());
         console.log('player 1',Player.getPlayer());
     },

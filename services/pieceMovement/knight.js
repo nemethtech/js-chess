@@ -1,13 +1,8 @@
 import { chessConfig } from '../../config/chessConfig.config.js';
-import { movePieceHandler } from './movePiece.js';
-
+import { generalMovement } from './general.js';
 
 export const knightMovement = {
     
-    returnAvailableSquares(knightPiece){
-        return this.getAvaliableSquares(knightPiece);
-    },
-
     getAllPossibleSquares(knightPiece){
         const columnPos = knightPiece.piecePosition[0];
         const rowPos    = parseInt(knightPiece.piecePosition[1]);
@@ -22,7 +17,7 @@ export const knightMovement = {
                 chessConfig.columns[colIdx+2]+(parseInt(rowPos)+1),
                 chessConfig.columns[colIdx+2]+(parseInt(rowPos)-1)];
 
-        const availableSquares = movePieceHandler.filterNonExistentSquares(possibleSquares.filter(e => typeof(e) === 'string'));
+        const availableSquares = generalMovement.filterNonExistentSquares(possibleSquares.filter(e => typeof(e) === 'string'));
         const horseJump = {};
         availableSquares.forEach((e,i) => {
             horseJump[i] = [e] ; 
