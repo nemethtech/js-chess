@@ -3,8 +3,10 @@ import { knightMovement } from './knight.js';
 import { kingMovement } from './king.js';
 import { rookMovement } from './rook.js';
 import { pawnMovement } from './pawn.js';
-import { $ , $$ } from '../../utils/utils.js';
+import { $ } from '../../utils/utils.js';
 import { chessConfig } from '../../config/chessConfig.config.js';
+import { eventHandler } from '../eventHandler.js';
+
 
 export const generalMovement = {
 
@@ -30,29 +32,15 @@ export const generalMovement = {
         }   
      },
 
-     filterNonExistentSquares(squareArray){
-        const validRows = Array.from({length: 8}, (_, i) => i + 1);
-        return squareArray.filter(e => e.length === 2).filter( e => validRows.indexOf(parseInt(e[1])) !== -1);
-    },
-   
-    simplifyArray(array){
-        const mergedSquares = array.flat(1);
-        const simplifiedArray =  mergedSquares.filter((element, index) => {
-            return mergedSquares.indexOf(element) === index;
-        });
-        return simplifiedArray;
-    },
+  
 
-    fillModal(pawnPiece){
+    fillModal(event){
         this.clearModal();
-        const pawnColor = pawnPiece.getAttribute( 'pieceColor' );
         chessConfig.promotePieces.forEach( pieceName => {
-            let imgPiece = document.createElement( 'img' );
+            const imgPiece = document.createElement( 'img' );
             imgPiece.classList.add( 'promote-piece' );
-            imgPiece.setAttribute('src', `pieces/${pawnColor}_${pieceName}.png`);
-            imgPiece.setAttribute( 'pieceType'  , `${pieceName}`);
-            imgPiece.setAttribute( 'pieceColor'  , `${pawnColor}`);
-            imgPiece.addEventListener('click' , this.changePiece.bind(this , pieceName , pawnPiece)  )
+            imgPiece.setAttribute('src', `pieces/${chessConfig.currentTurn}_${pieceName}.png`);
+            imgPiece.addEventListener('click' , eventHandler.changePiece.bind(this, pieceName  , event )  )
             $(chessConfig.modalSelector).append(imgPiece);
         }) 
 
@@ -64,33 +52,11 @@ export const generalMovement = {
         }
     },
 
-    promotePawn(pawnPiece){
-        this.fillModal(pawnPiece);
+    promotePawn(event){
+        this.fillModal(event);
         document.querySelector(".modal").showModal();
         
-       
     },
 
-
-
-
-   pawnCanBePromoted(piecePos , pieceColor){
-    return pieceColor === 'white' && piecePos[1] === '8' ||  pieceColor === 'black' && piecePos[1] === '1' ? true : false;
-    },
-  
-  checkPromotionForColor(color){
-   $$(`[pieceColor=${color}`).forEach( piece => {
-       const piecePosition = piece.getAttribute( 'piecePosition' );
-       const pieceColor = piece.getAttribute( 'pieceColor' );
-           if(this.pawnCanBePromoted(piecePosition , pieceColor)){
-               this.promotePawn(piece , pieceColor);
-           }
-       })
-    },
-
-    checkPawnPromotion(){
-        this.checkPromotionForColor('black');
-        this.checkPromotionForColor('white');
-    },
 
 }

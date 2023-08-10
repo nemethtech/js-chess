@@ -1,43 +1,37 @@
 import { chessConfig }  from '../../config/chessConfig.config.js'
-import { generalMovement } from './general.js';
 
 export const bishopMovement = {
     
    getAllPossibleSquares(bishopPiece){
  
-     const columArrayOne = chessConfig.columns.slice(chessConfig.columns.indexOf(bishopPiece.piecePosition[0])+1, 8 );
-     const columArrayTwo = chessConfig.columns.slice(0, chessConfig.columns.indexOf(bishopPiece.piecePosition[0])).reverse();
-     const rowPos = bishopPiece.piecePosition[1];
- 
+    const columnPos = bishopPiece.piecePosition[0];
+    const rowPos = bishopPiece.piecePosition[1];
+
+    const columArrayOne = chessConfig.columns.slice(chessConfig.columns.indexOf(columnPos)+1, 8 );
+    const columArrayTwo = chessConfig.columns.slice(0, chessConfig.columns.indexOf(columnPos)).reverse();
+
+    const rowsWayOne = Array(8 - Number(rowPos) ).fill().map((_,idx) => Number(rowPos)+1 + idx);
+    const rowsWayTwo = Array( Number(rowPos-1)  ).fill().map((_,idx) => Number(rowPos)-1 - idx);
+    
      return {
  
-         lineOneWayOne : this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayOne , 
-         lineOneWayTwo : this.getSquaresOnLine(columArrayOne, rowPos).squaresOnWayTwo , 
-         lineTwoWayOne : this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayOne ,
-         lineTwoWayTwo : this.getSquaresOnLine(columArrayTwo, rowPos).squaresOnWayTwo ,    
+         lineOneWayOne : this.setSquaresOrUndefined(rowsWayOne ,columArrayOne ).filter(e => e !== undefined), 
+         lineOneWayTwo : this.setSquaresOrUndefined(rowsWayTwo ,columArrayOne ).filter(e => e !== undefined), 
+         lineTwoWayOne : this.setSquaresOrUndefined(rowsWayOne ,columArrayTwo ).filter(e => e !== undefined), 
+         lineTwoWayTwo : this.setSquaresOrUndefined(rowsWayTwo ,columArrayTwo ).filter(e => e !== undefined), 
          
          }   
  
     },
 
-   getSquaresOnLine(columnArray , rowPos){
-
-    const rowPosWayOne = columnArray.map((_,idx) => Number(parseInt(rowPos) +1 ) + idx);
-    const rowPosWayTwo = columnArray.map((_,idx) => Number(rowPos -1 ) - idx);
-
-        return {
-            squaresOnWayOne : generalMovement.filterNonExistentSquares(this.zipArray(columnArray, rowPosWayOne)) , 
-            squaresOnWayTwo : generalMovement.filterNonExistentSquares(this.zipArray(columnArray, rowPosWayTwo)) ,
-        }
-   },
-
-
-   zipArray(array1, array2){
-
-    return array1.map(function(e, i) {
-        return e +array2[i];
-      })
-
-   }
+   setSquaresOrUndefined(rows , columnArray){
+    return rows.map(( row , i ) => {
+        if(chessConfig.columns.includes(columnArray[i])){
+            if(row > 0 && row < 9){
+                return columnArray[i]+ row;
+                }
+            }
+        })
+    },
 }
 

@@ -1,6 +1,5 @@
 import { $, $$ } from "../../utils/utils.js";
-import { gameHandler } from "./gameHandler.js";
-
+import { chessConfig } from "../config/chessConfig.config.js";
 
 class BasePlayer {
 
@@ -75,7 +74,7 @@ class BasePlayer {
           .getPlayerPieces()
           .getEnemyPlayer()
           .setEnemeyPieceMoves()
-          .setAllPlayerPieceMoves();
+          .setPlayerPieceMoves();
     }
 
 
@@ -89,12 +88,11 @@ BasePlayer.instanceByColor = (color) => {
 }
 
 BasePlayer.getPlayer = ()  => {
-return BasePlayer.instances[gameHandler.currentTurnFor()];
+return BasePlayer.instances[chessConfig.currentTurn];
 }
 
 BasePlayer.getEnemyPlayer = ()  => {
-  return BasePlayer.instances[gameHandler.notCurrentTurnFor()];
+  return BasePlayer.instances[chessConfig.currentEnemy];
 }
-
 
 export { BasePlayer };

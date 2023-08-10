@@ -1,7 +1,6 @@
 import { generalMovement } from "./pieceMovement/general.js";
 import { BasePlayer } from "./playerClass.js";
 
-
 class Player extends BasePlayer {
 
     analyzeEnemyPieceMove(piece , pieceMove){
@@ -14,7 +13,6 @@ class Player extends BasePlayer {
                 const moveSquares = this.getMoveSquares(pieceMove[direction] , collisionPieces[0]);
                 this.collectMoveSquares(moveSquares);
                 
-
                 if(piece.pieceType === 'pawn' && (direction === 'rightColumn' || direction === 'leftColumn')){
                     this.checkCollisionsForEnemy(collisionPieces , piece  , []  , []);
                 }
@@ -29,7 +27,6 @@ class Player extends BasePlayer {
     }
 
     checkCollisionsForEnemy(collisionPieces ,   piece  , moveSquares , allMoveSquare){
-
         if(collisionPieces.length === 0){
             return;
         }else if(collisionPieces.length === 1){
@@ -82,7 +79,11 @@ class Player extends BasePlayer {
     }
   
     collectMoveSquares(squareArray){
-        squareArray.forEach( square => { this.allEnemyMoveSquare.push(square); })
+        squareArray.forEach( square => { 
+            if(!this.allEnemyMoveSquare.includes(square)){
+                this.allEnemyMoveSquare.push(square); 
+            }
+        })
         return this;
     } 
       
@@ -93,7 +94,7 @@ class Player extends BasePlayer {
           });
         return this;
     }
-}
 
+}
 
 export { Player };

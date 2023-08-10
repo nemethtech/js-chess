@@ -1,30 +1,35 @@
 import { chessConfig } from '../../config/chessConfig.config.js';
-import { generalMovement } from './general.js';
 
 export const knightMovement = {
     
     getAllPossibleSquares(knightPiece){
+
         const columnPos = knightPiece.piecePosition[0];
         const rowPos    = parseInt(knightPiece.piecePosition[1]);
         const colIdx    = chessConfig.columns.indexOf(columnPos);
-        const possibleSquares = 
-               [chessConfig.columns[colIdx-2]+(parseInt(rowPos)+1),
-                chessConfig.columns[colIdx-2]+(parseInt(rowPos)-1),
-                chessConfig.columns[colIdx-1]+(parseInt(rowPos)+2),
-                chessConfig.columns[colIdx-1]+(parseInt(rowPos)-2),
-                chessConfig.columns[colIdx+1]+(parseInt(rowPos)+2),
-                chessConfig.columns[colIdx+1]+(parseInt(rowPos)-2),
-                chessConfig.columns[colIdx+2]+(parseInt(rowPos)+1),
-                chessConfig.columns[colIdx+2]+(parseInt(rowPos)-1)];
 
-        const availableSquares = generalMovement.filterNonExistentSquares(possibleSquares.filter(e => typeof(e) === 'string'));
-        const horseJump = {};
-        availableSquares.forEach((e,i) => {
-            horseJump[i] = [e] ; 
-        })
+        const horseJumpBase = {
+            
+            1 : { col : chessConfig.columns[colIdx-2] , row : parseInt(rowPos)+1} , 
+            2 : { col : chessConfig.columns[colIdx-2] , row : parseInt(rowPos)-1} , 
+            3 : { col : chessConfig.columns[colIdx-1] , row : parseInt(rowPos)+2} , 
+            4 : { col : chessConfig.columns[colIdx-1] , row : parseInt(rowPos)-2} , 
+            5 : { col : chessConfig.columns[colIdx+1] , row : parseInt(rowPos)+2} , 
+            6 : { col : chessConfig.columns[colIdx+1] , row : parseInt(rowPos)-2} , 
+            7 : { col : chessConfig.columns[colIdx+2] , row : parseInt(rowPos)+1} , 
+            8 : { col : chessConfig.columns[colIdx+2] , row : parseInt(rowPos)-1} , 
+            
+        };
 
-        return horseJump;
-    }
-    
+        const horseJumpChecked = {};
+
+        Object.values(horseJumpBase).forEach( (horseJump , idx ) => {
+            if(horseJump.col !== undefined && (horseJump.row > 0 && horseJump.row < 9)){
+                horseJumpChecked[idx] = [horseJump.col + horseJump.row];  
+            }  
+        });
+      
+        return horseJumpChecked;
+    }  
 }
 

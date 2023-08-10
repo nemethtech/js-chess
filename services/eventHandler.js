@@ -1,7 +1,8 @@
-import { $$ } from '../utils/utils.js'
+import { $ , $$ } from '../utils/utils.js'
 import { pieceHandle } from './pieceHandler.js'
 import { Player } from './playerClassExtend.js'
 import { gameHandler } from './gameHandler.js'
+import { generalMovement } from './pieceMovement/general.js'
 
 export const eventHandler = {
 
@@ -43,44 +44,50 @@ export const eventHandler = {
         })
     },
 
-    setEventsOnMoveSquares(){
+    setEventsOnSquares(eventType){
+        const event = eventType === 'move' ?  this.movePiece : this.promotePiece;
         $$('.moveSquare , .enemySquare').forEach(pieceBox => {
-            pieceBox.addEventListener( 'click', this.movePiece);    
+            pieceBox.addEventListener( 'click', event);    
         });
     },
     
-    removeEventsOnMoveSquares(){
+    removeEventsOnSquares(eventType){
+        const event = eventType === 'move' ?  this.movePiece : this.promotePiece;
         $$('.moveSquare , .enemySquare').forEach(pieceBox => {
-            pieceBox.removeEventListener( 'click', this.movePiece);
+            pieceBox.removeEventListener( 'click', event);
         });
     },
 
-
+    
     movePiece(event){
         const targetDiv = event.target.tagName === 'DIV' ? event.target : event.target.parentNode ;
         const playerPiece = pieceHandle.getPieceSelected();
-        console.log('playerPiece',playerPiece);
-        //general pawncanbepromoted
+
         eventHandler.removeEventListeners();
         playerPiece.setAttribute('piecePosition', targetDiv.getAttribute('id'));
         
         targetDiv.firstChild.remove();
-        pieceHandle.removeSelectPieceAndSquares()
+        eventHandler.removeEventsOnSquares('move');
+        pieceHandle.clearPieceMoves();
+        pieceHandle.removeSelected();
         targetDiv.append(playerPiece);
-
+        
         gameHandler.endTurn();
-
+        
     },
 
+    
+    promotePiece(event){
+       generalMovement.promotePawn(event);
+       
+    },
 
-    changePiece(promotPiece , pawnPiece){
-        const pawnColor = pawnPiece.getAttribute( 'pieceColor' );
-
-        pawnPiece.setAttribute( 'src'  ,  `pieces/${pawnColor}_${promotPiece}.png`);
-        pawnPiece.setAttribute( 'pieceType'  , `${pieceName}`);
-        pawnPiece.setAttribute( 'pieceColor'  , `${pawnColor}`);
+    changePiece(type,  event){
+        pieceHandle.getPieceSelected().setAttribute('src', `pieces/${Player.getPlayer().playerColor}_${type}.png`);
+        pieceHandle.getPieceSelected().setAttribute('piecetype', `${type}`);
         $(".modal").close();
-        gameHandler.endTurn();
+        eventHandler.removeEventsOnSquares('promote');
+        eventHandler.movePiece(event);
     },
 
 }

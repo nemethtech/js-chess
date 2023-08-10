@@ -1,64 +1,28 @@
 import { chessConfig }  from '../config/chessConfig.config.js'
-import { normalGame } from '../config/normalGameInit.config.js'
-import { editedGame } from '../config/editedGameInit.config.js'
 import { eventHandler } from './eventHandler.js'
-import { Player } from './playerClassExtend.js'
-import { PlayerSetup } from './playerClassSetup.js'
-import { $ } from '../utils/utils.js'
-
-
+import { BasePlayer } from './playerClass.js'
+import { pieceHandle } from './pieceHandler.js'
 
 export const gameHandler = {
     
-    createPieces(){
-
-       const gameStart = chessConfig.useNormalGame ? normalGame : editedGame;
-
-        for(let postion in gameStart){
-
-            const imgPiece = document.createElement( 'img' );
-            imgPiece.classList.add( 'piece' );
-            imgPiece.setAttribute( 'pieceType'   , gameStart[postion].split('_')[1]);
-            imgPiece.setAttribute( 'pieceColor'   , gameStart[postion].split('_')[0]);
-            imgPiece.setAttribute( 'piecePosition', postion);
-            imgPiece.setAttribute( 'src'          , 'pieces/'+gameStart[postion]+'.png');
-            $('#'+postion).append(imgPiece);
-        }
-    },
-
     startGame(){
-        this.createPieces();
-        PlayerSetup.getPlayer().getSetup();
+        pieceHandle.createPieces();
+        BasePlayer.getPlayer().getSetup();
         eventHandler.setEventListeners();
-        console.log('player 2',Player.getEnemyPlayer());
-        console.log('player 1',Player.getPlayer());
+        console.log('player 2',BasePlayer.getEnemyPlayer());
+        console.log('player 1',BasePlayer.getPlayer());
     },
-
 
     endTurn(){
         this.changeTurnSettings();
-        PlayerSetup.getPlayer().getSetup();
+        BasePlayer.getPlayer().getSetup();
         eventHandler.setEventListeners();
-        console.log('player 2',Player.getEnemyPlayer());
-        console.log('player 1',Player.getPlayer());
-    },
-
-    pieceTurn(color){
-        return chessConfig.currentTurn === color ? true : false;
-    },
-
-    currentTurnFor(){
-        return chessConfig.currentTurn;
+        console.log('player 2',BasePlayer.getEnemyPlayer());
+        console.log('player 1',BasePlayer.getPlayer());
     },
 
     changeTurnSettings(){
-        chessConfig.whiteTurn = chessConfig.whiteTurn === true ?  false : true;
         chessConfig.currentTurn = chessConfig.currentTurn  === 'white' ? 'black' : 'white';
+        chessConfig.currentEnemy = chessConfig.currentTurn  === 'white' ? 'white' : 'black';
     },
-
-    notCurrentTurnFor(){
-        return  chessConfig.whiteTurn === true ?  'black' : 'white';
-    },
-
-
 }

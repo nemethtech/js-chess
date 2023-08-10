@@ -9,7 +9,6 @@ class PlayerSetup extends Player {
         piece.moves = [];
 
         for(const direction in pieceMove){
-
             if(pieceMove[direction].length > 0 ){
 
                 const collsion = this.getCollisionPieces(pieceMove[direction])?.[0];
@@ -20,7 +19,6 @@ class PlayerSetup extends Player {
                     collision : {},
                     direction : direction,
                 };
-
 
                 if(collsion){
                     if(collsion.status === 'enemy'){
@@ -75,14 +73,17 @@ class PlayerSetup extends Player {
                 }
 
                 if(JSON.stringify(playerPieceMove.collision) !== '{}' || !!playerPieceMove.moveSquares.length){
+                    if(piece.pieceType === 'pawn' && ((piece.pieceColor === 'white' && piece.piecePosition[1] === '7') || 
+                    (piece.pieceColor === 'black' && piece.piecePosition[1] === '2'))){
+                        piece.canPromote = true;
+                    }
                     piece.moves.push(playerPieceMove);
                 }
             }
         }
     }
-
-    
-    setAllPlayerPieceMoves(){
+   
+    setPlayerPieceMoves(){
         this.playerPieces.forEach( playerPiece => {
             let pieceMove = generalMovement.getPieceMoveUnfiltered(playerPiece);
             this.setupPlayerPieceMove(playerPiece , pieceMove);
@@ -92,7 +93,5 @@ class PlayerSetup extends Player {
 
 }
 
-const playerTwo = new PlayerSetup('black');
-const playerOne = new PlayerSetup('white');
 
 export { PlayerSetup };
