@@ -46,7 +46,6 @@ export const pieceHandle = {
 
     removeSelectPieceAndSquares(piece){
         this.removeSelected();
-        console.log("piece",piece);
         const eventType = Object.hasOwn(piece, 'canPromote') ? 'promote' : 'move';
         eventHandler.removeEventsOnSquares(eventType);
         this.clearPieceMoves();
@@ -67,12 +66,9 @@ export const pieceHandle = {
     },
 
     markMoveSquares(piece){
-        console.log('pieceSettings',piece);
         this.setSquares(piece);
         const eventType = Object.hasOwn(piece, 'canPromote') ? 'promote' : 'move';
-        console.log('eventType',eventType);
         eventHandler.setEventsOnSquares(eventType);
-        
     },
 
     setSquares(piece){

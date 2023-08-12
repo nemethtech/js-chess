@@ -32,6 +32,28 @@ export const generalMovement = {
         }   
      },
 
+    getMoveSquares(moveSquareArr , collsion ){
+        return collsion !== undefined ? moveSquareArr.slice(0 , moveSquareArr.indexOf(collsion.colPos)) : moveSquareArr ;
+    },
+
+    getCollisionPieces(squareArr , forEnemy){
+        const pieceSquareArr =  squareArr.filter(square => $(`[piecePosition="${square}"]`));
+        const firstCollision  = pieceSquareArr?.[0] ;
+        const secondCollision  = pieceSquareArr?.[1] ;
+        const statusOne = forEnemy ?  'enemy' : 'ally';
+        const statusTwo = forEnemy ?  'ally' : 'enemy';
+        let collisionPieces = [firstCollision,secondCollision].map( collision => {
+          if(collision){
+            return {
+              colPos : $(`[pieceposition="${collision}"]`).getAttribute( 'piecePosition' ) , 
+              status : $(`[pieceposition="${collision}"]`).getAttribute( 'pieceColor' ) === chessConfig.currentTurn ?  statusOne : statusTwo ,
+              type   : $(`[pieceposition="${collision}"]`).getAttribute( 'pieceType' ) ,
+            }
+          }
+        });
+        return collisionPieces.filter( collision => collision !== undefined);
+      },
+
   
 
     fillModal(event){

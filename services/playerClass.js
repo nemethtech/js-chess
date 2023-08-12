@@ -1,7 +1,7 @@
 import { $, $$ } from "../../utils/utils.js";
 import { chessConfig } from "../config/chessConfig.config.js";
 
-class BasePlayer {
+export class BasePlayer {
 
     constructor(color) {
   //    this.playerName = name;
@@ -14,7 +14,7 @@ class BasePlayer {
       BasePlayer.instances[color] = this;
     }
     
-    getEnemyPlayer(){
+    getEnemyPlayerForPlayer(){
       return BasePlayer.instanceByColor(this.enemyColor);
     }
     
@@ -69,10 +69,10 @@ class BasePlayer {
         
       this.setPlayerValuesToDefault()
           .getPlayerPieces()
-          .getEnemyPlayer()
+          .getEnemyPlayerForPlayer()
           .setPlayerValuesToDefault()
           .getPlayerPieces()
-          .getEnemyPlayer()
+          .getEnemyPlayerForPlayer()
           .setEnemeyPieceMoves()
           .setPlayerPieceMoves();
     }
@@ -95,4 +95,3 @@ BasePlayer.getEnemyPlayer = ()  => {
   return BasePlayer.instances[chessConfig.currentEnemy];
 }
 
-export { BasePlayer };

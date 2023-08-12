@@ -2,7 +2,7 @@ import { generalMovement } from './pieceMovement/general.js';
 import { Player } from './playerClassExtend.js'
 
 
-class PlayerSetup extends Player {
+export class PlayerSetup extends Player {
 
     setupPlayerPieceMove(piece , pieceMove){
 
@@ -65,7 +65,7 @@ class PlayerSetup extends Player {
                     }
 
                     if(JSON.stringify(playerPieceMove.collision) !== '{}'){
-                        const enemy = this.getEnemyPlayer().playerPieces.find( piece => piece.piecePosition === playerPieceMove.collision.colPos);
+                        const enemy = this.getEnemyPlayerForPlayer().playerPieces.find( piece => piece.piecePosition === playerPieceMove.collision.colPos);
                         if(enemy.isBackedUp){
                             playerPieceMove.collision =  {};
                         }
@@ -93,5 +93,5 @@ class PlayerSetup extends Player {
 
 }
 
-
-export { PlayerSetup };
+export const playerTwo = new PlayerSetup('black');
+export const playerOne = new PlayerSetup('white');
